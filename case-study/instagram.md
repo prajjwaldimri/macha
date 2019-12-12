@@ -1,28 +1,30 @@
 # Feature of Instagram
 
-* Story
-    * Filters
-    * Stickers
-    * GIFs
-    * Location
-    * Close friends
+- Story
 
-* Messaging
-    * Private
-    * Group
+  - Filters
+  - Stickers
+  - GIFs
+  - Location
+  - Close friends
 
-* Post
-    * Caption
-    * Hashtags
-    * Tag users
-* Private & Public profiles
+- Messaging
 
-* Video editing 
-* Text editing and Drawing
+  - Private
+  - Group
 
-* Live video stream
-    * You can stream with your one friend
-* Search
-    * By username
-    * By profile name
-    * By hashtags
+- Post
+  - Caption
+  - Hashtags
+  - Tag users
+- Private & Public profiles
+
+- Video editing
+- Text editing and Drawing
+
+- Live video stream
+  - You can stream with your one friend
+- Search
+  - By username
+  - By profile name
+  - By hashtags
