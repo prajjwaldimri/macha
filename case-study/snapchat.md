@@ -17,5 +17,6 @@
 - Snapchat Trophies.
 - Saving snaps clicked on snapchat is optional.
 - A friend with whom we communicate most frequently is termed as best friends and snapchat shows it under Best Friend section.
-
+- Snapchat has a section called "My Eyes Only" where we can move our snaps can it is password protected.
+- Snaps sent also contains a timer which define how long a friend can see your snap.
                                   
