@@ -7,3 +7,4 @@
 - Text/Audio/Photo/Video/Location Updates
 - Friend Request (Link / QR)
 - Tagging users
+- Account Deletion
