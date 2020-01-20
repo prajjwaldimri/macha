@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "typescript": "^3.7.5"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.8"
   }
 }
