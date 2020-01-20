@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.9.16",
     "graphql": "^14.5.8",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "devDependencies": {
