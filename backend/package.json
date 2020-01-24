@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --no-notify --transpileOnly --respawn ./src"
+    "dev": "ts-node-dev --no-notify --respawn ./src"
   },
   "author": "",
   "license": "ISC",

@@ -8,5 +8,14 @@ export const Query = queryType({
         name: stringArg()
       }
     });
+    t.field("inputname", {
+      type: "String",
+      args: {
+        input: stringArg({ required: true })
+      },
+      resolve: (parent, { input }, ctx) => {
+        return input;
+      }
+    });
   }
 });
