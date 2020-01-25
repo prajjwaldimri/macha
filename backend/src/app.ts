@@ -1,4 +1,10 @@
-import { ApolloServer, gql } from "apollo-server";
+import dotenv from "dotenv";
+dotenv.config();
+
+const debug = require("debug")("dev");
+
+import { ApolloServer } from "apollo-server";
+import mongoose from "mongoose";
 
 import * as allTypes from "./schema";
 import { makeSchema } from "nexus";
@@ -14,6 +20,15 @@ const schema = makeSchema({
 
 const server = new ApolloServer({ schema });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+// DB Connection
+
+mongoose
+  .connect(process.env.MONGODB || "", { useNewUrlParser: true })
+  .then(() => {
+    server.listen().then(({ url }) => {
+      debug(`🚀 Server ready at ${url}`);
+    });
+  })
+  .catch(err => {
+    debug(err);
+  });
