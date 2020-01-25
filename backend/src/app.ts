@@ -26,8 +26,6 @@ const schema = makeSchema({
 
 const server = new ApolloServer({ schema });
 
-// DB Connection
-
 mongoose
   .connect(process.env.MONGODB || "", { useNewUrlParser: true })
   .then(() => {
