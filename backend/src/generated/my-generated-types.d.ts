@@ -20,6 +20,7 @@ export interface NexusGenEnums {
 }
 
 export interface NexusGenRootTypes {
+  Mutation: {};
   Query: {};
   User: { // root type
     email: string; // String!
@@ -38,8 +39,11 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 }
 
 export interface NexusGenFieldTypes {
+  Mutation: { // field return type
+    createUser: NexusGenRootTypes['User']; // User!
+  }
   Query: { // field return type
-    inputname: string; // String!
+    hello: string; // String!
   }
   User: { // field return type
     email: string; // String!
@@ -52,9 +56,10 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenArgTypes {
-  Query: {
-    inputname: { // args
-      input: string; // String!
+  Mutation: {
+    createUser: { // args
+      email: string; // String!
+      username: string; // String!
     }
   }
 }
@@ -65,7 +70,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Query" | "User";
+export type NexusGenObjectNames = "Mutation" | "Query" | "User";
 
 export type NexusGenInputNames = never;
 

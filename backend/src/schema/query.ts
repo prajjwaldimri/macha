@@ -2,13 +2,10 @@ import { queryType, stringArg } from "nexus";
 
 export const Query = queryType({
   definition(t) {
-    t.field("inputname", {
+    t.field("hello", {
       type: "String",
-      args: {
-        input: stringArg({ required: true })
-      },
-      resolve: (parent, { input }, ctx) => {
-        return input;
+      resolve: () => {
+        return "World";
       }
     });
   }
