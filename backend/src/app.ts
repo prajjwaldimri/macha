@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
+
 dotenv.config();
+if (!process.env.MONGODB) {
+  console.error(
+    "ERROR - No .env file found. Please contact @prajjwaldimri for more info."
+  );
+}
 
 const debug = require("debug")("dev");
 
