@@ -40,7 +40,6 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Query: { // field return type
     inputname: string; // String!
-    user: NexusGenRootTypes['User']; // User!
   }
   User: { // field return type
     email: string; // String!
@@ -56,9 +55,6 @@ export interface NexusGenArgTypes {
   Query: {
     inputname: { // args
       input: string; // String!
-    }
-    user: { // args
-      name?: string | null; // String
     }
   }
 }

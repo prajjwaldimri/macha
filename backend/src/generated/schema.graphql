@@ -9,7 +9,6 @@ interface Node {
 
 type Query {
   inputname(input: String!): String!
-  user(name: String): User!
 }
 
 type User implements Node {
