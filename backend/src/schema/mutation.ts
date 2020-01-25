@@ -1,5 +1,4 @@
 import { mutationType, stringArg } from "nexus";
-
 import { UserModel } from "../models/User";
 
 export const Mutation = mutationType({
