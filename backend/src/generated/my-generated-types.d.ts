@@ -43,6 +43,7 @@ export interface NexusGenFieldTypes {
     createUser: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
+    getUser: NexusGenRootTypes['User']; // User!
     hello: string; // String!
   }
   User: { // field return type
@@ -60,6 +61,11 @@ export interface NexusGenArgTypes {
     createUser: { // args
       email: string; // String!
       username: string; // String!
+    }
+  }
+  Query: {
+    getUser: { // args
+      id: string; // String!
     }
   }
 }

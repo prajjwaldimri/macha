@@ -12,6 +12,7 @@ interface Node {
 }
 
 type Query {
+  getUser(id: String!): User!
   hello: String!
 }
 
