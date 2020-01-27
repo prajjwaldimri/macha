@@ -14,7 +14,7 @@ export const loginUser = mutationField("login", {
 });
 
 export const signUpUser = mutationField("signup", {
-  type: "User",
+  type: "String",
   args: {
     username: stringArg({ required: true }),
     password: stringArg({ required: true })
@@ -29,7 +29,7 @@ export const signUpUser = mutationField("signup", {
         throw new UserInputError("Username is already is use");
       }
 
-      return await UserModel.create({
+      const createdUser = await UserModel.create({
         username,
         password: await bcrypt.hash(password, 10)
       });

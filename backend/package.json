@@ -29,6 +29,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.9",
     "nexus": "^0.12.0-rc.5",
     "supports-color": "^7.1.0",
