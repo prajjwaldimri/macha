@@ -58,6 +58,10 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    login: { // args
+      password: string; // String!
+      username: string; // String!
+    }
     signup: { // args
       password: string; // String!
       username: string; // String!
