@@ -2,18 +2,13 @@
 ### Do not make changes to this file directly
 
 
-type Mutation {
-  createUser(email: String!, username: String!): User!
-}
-
 interface Node {
   """Unique identifier for the resource"""
   id: ID!
 }
 
 type Query {
-  getUser(id: String!): User!
-  hello: String!
+  user: String!
 }
 
 type User implements Node {
