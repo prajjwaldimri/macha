@@ -5,14 +5,32 @@ import { UserInputError } from "apollo-server";
 import { stringArg, mutationField } from "nexus";
 
 import { UserModel } from "../../models/User";
+import { User } from "./user";
 
 export const loginUser = mutationField("login", {
-  type: "User",
+  type: "String",
   args: {
     username: stringArg({ required: true }),
     password: stringArg({ required: true })
   },
-  async resolve(_, { username, password }): Promise<any> {}
+  async resolve(_, { username, password }): Promise<any> {
+    try {
+      const user = await UserModel.findOne({ username });
+      if (!user) {
+        throw new UserInputError("Username/Password is invalid!");
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        throw new UserInputError("Username/Password is invalid!");
+      }
+      return jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
+        expiresIn: "15d"
+      });
+    } catch (err) {
+      return err;
+    }
+  }
 });
 
 export const signUpUser = mutationField("signup", {

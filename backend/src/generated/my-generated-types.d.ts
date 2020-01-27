@@ -40,7 +40,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
-    login: NexusGenRootTypes['User']; // User!
+    login: string; // String!
     signup: string; // String!
   }
   Query: { // field return type

@@ -3,7 +3,7 @@
 
 
 type Mutation {
-  login(password: String!, username: String!): User!
+  login(password: String!, username: String!): String!
   signup(password: String!, username: String!): String!
 }
 
