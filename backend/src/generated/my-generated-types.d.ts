@@ -23,7 +23,7 @@ export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
   User: { // root type
-    email: string; // String!
+    authToken: string; // ID!
     id: string; // ID!
     username: string; // String!
   }
@@ -41,13 +41,13 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     login: NexusGenRootTypes['User']; // User!
-    signup: NexusGenRootTypes['User']; // User!
+    signup: string; // String!
   }
   Query: { // field return type
     user: string; // String!
   }
   User: { // field return type
-    email: string; // String!
+    authToken: string; // ID!
     id: string; // ID!
     username: string; // String!
   }

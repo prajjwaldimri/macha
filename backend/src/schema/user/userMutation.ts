@@ -1,8 +1,10 @@
-import { stringArg, mutationField } from "nexus";
-import { UserModel } from "../../models/User";
-import { UserInputError } from "apollo-server";
 import isLength from "validator/lib/isLength";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { UserInputError } from "apollo-server";
+import { stringArg, mutationField } from "nexus";
+
+import { UserModel } from "../../models/User";
 
 export const loginUser = mutationField("login", {
   type: "User",
@@ -32,6 +34,10 @@ export const signUpUser = mutationField("signup", {
       const createdUser = await UserModel.create({
         username,
         password: await bcrypt.hash(password, 10)
+      });
+
+      return jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET!, {
+        expiresIn: "15d"
       });
     } catch (err) {
       return err;
