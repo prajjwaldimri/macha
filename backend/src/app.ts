@@ -9,12 +9,14 @@ if (!process.env.MONGODB) {
 
 const debug = require("debug")("dev");
 
-import { ApolloServer } from "apollo-server";
+import { ApolloServer, ApolloError } from "apollo-server";
+import { makeSchema } from "nexus";
 import mongoose from "mongoose";
+import path from "path";
+import * as jwt from "jsonwebtoken";
 
 import * as allTypes from "./schema";
-import { makeSchema } from "nexus";
-import path from "path";
+import { UserModel } from "./models/User";
 
 const schema = makeSchema({
   types: allTypes,
@@ -24,7 +26,25 @@ const schema = makeSchema({
   }
 });
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  schema,
+  context: async ({ req }) => {
+    console.log("HYo");
+    try {
+      if (req.headers.authorization) {
+        const token = req.headers.authorization.replace("Bearer ", "");
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        const user = await UserModel.findById(decoded.id);
+        if (!user) {
+          throw new ApolloError("JWT token invalid");
+        }
+        return { id: user?._id, username: user?.username };
+      }
+    } catch (err) {
+      return {};
+    }
+  }
+});
 
 mongoose
   .connect(process.env.MONGODB || "", { useNewUrlParser: true })

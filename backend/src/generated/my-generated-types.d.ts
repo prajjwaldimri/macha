@@ -44,7 +44,7 @@ export interface NexusGenFieldTypes {
     signup: string; // String!
   }
   Query: { // field return type
-    user: string; // String!
+    me: NexusGenRootTypes['User']; // User!
   }
   User: { // field return type
     authToken: string; // ID!

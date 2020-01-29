@@ -13,7 +13,7 @@ interface Node {
 }
 
 type Query {
-  user: String!
+  me: User!
 }
 
 type User implements Node {
