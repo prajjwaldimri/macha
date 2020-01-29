@@ -29,16 +29,15 @@ const schema = makeSchema({
 const server = new ApolloServer({
   schema,
   context: async ({ req }) => {
-    console.log("HYo");
     try {
       if (req.headers.authorization) {
         const token = req.headers.authorization.replace("Bearer ", "");
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-        const user = await UserModel.findById(decoded.id);
+        const user = await UserModel.findById(decoded.id).select("-password");
         if (!user) {
           throw new ApolloError("JWT token invalid");
         }
-        return { id: user?._id, username: user?.username };
+        return { user: user };
       }
     } catch (err) {
       return {};
