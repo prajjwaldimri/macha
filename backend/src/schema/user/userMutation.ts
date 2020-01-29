@@ -5,7 +5,6 @@ import { UserInputError } from "apollo-server";
 import { stringArg, mutationField } from "nexus";
 
 import { UserModel } from "../../models/User";
-import { User } from "./user";
 
 export const loginUser = mutationField("login", {
   type: "String",
@@ -15,6 +14,10 @@ export const loginUser = mutationField("login", {
   },
   async resolve(_, { username, password }): Promise<any> {
     try {
+      if (!isLength(username.trim(), { min: 3 })) {
+        throw new UserInputError("Username is too short");
+      }
+
       const user = await UserModel.findOne({ username });
       if (!user) {
         throw new UserInputError("Username/Password is invalid!");
