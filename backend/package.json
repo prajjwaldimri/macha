@@ -40,8 +40,9 @@
   },
   "devDependencies": {
     "@types/node": "^13.1.8",
-    "ts-node-dev": "^1.0.0-pre.44",
     "apollo-server-micro": "^2.9.16",
-    "apollo-server-testing": "^2.9.16"
+    "apollo-server-testing": "^2.9.16",
+    "mongodb-memory-server": "^6.2.4",
+    "ts-node-dev": "^1.0.0-pre.44"
   }
 }
