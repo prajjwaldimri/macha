@@ -3,8 +3,8 @@
 
 
 type Mutation {
-  login(password: String!, username: String!): User!
-  signup(password: String!, username: String!): User!
+  login(password: String!, username: String!): String!
+  signup(password: String!, username: String!): String!
 }
 
 interface Node {
@@ -13,11 +13,11 @@ interface Node {
 }
 
 type Query {
-  user: String!
+  me: User!
 }
 
 type User implements Node {
-  email: String!
+  authToken: ID!
 
   """Unique identifier for the resource"""
   id: ID!

@@ -5,6 +5,6 @@ export const User = objectType({
   definition(t) {
     t.implements("Node");
     t.string("username");
-    t.string("email");
+    t.id("authToken");
   }
 });

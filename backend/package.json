@@ -21,6 +21,7 @@
     "@typegoose/typegoose": "^6.2.2",
     "@types/bcrypt": "^3.0.0",
     "@types/debug": "^4.1.5",
+    "@types/jsonwebtoken": "^8.3.7",
     "@types/mongoose": "^5.5.43",
     "@types/validator": "^12.0.1",
     "apollo-server": "^2.9.16",
@@ -29,6 +30,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.9",
     "nexus": "^0.12.0-rc.5",
     "supports-color": "^7.1.0",
@@ -38,8 +40,9 @@
   },
   "devDependencies": {
     "@types/node": "^13.1.8",
-    "ts-node-dev": "^1.0.0-pre.44",
     "apollo-server-micro": "^2.9.16",
-    "apollo-server-testing": "^2.9.16"
+    "apollo-server-testing": "^2.9.16",
+    "mongodb-memory-server": "^6.2.4",
+    "ts-node-dev": "^1.0.0-pre.44"
   }
 }
