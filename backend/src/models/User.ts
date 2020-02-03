@@ -29,13 +29,12 @@ export class User {
 
   @prop({
     required: true,
-    minlength: 1,
     default: 13
   })
   age!: number;
 
   @arrayProp({
-    itemsref: "User"
+    itemsRef: "User"
   })
   machas?: Ref<User>[];
 }
