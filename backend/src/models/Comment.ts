@@ -4,6 +4,12 @@ import { ImagePost } from "./ImagePost";
 import { VideoPost } from "./VideoPost";
 import { TextPost } from "./TextPost";
 
+enum PostType {
+  ImagePost = "ImagePost",
+  VideoPost = "VideoPost",
+  TextPost = "TextPost"
+}
+
 class Comment {
   @prop({
     required: true,
@@ -18,9 +24,15 @@ class Comment {
 
   @prop({
     required: true,
-    enum: "ImagePost" | "VideoPost" | "TextPost"
+    enum: PostType
   })
-  postType!: string;
+  postType!: PostType;
+
+  @prop({
+    required: true,
+    refPath: "postType"
+  })
+  post!: Ref<ImagePost | VideoPost | TextPost>;
 }
 
 export const CommentModel = getModelForClass(Comment);

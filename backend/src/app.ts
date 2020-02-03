@@ -17,6 +17,8 @@ import * as jwt from "jsonwebtoken";
 
 import * as allTypes from "./schema";
 import { UserModel } from "./models/User";
+import { CommentModel } from "./models/Comment";
+import { TextPostModel } from "./models/TextPost";
 
 const schema = makeSchema({
   types: allTypes,
@@ -48,8 +50,21 @@ const server = new ApolloServer({
 mongoose
   .connect(process.env.MONGODB || "", { useNewUrlParser: true })
   .then(() => {
-    server.listen().then(({ url }) => {
+    server.listen().then(async ({ url }) => {
       debug(`🚀 Server ready at ${url}`);
+      const post = await TextPostModel.create({
+        author: "5e354de85354367aaeb76ded",
+        uri: "yoyoy",
+        content: "IOAUDIASYDIYASIs"
+      });
+      CommentModel.create({
+        author: "5e354de85354367aaeb76ded",
+        text: "Hello",
+        postType: "VideoPost",
+        post: post._id
+      }).then(doc => {
+        console.log(doc);
+      });
     });
   })
   .catch(err => {

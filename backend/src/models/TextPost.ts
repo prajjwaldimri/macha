@@ -20,3 +20,5 @@ export class TextPost {
   })
   content!: string;
 }
+
+export const TextPostModel = getModelForClass(TextPost);
