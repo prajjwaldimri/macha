@@ -2,7 +2,6 @@ import { createTestClient } from "apollo-server-testing";
 import { ApolloServer, gql } from "apollo-server-micro";
 
 import test from "ava";
-import bcrypt from "bcrypt";
 
 import * as allTypes from "../../schema";
 import { makeSchema } from "nexus";
