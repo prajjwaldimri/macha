@@ -1,7 +1,7 @@
 import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
 
-class ImagePost {
+export class ImagePost {
   @prop({
     required: true,
     unique: true,

@@ -1,7 +1,7 @@
 import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
 
-class VideoPost {
+export class VideoPost {
   @prop({
     required: true,
     unique: true,
