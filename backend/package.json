@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn ./src/app.ts",
-    "test": "ava"
+    "test": "ava --tap | tnyan"
   },
   "ava": {
     "extensions": [
       "ts"
     ],
+    "verbose": true,
     "require": [
       "ts-node/register"
     ]
@@ -43,6 +44,7 @@
     "apollo-server-micro": "^2.9.16",
     "apollo-server-testing": "^2.9.16",
     "mongodb-memory-server": "^6.2.4",
+    "tap-nyan": "^1.1.0",
     "ts-node-dev": "^1.0.0-pre.44"
   }
 }
