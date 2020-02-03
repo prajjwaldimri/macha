@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn ./src/app.ts",
-    "test": "ava"
+    "test": "ava --watch "
   },
   "ava": {
     "extensions": [
       "ts"
     ],
+    "verbose": true,
     "require": [
       "ts-node/register"
     ]

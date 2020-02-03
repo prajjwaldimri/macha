@@ -48,7 +48,7 @@ const server = new ApolloServer({
 mongoose
   .connect(process.env.MONGODB || "", { useNewUrlParser: true })
   .then(() => {
-    server.listen().then(({ url }) => {
+    server.listen().then(async ({ url }) => {
       debug(`🚀 Server ready at ${url}`);
     });
   })

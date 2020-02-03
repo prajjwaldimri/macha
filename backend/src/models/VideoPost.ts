@@ -1,15 +1,28 @@
-import { prop, getModelForClass } from "@typegoose/typegoose";
+import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
+import { User } from "./User";
 
-class VideoPost {
+export class VideoPost {
   @prop({
     required: true,
-    unique: true
+    unique: true,
+    ref: "User"
   })
-  author!: string;
+  author!: Ref<User>;
 
   @prop({
     required: true,
     unique: true
   })
   uri!: string;
+
+  @prop({ required: true })
+  video!: string;
+
+  @prop()
+  caption?: string;
+
+  @prop()
+  location?: string;
 }
+
+export const VideoPostModel = getModelForClass(VideoPost);
