@@ -4,7 +4,10 @@ export const User = objectType({
   name: "User",
   definition(t) {
     t.implements("Node");
-    t.string("username");
+    t.string("username", { nullable: false });
+    t.string("email");
+    t.string("name", { nullable: false });
+    t.string("age", { nullable: false });
     t.id("authToken");
   }
 });

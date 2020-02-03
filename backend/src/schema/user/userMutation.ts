@@ -2,7 +2,7 @@ import isLength from "validator/lib/isLength";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserInputError } from "apollo-server";
-import { stringArg, mutationField } from "nexus";
+import { stringArg, mutationField, intArg } from "nexus";
 
 import { UserModel } from "../../models/User";
 
@@ -40,9 +40,12 @@ export const signUpUser = mutationField("signup", {
   type: "String",
   args: {
     username: stringArg({ required: true }),
-    password: stringArg({ required: true })
+    password: stringArg({ required: true }),
+    name: stringArg({ required: true }),
+    email: stringArg(),
+    age: intArg({ default: 13 })
   },
-  async resolve(_, { username, password }): Promise<any> {
+  async resolve(_, { username, password, email, name, age }): Promise<any> {
     try {
       if (!isLength(username.trim(), { min: 3 })) {
         throw new UserInputError("Username is too short");
@@ -54,7 +57,10 @@ export const signUpUser = mutationField("signup", {
 
       const createdUser = await UserModel.create({
         username,
-        password: await bcrypt.hash(password, 10)
+        password: await bcrypt.hash(password, 10),
+        email,
+        name,
+        age
       });
 
       return jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET!, {
