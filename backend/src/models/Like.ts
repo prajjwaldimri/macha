@@ -3,11 +3,13 @@ import { User } from "./User";
 import { ImagePost } from "./ImagePost";
 import { VideoPost } from "./VideoPost";
 import { TextPost } from "./TextPost";
+import { Comment } from "./Comment";
 
-enum PostType {
+enum LikableType {
   ImagePost = "ImagePost",
   VideoPost = "VideoPost",
-  TextPost = "TextPost"
+  TextPost = "TextPost",
+  Comment = "Comment"
 }
 
 class Like {
@@ -19,15 +21,15 @@ class Like {
 
   @prop({
     required: true,
-    enum: PostType
+    enum: LikableType
   })
-  postType!: PostType;
+  likableType!: LikableType;
 
   @prop({
     required: true,
-    refPath: "postType"
+    refPath: "likableType"
   })
-  post!: Ref<ImagePost | TextPost | VideoPost>;
+  likable!: Ref<ImagePost | TextPost | VideoPost | Comment>;
 }
 
 export const LikeModel = getModelForClass(Like);

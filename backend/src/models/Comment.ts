@@ -10,7 +10,7 @@ enum PostType {
   TextPost = "TextPost"
 }
 
-class Comment {
+export class Comment {
   @prop({
     required: true,
     ref: "User"
