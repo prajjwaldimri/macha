@@ -18,11 +18,11 @@ export class VideoPost {
   @prop({ required: true })
   video!: string;
 
-  @prop({})
-  caption!: string;
+  @prop()
+  caption?: string;
 
-  @prop({})
-  location!: string;
+  @prop()
+  location?: string;
 }
 
 export const VideoPostModel = getModelForClass(VideoPost);

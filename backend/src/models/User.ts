@@ -1,5 +1,4 @@
-import { prop, getModelForClass } from "@typegoose/typegoose";
-
+import { prop, getModelForClass, Ref, arrayProp } from "@typegoose/typegoose";
 export class User {
   @prop({
     required: true,
@@ -13,6 +12,32 @@ export class User {
 
   @prop({ required: true })
   password!: string;
+
+  @prop({
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+    sparse: true
+  })
+  email!: string;
+
+  @prop({
+    required: true
+  })
+  name!: string;
+
+  @prop({
+    required: true,
+    minlength: 1,
+    default: 13
+  })
+  age!: number;
+
+  @arrayProp({
+    itemsref: "User"
+  })
+  machas?: Ref<User>[];
 }
 
 export const UserModel = getModelForClass(User);

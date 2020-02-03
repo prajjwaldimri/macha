@@ -18,11 +18,11 @@ export class ImagePost {
   @prop({ required: true })
   image!: string;
 
-  @prop({})
-  location!: string;
+  @prop()
+  location?: string;
 
-  @prop({})
-  caption!: string;
+  @prop()
+  caption?: string;
 }
 
 export const ImagePostModel = getModelForClass(ImagePost);
