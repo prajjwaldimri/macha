@@ -5,8 +5,10 @@ export * from "./user/userQuery";
 export * from "./user/userMutation";
 
 export * from "./imagePost/imagePost";
+export * from "./imagePost/imagePostMutation";
 
 export * from "./textPost/textPost";
+export * from "./textPost/textPostMutation";
 
 export * from "./textPost/textPostMutation";
 
