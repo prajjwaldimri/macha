@@ -2,9 +2,29 @@
 ### Do not make changes to this file directly
 
 
+type Comment implements Node {
+  """Unique identifier for the resource"""
+  id: ID!
+  post: ID!
+  postType: PostTypeEnum!
+  text: String!
+}
+
+type ImagePost implements Node {
+  author: ID!
+  authorDetails: User!
+  caption: String
+
+  """Unique identifier for the resource"""
+  id: ID!
+  image: String!
+  location: String
+  uri: String!
+}
+
 type Mutation {
   login(password: String!, username: String!): String!
-  signup(password: String!, username: String!): String!
+  signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
 }
 
 interface Node {
@@ -12,14 +32,45 @@ interface Node {
   id: ID!
 }
 
+enum PostTypeEnum {
+  ImagePost
+  TextPost
+  VideoPost
+}
+
 type Query {
   me: User!
 }
 
-type User implements Node {
-  authToken: ID!
+type TextPost implements Node {
+  author: ID!
+  authorDetails: User!
+  content: String!
 
   """Unique identifier for the resource"""
   id: ID!
+  uri: String!
+}
+
+type User implements Node {
+  age: String
+  authToken: ID!
+  email: String!
+
+  """Unique identifier for the resource"""
+  id: ID!
+  name: String!
   username: String!
+}
+
+type VideoPost implements Node {
+  author: ID!
+  authorDetails: User!
+  caption: String
+
+  """Unique identifier for the resource"""
+  id: ID!
+  location: String
+  uri: String!
+  video: String!
 }

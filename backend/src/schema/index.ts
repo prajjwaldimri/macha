@@ -2,3 +2,8 @@ export * from "./node";
 export * from "./user/user";
 export * from "./user/userQuery";
 export * from "./user/userMutation";
+export * from "./imagePost/imagePost";
+export * from "./textPost/textPost";
+export * from "./videoPost/videoPost";
+export * from "./imagePost/imagePost";
+export * from "./comment/comment";

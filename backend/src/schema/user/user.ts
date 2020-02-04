@@ -7,7 +7,9 @@ export const User = objectType({
     t.string("username", { nullable: false });
     t.string("email");
     t.string("name", { nullable: false });
-    t.string("age", { nullable: false });
+    t.string("age", {
+      nullable: true
+    });
     t.id("authToken");
   }
 });

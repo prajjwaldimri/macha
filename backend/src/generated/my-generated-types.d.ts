@@ -17,17 +17,49 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  PostTypeEnum: "ImagePost" | "TextPost" | "VideoPost"
 }
 
 export interface NexusGenRootTypes {
+  Comment: { // root type
+    id: string; // ID!
+    post: string; // ID!
+    postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
+    text: string; // String!
+  }
+  ImagePost: { // root type
+    author: string; // ID!
+    caption?: string | null; // String
+    id: string; // ID!
+    image: string; // String!
+    location?: string | null; // String
+    uri: string; // String!
+  }
   Mutation: {};
   Query: {};
-  User: { // root type
-    authToken: string; // ID!
+  TextPost: { // root type
+    author: string; // ID!
+    content: string; // String!
     id: string; // ID!
+    uri: string; // String!
+  }
+  User: { // root type
+    age?: string | null; // String
+    authToken: string; // ID!
+    email: string; // String!
+    id: string; // ID!
+    name: string; // String!
     username: string; // String!
   }
-  Node: NexusGenRootTypes['User'];
+  VideoPost: { // root type
+    author: string; // ID!
+    caption?: string | null; // String
+    id: string; // ID!
+    location?: string | null; // String
+    uri: string; // String!
+    video: string; // String!
+  }
+  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
   String: string;
   Int: number;
   Float: number;
@@ -36,9 +68,25 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  PostTypeEnum: NexusGenEnums['PostTypeEnum'];
 }
 
 export interface NexusGenFieldTypes {
+  Comment: { // field return type
+    id: string; // ID!
+    post: string; // ID!
+    postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
+    text: string; // String!
+  }
+  ImagePost: { // field return type
+    author: string; // ID!
+    authorDetails: NexusGenRootTypes['User']; // User!
+    caption: string | null; // String
+    id: string; // ID!
+    image: string; // String!
+    location: string | null; // String
+    uri: string; // String!
+  }
   Mutation: { // field return type
     login: string; // String!
     signup: string; // String!
@@ -46,10 +94,29 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     me: NexusGenRootTypes['User']; // User!
   }
-  User: { // field return type
-    authToken: string; // ID!
+  TextPost: { // field return type
+    author: string; // ID!
+    authorDetails: NexusGenRootTypes['User']; // User!
+    content: string; // String!
     id: string; // ID!
+    uri: string; // String!
+  }
+  User: { // field return type
+    age: string | null; // String
+    authToken: string; // ID!
+    email: string; // String!
+    id: string; // ID!
+    name: string; // String!
     username: string; // String!
+  }
+  VideoPost: { // field return type
+    author: string; // ID!
+    authorDetails: NexusGenRootTypes['User']; // User!
+    caption: string | null; // String
+    id: string; // ID!
+    location: string | null; // String
+    uri: string; // String!
+    video: string; // String!
   }
   Node: { // field return type
     id: string; // ID!
@@ -63,6 +130,9 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
     signup: { // args
+      age?: number | null; // Int
+      email?: string | null; // String
+      name: string; // String!
       password: string; // String!
       username: string; // String!
     }
@@ -70,16 +140,16 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
-  Node: "User"
+  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "User";
+export type NexusGenObjectNames = "Comment" | "ImagePost" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = "PostTypeEnum";
 
 export type NexusGenInterfaceNames = "Node";
 
