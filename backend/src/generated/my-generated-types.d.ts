@@ -37,7 +37,7 @@ export interface NexusGenRootTypes {
     location?: string | null; // String
     uri: string; // String!
   }
-  LikeType: { // root type
+  Like: { // root type
     author: string; // ID!
     id: string; // ID!
     likable: string; // ID!
@@ -67,7 +67,7 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['LikeType'];
+  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Like'];
   String: string;
   Int: number;
   Float: number;
@@ -100,7 +100,7 @@ export interface NexusGenFieldTypes {
     location: string | null; // String
     uri: string; // String!
   }
-  LikeType: { // field return type
+  Like: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     id: string; // ID!
@@ -162,12 +162,12 @@ export interface NexusGenArgTypes {
 export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
-  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "LikeType"
+  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "Like"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "ImagePost" | "LikeType" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "ImagePost" | "Like" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 

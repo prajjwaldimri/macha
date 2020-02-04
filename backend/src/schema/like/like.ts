@@ -20,8 +20,8 @@ export const LikableType = unionType({
   }
 });
 
-export const LikeType = objectType({
-  name: "LikeType",
+export const Like = objectType({
+  name: "Like",
   definition(t) {
     t.implements("Node");
     t.id("author", { nullable: false });
