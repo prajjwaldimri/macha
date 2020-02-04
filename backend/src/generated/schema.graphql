@@ -3,6 +3,9 @@
 
 
 type Comment implements Node {
+  author: ID!
+  authorDetails: User!
+
   """Unique identifier for the resource"""
   id: ID!
   post: ID!
@@ -22,6 +25,26 @@ type ImagePost implements Node {
   uri: String!
 }
 
+"""ImagePost / VideoPost / TextPost / Comment"""
+union LikableType = Comment | ImagePost | TextPost | VideoPost
+
+enum LikableTypeEnum {
+  Comment
+  ImagePost
+  TextPost
+  VideoPost
+}
+
+type LikeType implements Node {
+  author: ID!
+  authorDetails: User!
+
+  """Unique identifier for the resource"""
+  id: ID!
+  likable: ID!
+  likableType: LikableTypeEnum!
+}
+
 type Mutation {
   login(password: String!, username: String!): String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
@@ -31,6 +54,9 @@ interface Node {
   """Unique identifier for the resource"""
   id: ID!
 }
+
+"""ImagePost / VideoPost / TextPost"""
+union PostType = ImagePost | TextPost | VideoPost
 
 enum PostTypeEnum {
   ImagePost

@@ -1,26 +1,27 @@
 import { objectType, enumType, unionType } from "nexus";
 import { UserModel } from "../../models/User";
 
-export const PostTypeEnum = enumType({
-  name: "PostTypeEnum",
+export const LikableTypeEnum = enumType({
+  name: "LikableTypeEnum",
   members: {
     ImagePost: "ImagePost",
     VideoPost: "VideoPost",
-    TextPost: "TextPost"
+    TextPost: "TextPost",
+    Comment: "Comment"
   }
 });
 
-export const PostType = unionType({
-  name: "PostType",
-  description: "ImagePost / VideoPost / TextPost",
+export const LikableType = unionType({
+  name: "LikableType",
+  description: "ImagePost / VideoPost / TextPost / Comment",
   definition(t) {
-    t.members("ImagePost", "VideoPost", "TextPost");
+    t.members("ImagePost", "VideoPost", "TextPost", "Comment");
     t.resolveType(() => null);
   }
 });
 
-export const Comment = objectType({
-  name: "Comment",
+export const LikeType = objectType({
+  name: "LikeType",
   definition(t) {
     t.implements("Node");
     t.id("author", { nullable: false });
@@ -30,8 +31,7 @@ export const Comment = objectType({
         return await UserModel.findById(root.author).select("-password -age");
       }
     });
-    t.string("text", { nullable: false });
-    t.field("postType", { type: "PostTypeEnum", nullable: false });
-    t.id("post", { nullable: false });
+    t.field("likableType", { type: "LikableTypeEnum", nullable: false });
+    t.id("likable", { nullable: false });
   }
 });

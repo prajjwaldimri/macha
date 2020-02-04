@@ -7,3 +7,4 @@ export * from "./textPost/textPost";
 export * from "./videoPost/videoPost";
 export * from "./imagePost/imagePost";
 export * from "./comment/comment";
+export * from "./like/like";

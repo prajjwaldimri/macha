@@ -17,11 +17,13 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  LikableTypeEnum: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostTypeEnum: "ImagePost" | "TextPost" | "VideoPost"
 }
 
 export interface NexusGenRootTypes {
   Comment: { // root type
+    author: string; // ID!
     id: string; // ID!
     post: string; // ID!
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
@@ -34,6 +36,12 @@ export interface NexusGenRootTypes {
     image: string; // String!
     location?: string | null; // String
     uri: string; // String!
+  }
+  LikeType: { // root type
+    author: string; // ID!
+    id: string; // ID!
+    likable: string; // ID!
+    likableType: NexusGenEnums['LikableTypeEnum']; // LikableTypeEnum!
   }
   Mutation: {};
   Query: {};
@@ -59,20 +67,25 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
+  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['LikeType'];
   String: string;
   Int: number;
   Float: number;
   Boolean: boolean;
   ID: string;
+  LikableType: NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
+  PostType: NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  LikableTypeEnum: NexusGenEnums['LikableTypeEnum'];
   PostTypeEnum: NexusGenEnums['PostTypeEnum'];
 }
 
 export interface NexusGenFieldTypes {
   Comment: { // field return type
+    author: string; // ID!
+    authorDetails: NexusGenRootTypes['User']; // User!
     id: string; // ID!
     post: string; // ID!
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
@@ -86,6 +99,13 @@ export interface NexusGenFieldTypes {
     image: string; // String!
     location: string | null; // String
     uri: string; // String!
+  }
+  LikeType: { // field return type
+    author: string; // ID!
+    authorDetails: NexusGenRootTypes['User']; // User!
+    id: string; // ID!
+    likable: string; // ID!
+    likableType: NexusGenEnums['LikableTypeEnum']; // LikableTypeEnum!
   }
   Mutation: { // field return type
     login: string; // String!
@@ -140,22 +160,24 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
-  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost"
+  LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
+  PostType: "ImagePost" | "TextPost" | "VideoPost"
+  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "LikeType"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "ImagePost" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "ImagePost" | "LikeType" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 
-export type NexusGenEnumNames = "PostTypeEnum";
+export type NexusGenEnumNames = "LikableTypeEnum" | "PostTypeEnum";
 
 export type NexusGenInterfaceNames = "Node";
 
 export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String";
 
-export type NexusGenUnionNames = never;
+export type NexusGenUnionNames = "LikableType" | "PostType";
 
 export interface NexusGenTypes {
   context: any;
