@@ -1,4 +1,8 @@
-import { UserInputError, AuthenticationError } from "apollo-server";
+import {
+  UserInputError,
+  AuthenticationError,
+  ForbiddenError
+} from "apollo-server";
 import { stringArg, mutationField, intArg } from "nexus";
 import { ImagePostModel } from "../../models/ImagePost";
 import isLatLong from "validator/lib/isLatLong";
@@ -34,6 +38,47 @@ export const createImagePost = mutationField("createImagePost", {
         location,
         caption
       });
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const updateImagePost = mutationField("updateImagePost", {
+  type: "ImagePost",
+  args: {
+    uri: stringArg({ required: true }),
+    location: stringArg(),
+    caption: stringArg()
+  },
+  async resolve(_, { uri, location, caption }, ctx): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot update a post without logging in"
+        );
+      }
+
+      const imagePost = await ImagePostModel.findOne({ uri });
+
+      if (!imagePost) {
+        throw new UserInputError("uri doesn't exist");
+      }
+
+      if (imagePost.author.toString() !== ctx.user._id.toString()) {
+        throw new ForbiddenError(
+          "Not allowed to update the post as the logged in user is not the author of the post"
+        );
+      }
+
+      return await ImagePostModel.findOneAndUpdate(
+        { uri },
+        {
+          location,
+          caption
+        },
+        { new: true }
+      );
     } catch (err) {
       return err;
     }
