@@ -54,6 +54,12 @@ test.before(async () => {
     "-password"
   );
 
+  await TextPostModel.create({
+    author: user!._id,
+    uri: "novel-uri",
+    content: "Hello"
+  });
+
   authorizedApolloClient = createTestClient(
     new ApolloServer({
       schema,
@@ -96,6 +102,8 @@ test.serial("should create text post", async t => {
       content: "Test Content"
     }
   });
+
+  console.log(result);
 
   const post = await TextPostModel.findOne({ uri: "test-uri" });
 
@@ -212,6 +220,46 @@ test("shouldn't update text post (not logged in)", async t => {
 
   t.assert(result.errors);
   t.assert(!result.data);
+});
+
+//#endregion
+
+//#region Delete Text Post
+
+const DELETETEXTPOST = gql`
+  mutation deleteTextPost($uri: String!) {
+    deleteTextPost(uri: $uri)
+  }
+`;
+
+test.serial("it should not delete the post (not logged in)", async t => {
+  const result = await mutate({
+    mutation: DELETETEXTPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const textPost = await TextPostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+  t.assert(textPost);
+});
+
+test.serial("it should not delete the post (wrong logged in user)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETETEXTPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const textPost = await TextPostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+  t.assert(textPost);
 });
 
 //#endregion

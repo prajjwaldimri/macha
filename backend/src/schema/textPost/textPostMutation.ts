@@ -82,3 +82,35 @@ export const updateTextPost = mutationField("updateTextPost", {
     }
   }
 });
+
+export const deleteTextPost = mutationField("deleteTextPost", {
+  type: "TextPost",
+  args: {
+    uri: stringArg({ required: true })
+  },
+  async resolve(_, { uri }, ctx): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot delete a post without logging in"
+        );
+      }
+
+      const textPost = await TextPostModel.findOne({ uri });
+
+      if (!textPost) {
+        throw new UserInputError("uri doesn't exist");
+      }
+
+      if (textPost.author.toString() !== ctx.user._id.toString()) {
+        throw new ForbiddenError(
+          "Not allowed to delete the post as the logged in user is not the author of the post"
+        );
+      }
+
+      return await textPost.remove();
+    } catch (err) {
+      return err;
+    }
+  }
+});
