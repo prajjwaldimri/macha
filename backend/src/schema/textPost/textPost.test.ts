@@ -103,8 +103,6 @@ test.serial("should create text post", async t => {
     }
   });
 
-  console.log(result);
-
   const post = await TextPostModel.findOne({ uri: "test-uri" });
 
   t.assert(post);
