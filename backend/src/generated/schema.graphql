@@ -46,8 +46,14 @@ type Like implements Node {
 }
 
 type Mutation {
+  createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
+  createTextPost(content: String!, uri: String!): TextPost!
+  deleteImagePost(uri: String!): ImagePost!
+  deleteTextPost(uri: String!): TextPost!
   login(password: String!, username: String!): String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
+  updateImagePost(caption: String, location: String, uri: String!): ImagePost!
+  updateTextPost(content: String!, uri: String!): TextPost!
 }
 
 interface Node {

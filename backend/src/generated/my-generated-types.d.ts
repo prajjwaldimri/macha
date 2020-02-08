@@ -67,7 +67,7 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Like'];
+  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Like'];
   String: string;
   Int: number;
   Float: number;
@@ -108,8 +108,14 @@ export interface NexusGenFieldTypes {
     likableType: NexusGenEnums['LikableTypeEnum']; // LikableTypeEnum!
   }
   Mutation: { // field return type
+    createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
+    createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    deleteImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
+    deleteTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     login: string; // String!
     signup: string; // String!
+    updateImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
+    updateTextPost: NexusGenRootTypes['TextPost']; // TextPost!
   }
   Query: { // field return type
     me: NexusGenRootTypes['User']; // User!
@@ -145,6 +151,22 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createImagePost: { // args
+      caption?: string | null; // String
+      image: string; // String!
+      location?: string | null; // String
+      uri: string; // String!
+    }
+    createTextPost: { // args
+      content: string; // String!
+      uri: string; // String!
+    }
+    deleteImagePost: { // args
+      uri: string; // String!
+    }
+    deleteTextPost: { // args
+      uri: string; // String!
+    }
     login: { // args
       password: string; // String!
       username: string; // String!
@@ -156,13 +178,22 @@ export interface NexusGenArgTypes {
       password: string; // String!
       username: string; // String!
     }
+    updateImagePost: { // args
+      caption?: string | null; // String
+      location?: string | null; // String
+      uri: string; // String!
+    }
+    updateTextPost: { // args
+      content: string; // String!
+      uri: string; // String!
+    }
   }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
-  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "Like"
+  Node: "User" | "ImagePost" | "TextPost" | "Comment" | "VideoPost" | "Like"
 }
 
 export interface NexusGenInheritedFields {}
