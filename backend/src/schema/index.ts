@@ -19,3 +19,4 @@ export * from "./imagePost/imagePost";
 export * from "./comment/comment";
 
 export * from "./like/like";
+export * from "./like/likeMutation";
