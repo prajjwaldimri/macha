@@ -12,39 +12,43 @@ export const likePost = mutationField("likePost", {
   args: {
     postId: stringArg({ required: true })
   },
-  async resolve(_, { postId }, ctx: UserContext) {
-    if (!ctx.user) {
-      throw new AuthenticationError("Cannot like without logging in");
-    }
+  async resolve(_, { postId }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Cannot like without logging in");
+      }
 
-    // https://stackoverflow.com/questions/4677237/possibility-of-duplicate-mongo-objectids-being-generated-in-two-different-colle/10183273
+      // https://stackoverflow.com/questions/4677237/possibility-of-duplicate-mongo-objectids-being-generated-in-two-different-colle/10183273
 
-    const textPost = await TextPostModel.findById(postId);
-    const imagePost = await ImagePostModel.findById(postId);
-    const videoPost = await VideoPostModel.findById(postId);
+      const textPost = await TextPostModel.findById(postId);
+      const imagePost = await ImagePostModel.findById(postId);
+      const videoPost = await VideoPostModel.findById(postId);
 
-    if (!textPost && !imagePost && !videoPost) {
-      throw new UserInputError("No post found with the given id");
-    }
+      if (!textPost && !imagePost && !videoPost) {
+        throw new UserInputError("No post found with the given id");
+      }
 
-    if (textPost) {
-      return await LikeModel.create({
-        author: ctx.user._id,
-        likableType: "TextPost",
-        likable: postId
-      });
-    } else if (imagePost) {
-      return await LikeModel.create({
-        author: ctx.user._id,
-        likableType: "ImagePost",
-        likable: postId
-      });
-    } else if (videoPost) {
-      return await LikeModel.create({
-        author: ctx.user._id,
-        likableType: "VideoPost",
-        likable: postId
-      });
+      if (textPost) {
+        return await LikeModel.create({
+          author: ctx.user._id,
+          likableType: "TextPost",
+          likable: postId
+        });
+      } else if (imagePost) {
+        return await LikeModel.create({
+          author: ctx.user._id,
+          likableType: "ImagePost",
+          likable: postId
+        });
+      } else if (videoPost) {
+        return await LikeModel.create({
+          author: ctx.user._id,
+          likableType: "VideoPost",
+          likable: postId
+        });
+      }
+    } catch (err) {
+      return err;
     }
   }
 });
@@ -54,21 +58,25 @@ export const likeComment = mutationField("likeComment", {
   args: {
     commentId: stringArg({ required: true })
   },
-  async resolve(_, { commentId }, ctx: UserContext) {
-    if (!ctx.user) {
-      throw new AuthenticationError("Cannot like without logging in");
+  async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Cannot like without logging in");
+      }
+
+      const comment = await CommentModel.findById(commentId);
+
+      if (!comment) {
+        throw new UserInputError("No comment found with the given id");
+      }
+
+      return await LikeModel.create({
+        author: ctx.user._id,
+        likableType: "Comment",
+        likable: commentId
+      });
+    } catch (err) {
+      return err;
     }
-
-    const comment = await CommentModel.findById(commentId);
-
-    if (!comment) {
-      throw new UserInputError("No comment found with the given id");
-    }
-
-    return await LikeModel.create({
-      author: ctx.user._id,
-      likableType: "Comment",
-      likable: commentId
-    });
   }
 });

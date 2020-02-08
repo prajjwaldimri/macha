@@ -28,7 +28,8 @@ export const Comment = objectType({
       type: "User",
       async resolve(root): Promise<any> {
         return await UserModel.findById(root.author).select("-password -age");
-      }
+      },
+      nullable: false
     });
     t.string("text", { nullable: false });
     t.field("postType", { type: "PostTypeEnum", nullable: false });
