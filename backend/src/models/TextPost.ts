@@ -4,7 +4,6 @@ import { User } from "./User";
 export class TextPost {
   @prop({
     required: true,
-    unique: true,
     ref: "User"
   })
   author!: Ref<User>;

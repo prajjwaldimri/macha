@@ -14,7 +14,6 @@ export class User {
   password!: string;
 
   @prop({
-    required: true,
     unique: true,
     lowercase: true,
     trim: true,
@@ -22,10 +21,8 @@ export class User {
   })
   email!: string;
 
-  @prop({
-    required: true
-  })
-  name!: string;
+  @prop({ required: true })
+  name?: string;
 
   @prop({
     required: true,

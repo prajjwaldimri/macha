@@ -2,9 +2,60 @@
 ### Do not make changes to this file directly
 
 
+type Comment implements Node {
+  author: ID!
+  authorDetails: User!
+
+  """Unique identifier for the resource"""
+  id: ID!
+  post: ID!
+  postType: PostTypeEnum!
+  text: String!
+}
+
+type ImagePost implements Node {
+  author: ID!
+  authorDetails: User!
+  caption: String
+
+  """Unique identifier for the resource"""
+  id: ID!
+  image: String!
+  location: String
+  uri: String!
+}
+
+"""ImagePost / VideoPost / TextPost / Comment"""
+union LikableType = Comment | ImagePost | TextPost | VideoPost
+
+enum LikableTypeEnum {
+  Comment
+  ImagePost
+  TextPost
+  VideoPost
+}
+
+type Like implements Node {
+  author: ID!
+  authorDetails: User!
+
+  """Unique identifier for the resource"""
+  id: ID!
+  likable: ID!
+  likableType: LikableTypeEnum!
+}
+
 type Mutation {
+  createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
+  createTextPost(content: String!, uri: String!): TextPost!
+  deleteImagePost(uri: String!): ImagePost!
+  deleteTextPost(uri: String!): TextPost!
+  likeComment(commentId: String!): Like!
+  likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
-  signup(password: String!, username: String!): String!
+  signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
+  updateImagePost(caption: String, location: String, uri: String!): ImagePost!
+  updateTextPost(content: String!, uri: String!): TextPost!
 }
 
 interface Node {
@@ -12,14 +63,48 @@ interface Node {
   id: ID!
 }
 
+"""ImagePost / VideoPost / TextPost"""
+union PostType = ImagePost | TextPost | VideoPost
+
+enum PostTypeEnum {
+  ImagePost
+  TextPost
+  VideoPost
+}
+
 type Query {
   me: User!
 }
 
-type User implements Node {
-  authToken: ID!
+type TextPost implements Node {
+  author: ID!
+  authorDetails: User!
+  content: String!
 
   """Unique identifier for the resource"""
   id: ID!
+  uri: String!
+}
+
+type User implements Node {
+  age: String
+  authToken: ID!
+  email: String!
+
+  """Unique identifier for the resource"""
+  id: ID!
+  name: String!
   username: String!
+}
+
+type VideoPost implements Node {
+  author: ID!
+  authorDetails: User!
+  caption: String
+
+  """Unique identifier for the resource"""
+  id: ID!
+  location: String
+  uri: String!
+  video: String!
 }

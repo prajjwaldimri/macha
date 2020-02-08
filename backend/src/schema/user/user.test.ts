@@ -24,8 +24,8 @@ test.before(before);
 //#region User Signup
 
 const CREATEUSER = gql`
-  mutation signup($username: String!, $password: String!) {
-    signup(username: $username, password: $password)
+  mutation signup($username: String!, $password: String!, $name: String!) {
+    signup(username: $username, password: $password, name: $name)
   }
 `;
 
@@ -34,7 +34,8 @@ test.serial("creates user", async t => {
     mutation: CREATEUSER,
     variables: {
       username: "test@#!use*(",
-      password: ".sdasdad*&^^%$Jmandb   sdas"
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+      name: "Test User"
     }
   });
 
@@ -62,7 +63,8 @@ test.serial("doesn't create user (short username)", async t => {
     mutation: CREATEUSER,
     variables: {
       username: "te",
-      password: ".sdasdad*&^^%$Jmandb   sdas"
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+      name: "Test User"
     }
   });
 
@@ -73,6 +75,21 @@ test.serial("doesn't create user (short username)", async t => {
 });
 
 test.serial("doesn't create user (duplicate username)", async t => {
+  const result = await mutate({
+    mutation: CREATEUSER,
+    variables: {
+      username: "test@#!use*(",
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+      name: "Test User"
+    }
+  });
+  const user = await UserModel.findOne({ username: "te" });
+
+  t.assert(result.errors);
+  t.assert(!user);
+});
+
+test.serial("doesn't create user (insufficient attributes)", async t => {
   const result = await mutate({
     mutation: CREATEUSER,
     variables: {
@@ -140,6 +157,7 @@ const ME = gql`
   query {
     me {
       username
+      name
     }
   }
 `;
@@ -150,6 +168,7 @@ test.serial("It should return the user", async t => {
   });
 
   t.assert(result.data!.me.username);
+  t.assert(result.data!.me.name);
 });
 
 test.serial("It should not return the user (Not logged in)", async t => {
