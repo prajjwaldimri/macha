@@ -6,6 +6,7 @@ import {
 import { stringArg, mutationField, intArg } from "nexus";
 import { ImagePostModel } from "../../models/ImagePost";
 import isLatLong from "validator/lib/isLatLong";
+import { UserContext } from "../types";
 
 export const createImagePost = mutationField("createImagePost", {
   type: "ImagePost",
@@ -15,7 +16,11 @@ export const createImagePost = mutationField("createImagePost", {
     caption: stringArg(),
     image: stringArg({ required: true })
   },
-  async resolve(_, { uri, location, caption, image }, ctx): Promise<any> {
+  async resolve(
+    _,
+    { uri, location, caption, image },
+    ctx: UserContext
+  ): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
@@ -51,7 +56,7 @@ export const updateImagePost = mutationField("updateImagePost", {
     location: stringArg(),
     caption: stringArg()
   },
-  async resolve(_, { uri, location, caption }, ctx): Promise<any> {
+  async resolve(_, { uri, location, caption }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
@@ -90,7 +95,7 @@ export const deleteImagePost = mutationField("deleteImagePost", {
   args: {
     uri: stringArg({ required: true })
   },
-  async resolve(_, { uri }, ctx): Promise<any> {
+  async resolve(_, { uri }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(

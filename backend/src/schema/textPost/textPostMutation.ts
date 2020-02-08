@@ -6,6 +6,7 @@ import {
 import { stringArg, mutationField, intArg } from "nexus";
 import { TextPostModel } from "../../models/TextPost";
 import isLength from "validator/lib/isLength";
+import { UserContext } from "../types";
 
 export const createTextPost = mutationField("createTextPost", {
   type: "TextPost",
@@ -13,7 +14,7 @@ export const createTextPost = mutationField("createTextPost", {
     uri: stringArg({ required: true }),
     content: stringArg({ required: true })
   },
-  async resolve(_, { uri, content }, ctx): Promise<any> {
+  async resolve(_, { uri, content }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
@@ -46,7 +47,7 @@ export const updateTextPost = mutationField("updateTextPost", {
     uri: stringArg({ required: true }),
     content: stringArg({ required: true })
   },
-  async resolve(_, { uri, content }, ctx): Promise<any> {
+  async resolve(_, { uri, content }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
@@ -88,7 +89,7 @@ export const deleteTextPost = mutationField("deleteTextPost", {
   args: {
     uri: stringArg({ required: true })
   },
-  async resolve(_, { uri }, ctx): Promise<any> {
+  async resolve(_, { uri }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
