@@ -102,6 +102,7 @@ const CREATEVIDEOPOST = gql`
       uri
       video
       caption
+      location
     }
   }
 `;
@@ -132,9 +133,9 @@ test.serial("should not create video post(same-uri)", async t => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATEVIDEOPOST,
     variables: {
-      uri: "tset-uri",
+      uri: "test-uri",
       video: "base/64 encoded video value",
-      caption: "Lib=ving life",
+      caption: "Living life",
       location: "15.401100, 74.011803"
     }
   });
@@ -193,13 +194,13 @@ test("shouldn't create video post(not logged in)", async t => {
 //#region Update Video Post
 
 const UPDATEVIDEOPOST = gql`
-  mutation updateVideoPost($uri String!, $location: String, $caption: String) {
+  mutation updateVideoPost($uri: String!, $location: String, $caption: String) {
     updateVideoPost(uri: $uri, location: $location, caption: $caption) {
       location
       caption
     }
   }
-  `;
+`;
 
 test.serial("should update video post", async t => {
   const result = await authorizedApolloClient.mutate({
@@ -256,7 +257,9 @@ test.serial("shouldn't update video post (not logged in)", async t => {
 
 const DELETEVIDEOPOST = gql`
   mutation deleteVideoPost($uri: String!) {
-    deleteVideoPost(uri: $uri)
+    deleteVideoPost(uri: $uri) {
+      uri
+    }
   }
 `;
 
@@ -302,7 +305,7 @@ test.serial("should delete the post", async t => {
 
   t.assert(result.data);
   t.assert(!result.errors);
-  t.assert(videoPost);
+  t.assert(!videoPost);
 });
 //#endregion
 
