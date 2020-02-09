@@ -15,6 +15,7 @@ const server = new ApolloServer({ schema });
 const { query, mutate } = createTestClient(server);
 
 let authorizedApolloClient: ApolloServerTestClient;
+let authorizedApolloClient2: ApolloServerTestClient;
 
 import { before, after } from "../testutils";
 import { UserModel } from "../../models/User";
@@ -36,9 +37,27 @@ test.before(async () => {
     }
   });
 
+  await mutate({
+    mutation: CREATEUSER,
+    variables: {
+      username: "test@#!use*(--2",
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+      name: "Test User 2"
+    }
+  });
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
     "-password"
   );
+
+  const user2 = await UserModel.findOne({ username: "test@#!use*(--2" }).select(
+    "-password"
+  );
+
+  await TextPostModel.create({
+    author: user!._id,
+    uri: "novel-uri",
+    content: "Hello"
+  });
 
   authorizedApolloClient = createTestClient(
     new ApolloServer({
@@ -46,6 +65,17 @@ test.before(async () => {
       context: () => {
         return {
           user: user
+        };
+      }
+    })
+  );
+
+  authorizedApolloClient2 = createTestClient(
+    new ApolloServer({
+      schema,
+      context: () => {
+        return {
+          user: user2
         };
       }
     })
@@ -146,6 +176,68 @@ test("shouldn't create video post(not logged in)", async t => {
       video: "base/64 encoded video value",
       caption: "Living life",
       location: "15.401100, 74.011803"
+    }
+  });
+
+  t.assert(result.errors);
+  t.assert(!result.data);
+});
+
+//#endregion
+
+//#region Update Video Post
+
+const UPDATEVIDEOPOST = gql`
+  mutation updateVideoPost($uri String!, $location: String, $caption: String) {
+    updateVideoPost(uri: $uri, location: $location, caption: $caption) {
+      location
+      caption
+    }
+  }
+  `;
+
+test.serial("should update video post", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: UPDATEVIDEOPOST,
+    variables: {
+      uri: "test-uri",
+      caption: "Living life large",
+      location: "15.401100, 94.011803"
+    }
+  });
+
+  const post = await VideoPostModel.findOne({ uri: "test-uri" });
+
+  t.assert(post);
+  t.assert(!result.errors);
+  t.assert(result.data);
+  t.assert(result.data!.updateVideoPost.caption === "Living life large");
+  t.assert(post!.caption === "Living life large");
+  t.assert(result.data!.updateVideoPost.location === "15.401100, 94.011803");
+  t.assert(post!.location === "15.401100, 94.011803");
+});
+
+test.serial("should not update video post (wrong-logged-in-user)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: UPDATEVIDEOPOST,
+    variables: {
+      uri: "test-uri",
+      caption: "Living life large",
+      location: "15.401100, 94.011803"
+    }
+  });
+
+  t.assert(result.errors);
+  t.assert(!result.data);
+});
+
+test.serial("shouldn't update video post (not logged in)", async t => {
+  const result = await mutate({
+    mutation: UPDATEVIDEOPOST,
+    variables: {
+      uri: "test-uri",
+      caption: "Living life large",
+      location: "15.401100, 94.011803"
     }
   });
 
