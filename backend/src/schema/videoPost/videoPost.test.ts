@@ -56,6 +56,7 @@ test.before(async () => {
   await VideoPostModel.create({
     author: user!._id,
     uri: "novel-uri",
+    video: "base/64 encoded video value",
     caption: "Hello world",
     location: "15.401100, 74.011803"
   });
