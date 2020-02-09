@@ -226,7 +226,9 @@ test("shouldn't update text post (not logged in)", async t => {
 
 const DELETETEXTPOST = gql`
   mutation deleteTextPost($uri: String!) {
-    deleteTextPost(uri: $uri)
+    deleteTextPost(uri: $uri) {
+      uri
+    }
   }
 `;
 
@@ -260,6 +262,20 @@ test.serial("it should not delete the post (wrong logged in user)", async t => {
   t.assert(textPost);
 });
 
+test.serial("it should delete the post", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETETEXTPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const textPost = await TextPostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(result.data);
+  t.assert(!result.errors);
+  t.assert(!textPost);
+});
 //#endregion
 
 test.after.always(after);

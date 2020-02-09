@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn ./src/app.ts",
-    "test": "ava --tap | tnyan",
-    "test-watch": "ava --watch"
+    "test": "ava --timeout=5m --tap | tnyan",
+    "test-watch": "ava --watch --timeout=5m"
   },
   "ava": {
     "extensions": [

@@ -19,7 +19,7 @@ let authorizedApolloClient2: ApolloServerTestClient;
 
 import { before, after } from "../testutils";
 import { UserModel } from "../../models/User";
-import { ImagePostModel } from "../../models/ImagePost";
+import { VideoPostModel } from "../../models/VideoPost";
 
 test.before(async () => {
   await before();
@@ -53,10 +53,10 @@ test.before(async () => {
     "-password"
   );
 
-  await ImagePostModel.create({
+  await VideoPostModel.create({
     author: user!._id,
     uri: "novel-uri",
-    image: "base/64 encoded image value",
+    video: "base/64 encoded video value",
     caption: "Hello world",
     location: "15.401100, 74.011803"
   });
@@ -84,57 +84,57 @@ test.before(async () => {
   );
 });
 
-//#region Create Image Post
+//#region Create Video Post
 
-const CREATEIMAGEPOST = gql`
-  mutation createImagePost(
+const CREATEVIDEOPOST = gql`
+  mutation createVideoPost(
     $uri: String!
-    $image: String!
+    $video: String!
     $caption: String
     $location: String
   ) {
-    createImagePost(
+    createVideoPost(
       uri: $uri
-      image: $image
+      video: $video
       caption: $caption
       location: $location
     ) {
       uri
-      image
+      video
       caption
       location
     }
   }
 `;
 
-test.serial("should create image post", async t => {
+test.serial("should create video post", async t => {
   const result = await authorizedApolloClient.mutate({
-    mutation: CREATEIMAGEPOST,
+    mutation: CREATEVIDEOPOST,
     variables: {
       uri: "test-uri",
-      image: "base/64 encoded image value",
+      video: "base/64 encoded video value",
       caption: "Living life",
       location: "15.401100, 74.011803"
     }
   });
 
-  const post = await ImagePostModel.findOne({ uri: "test-uri" });
+  const post = await VideoPostModel.findOne({ uri: "test-uri" });
 
   t.assert(post);
   t.assert(!result.errors);
   t.assert(result.data);
-  t.assert(result.data!.createImagePost.caption === "Living life");
+  t.assert(result.data!.createVideoPost.caption === "Living life");
   t.assert(post!.caption === "Living life");
-  t.assert(result.data!.createImagePost.location === "15.401100, 74.011803");
+  t.assert(result.data!.createVideoPost.location === "15.401100, 74.011803");
   t.assert(post!.location === "15.401100, 74.011803");
 });
 
-test.serial("should not create image post (same-uri)", async t => {
+test.serial("should not create video post(same-uri)", async t => {
   const result = await authorizedApolloClient.mutate({
-    mutation: CREATEIMAGEPOST,
+    mutation: CREATEVIDEOPOST,
     variables: {
       uri: "test-uri",
-      image: "base/64 encoded image value",
+      video: "base/64 encoded video value",
       caption: "Living life",
       location: "15.401100, 74.011803"
     }
@@ -144,12 +144,12 @@ test.serial("should not create image post (same-uri)", async t => {
   t.assert(!result.data);
 });
 
-test.serial("should not create image post (no image)", async t => {
+test.serial("should not create video post (no video)", async t => {
   const result = await authorizedApolloClient.mutate({
-    mutation: CREATEIMAGEPOST,
+    mutation: CREATEVIDEOPOST,
     variables: {
       uri: "test-uri",
-      image: "",
+      video: "",
       caption: "Living life",
       location: "15.401100, 74.011803"
     }
@@ -159,12 +159,12 @@ test.serial("should not create image post (no image)", async t => {
   t.assert(!result.data);
 });
 
-test.serial("should not create image post (wrong location)", async t => {
+test.serial("should not create video post (wrong location)", async t => {
   const result = await authorizedApolloClient.mutate({
-    mutation: CREATEIMAGEPOST,
+    mutation: CREATEVIDEOPOST,
     variables: {
       uri: "test-uri",
-      image: "base/64 encoded image value",
+      video: "base/64 encoded video value",
       caption: "Living life",
       location: "1523948328947, 1293812937"
     }
@@ -174,12 +174,12 @@ test.serial("should not create image post (wrong location)", async t => {
   t.assert(!result.data);
 });
 
-test("shouldn't create image post (not logged in)", async t => {
+test("shouldn't create video post(not logged in)", async t => {
   const result = await mutate({
-    mutation: CREATEIMAGEPOST,
+    mutation: CREATEVIDEOPOST,
     variables: {
       uri: "test-uri",
-      image: "base/64 encoded image value",
+      video: "base/64 encoded video value",
       caption: "Living life",
       location: "15.401100, 74.011803"
     }
@@ -191,20 +191,20 @@ test("shouldn't create image post (not logged in)", async t => {
 
 //#endregion
 
-//#region Update Image Post
+//#region Update Video Post
 
-const UPDATEIMAGEPOST = gql`
-  mutation updateImagePost($uri: String!, $location: String, $caption: String) {
-    updateImagePost(uri: $uri, location: $location, caption: $caption) {
+const UPDATEVIDEOPOST = gql`
+  mutation updateVideoPost($uri: String!, $location: String, $caption: String) {
+    updateVideoPost(uri: $uri, location: $location, caption: $caption) {
       location
       caption
     }
   }
 `;
 
-test.serial("should update image post", async t => {
+test.serial("should update video post", async t => {
   const result = await authorizedApolloClient.mutate({
-    mutation: UPDATEIMAGEPOST,
+    mutation: UPDATEVIDEOPOST,
     variables: {
       uri: "test-uri",
       caption: "Living life large",
@@ -212,20 +212,20 @@ test.serial("should update image post", async t => {
     }
   });
 
-  const post = await ImagePostModel.findOne({ uri: "test-uri" });
+  const post = await VideoPostModel.findOne({ uri: "test-uri" });
 
   t.assert(post);
   t.assert(!result.errors);
   t.assert(result.data);
-  t.assert(result.data!.updateImagePost.caption === "Living life large");
+  t.assert(result.data!.updateVideoPost.caption === "Living life large");
   t.assert(post!.caption === "Living life large");
-  t.assert(result.data!.updateImagePost.location === "15.401100, 94.011803");
+  t.assert(result.data!.updateVideoPost.location === "15.401100, 94.011803");
   t.assert(post!.location === "15.401100, 94.011803");
 });
 
-test.serial("should not update image post (wrong-logged-in-user)", async t => {
+test.serial("should not update video post (wrong-logged-in-user)", async t => {
   const result = await authorizedApolloClient2.mutate({
-    mutation: UPDATEIMAGEPOST,
+    mutation: UPDATEVIDEOPOST,
     variables: {
       uri: "test-uri",
       caption: "Living life large",
@@ -237,9 +237,9 @@ test.serial("should not update image post (wrong-logged-in-user)", async t => {
   t.assert(!result.data);
 });
 
-test.serial("shouldn't update image post (not logged in)", async t => {
+test.serial("shouldn't update video post (not logged in)", async t => {
   const result = await mutate({
-    mutation: UPDATEIMAGEPOST,
+    mutation: UPDATEVIDEOPOST,
     variables: {
       uri: "test-uri",
       caption: "Living life large",
@@ -253,11 +253,11 @@ test.serial("shouldn't update image post (not logged in)", async t => {
 
 //#endregion
 
-//#region Delete ImagePost
+//#region Delete Video Post
 
-const DELETEIMAGEPOST = gql`
-  mutation deleteImagePost($uri: String!) {
-    deleteImagePost(uri: $uri) {
+const DELETEVIDEOPOST = gql`
+  mutation deleteVideoPost($uri: String!) {
+    deleteVideoPost(uri: $uri) {
       uri
     }
   }
@@ -265,47 +265,48 @@ const DELETEIMAGEPOST = gql`
 
 test.serial("should not delete the post (not loged in)", async t => {
   const result = await mutate({
-    mutation: DELETEIMAGEPOST,
+    mutation: DELETEVIDEOPOST,
     variables: {
       uri: "novel-uri"
     }
   });
 
-  const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
+  const videoPost = await VideoPostModel.findOne({ uri: "novel-uri" });
 
   t.assert(!result.data);
   t.assert(result.errors);
-  t.assert(imagePost);
+  t.assert(videoPost);
 });
 
 test.serial("should not delete the post (wrong-logged-in-user)", async t => {
   const result = await authorizedApolloClient2.mutate({
-    mutation: DELETEIMAGEPOST,
+    mutation: DELETEVIDEOPOST,
     variables: {
       uri: "novel-uri"
     }
   });
 
-  const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
+  const videoPost = await VideoPostModel.findOne({ uri: "novel-uri" });
 
   t.assert(!result.data);
   t.assert(result.errors);
-  t.assert(imagePost);
+  t.assert(videoPost);
 });
 
 test.serial("should delete the post", async t => {
   const result = await authorizedApolloClient.mutate({
-    mutation: DELETEIMAGEPOST,
+    mutation: DELETEVIDEOPOST,
     variables: {
       uri: "novel-uri"
     }
   });
 
-  const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
+  const videoPost = await VideoPostModel.findOne({ uri: "novel-uri" });
 
   t.assert(result.data);
   t.assert(!result.errors);
-  t.assert(!imagePost);
+  t.assert(!videoPost);
 });
 //#endregion
+
 test.after.always(after);

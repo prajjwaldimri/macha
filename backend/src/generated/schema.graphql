@@ -53,8 +53,10 @@ type Mutation {
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
   createTextPost(content: String!, uri: String!): TextPost!
+  createVideoPost(caption: String, location: String, uri: String!, video: String!): VideoPost!
   deleteImagePost(uri: String!): ImagePost!
   deleteTextPost(uri: String!): TextPost!
+  deleteVideoPost(uri: String!): VideoPost!
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
@@ -62,6 +64,7 @@ type Mutation {
   updateComment(commentId: String!, text: String!): Comment!
   updateImagePost(caption: String, location: String, uri: String!): ImagePost!
   updateTextPost(content: String!, uri: String!): TextPost!
+  updateVideoPost(caption: String, location: String, uri: String!): VideoPost!
 }
 
 interface Node {

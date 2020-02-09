@@ -70,7 +70,7 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['VideoPost'];
+  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Like'];
   String: string;
   Int: number;
   Float: number;
@@ -117,8 +117,10 @@ export interface NexusGenFieldTypes {
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    createVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     deleteImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     deleteTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    deleteVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
@@ -126,6 +128,7 @@ export interface NexusGenFieldTypes {
     updateComment: NexusGenRootTypes['Comment']; // Comment!
     updateImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     updateTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    updateVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
   }
   Query: { // field return type
     getFeed: NexusGenRootTypes['Feed']; // Feed!
@@ -176,10 +179,19 @@ export interface NexusGenArgTypes {
       content: string; // String!
       uri: string; // String!
     }
+    createVideoPost: { // args
+      caption?: string | null; // String
+      location?: string | null; // String
+      uri: string; // String!
+      video: string; // String!
+    }
     deleteImagePost: { // args
       uri: string; // String!
     }
     deleteTextPost: { // args
+      uri: string; // String!
+    }
+    deleteVideoPost: { // args
       uri: string; // String!
     }
     likeComment: { // args
@@ -212,6 +224,11 @@ export interface NexusGenArgTypes {
       content: string; // String!
       uri: string; // String!
     }
+    updateVideoPost: { // args
+      caption?: string | null; // String
+      location?: string | null; // String
+      uri: string; // String!
+    }
   }
   Query: {
     getFeed: { // args
@@ -224,7 +241,7 @@ export interface NexusGenArgTypes {
 export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
-  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "Like" | "VideoPost"
+  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "Like"
 }
 
 export interface NexusGenInheritedFields {}
