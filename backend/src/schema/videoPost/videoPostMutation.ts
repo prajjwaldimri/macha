@@ -111,7 +111,7 @@ export const deleteVideoPost = mutationField("deleteVideoPost", {
 
       if (videoPost.author.toString() !== ctx.user._id.toString()) {
         throw new ForbiddenError(
-          "Not allowed to delete the post as the logged in user is notthe author of the post"
+          "Not allowed to delete the post as the logged in user is not the author of the post"
         );
       }
 

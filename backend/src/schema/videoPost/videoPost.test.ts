@@ -53,10 +53,11 @@ test.before(async () => {
     "-password"
   );
 
-  await TextPostModel.create({
+  await VideoPostModel.create({
     author: user!._id,
     uri: "novel-uri",
-    content: "Hello"
+    caption: "Hello world",
+    location: "15.401100, 74.011803"
   });
 
   authorizedApolloClient = createTestClient(
@@ -120,7 +121,10 @@ test.serial("should create video post", async t => {
   t.assert(post);
   t.assert(!result.errors);
   t.assert(result.data);
-  t.assert(post!.caption == "Living life");
+  t.assert(result.data!.createVideoPost.caption === "Living life");
+  t.assert(post!.caption === "Living life");
+  t.assert(result.data!.createVideoPost.location === "15.401100, 74.011803");
+  t.assert(post!.location === "15.401100, 74.011803");
 });
 
 test.serial("should not create video post(same-uri)", async t => {
@@ -246,3 +250,59 @@ test.serial("shouldn't update video post (not logged in)", async t => {
 });
 
 //#endregion
+
+//#region Delete Video Post
+
+const DELETEVIDEOPOST = gql`
+  mutation deleteVideoPost($uri: String!) {
+    deleteVideoPost(uri: $uri)
+  }
+`;
+
+test.serial("should not delete the post (not loged in)", async t => {
+  const result = await mutate({
+    mutation: DELETEVIDEOPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const videoPost = await VideoPostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+  t.assert(videoPost);
+});
+
+test.serial("should not delete the post (wrong-logged-in-user)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETEVIDEOPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const videoPost = await VideoPostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+  t.assert(videoPost);
+});
+
+test.serial("should delete the post", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETEVIDEOPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const videoPost = await VideoPostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(result.data);
+  t.assert(!result.errors);
+  t.assert(videoPost);
+});
+//#endregion
+
+test.after.always(after);
