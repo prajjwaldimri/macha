@@ -4,6 +4,7 @@ import { ImagePost } from "./ImagePost";
 import { VideoPost } from "./VideoPost";
 import { TextPost } from "./TextPost";
 import { Comment } from "./Comment";
+import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
 enum LikableType {
   ImagePost = "ImagePost",
@@ -12,7 +13,7 @@ enum LikableType {
   Comment = "Comment"
 }
 
-class Like {
+class Like extends TimeStamps {
   @prop({
     required: true,
     ref: "User"
