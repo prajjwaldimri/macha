@@ -102,6 +102,7 @@ const CREATEIMAGEPOST = gql`
       uri
       image
       caption
+      location
     }
   }
 `;
@@ -122,9 +123,9 @@ test.serial("should create image post", async t => {
   t.assert(post);
   t.assert(!result.errors);
   t.assert(result.data);
-  t.assert(result.data!.createVideoPost.caption === "Living life");
+  t.assert(result.data!.createImagePost.caption === "Living life");
   t.assert(post!.caption === "Living life");
-  t.assert(result.data!.createVideoPost.location === "15.401100, 74.011803");
+  t.assert(result.data!.createImagePost.location === "15.401100, 74.011803");
   t.assert(post!.location === "15.401100, 74.011803");
 });
 
@@ -193,13 +194,13 @@ test("shouldn't create image post (not logged in)", async t => {
 //#region Update Image Post
 
 const UPDATEIMAGEPOST = gql`
-  mutation updateImagePost($uri String!, $location: String, $caption: String) {
+  mutation updateImagePost($uri: String!, $location: String, $caption: String) {
     updateImagePost(uri: $uri, location: $location, caption: $caption) {
       location
       caption
     }
   }
-  `;
+`;
 
 test.serial("should update image post", async t => {
   const result = await authorizedApolloClient.mutate({
@@ -256,7 +257,9 @@ test.serial("shouldn't update image post (not logged in)", async t => {
 
 const DELETEIMAGEPOST = gql`
   mutation deleteImagePost($uri: String!) {
-    deleteImagePost(uri: $uri)
+    deleteImagePost(uri: $uri) {
+      uri
+    }
   }
 `;
 
@@ -302,7 +305,7 @@ test.serial("should delete the post", async t => {
 
   t.assert(result.data);
   t.assert(!result.errors);
-  t.assert(imagePost);
+  t.assert(!imagePost);
 });
 //#endregion
 test.after.always(after);

@@ -226,7 +226,9 @@ test("shouldn't update text post (not logged in)", async t => {
 
 const DELETETEXTPOST = gql`
   mutation deleteTextPost($uri: String!) {
-    deleteTextPost(uri: $uri)
+    deleteTextPost(uri: $uri) {
+      uri
+    }
   }
 `;
 
@@ -272,7 +274,7 @@ test.serial("it should delete the post", async t => {
 
   t.assert(result.data);
   t.assert(!result.errors);
-  t.assert(textPost);
+  t.assert(!textPost);
 });
 //#endregion
 
