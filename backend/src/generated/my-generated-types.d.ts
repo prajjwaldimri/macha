@@ -213,6 +213,12 @@ export interface NexusGenArgTypes {
       uri: string; // String!
     }
   }
+  Query: {
+    getFeed: { // args
+      limit?: number | null; // Int
+      skip?: number | null; // Int
+    }
+  }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {

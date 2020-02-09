@@ -30,22 +30,45 @@ export const getFeed = queryField("getFeed", {
         return { posts: null };
       }
 
-      let posts: Array<Array<any>> = [];
-      machas.forEach(async macha => {
-        posts.push(
-          await TextPostModel.find({ author: macha }).select("_id, updatedAt")
+      let posts: Array<any> = [];
+      for (const macha of machas) {
+        const textPosts = await TextPostModel.find({ author: macha }).select(
+          "_id, updatedAt"
         );
-        posts.push(
-          await ImagePostModel.find({ author: macha }).select("_id, updatedAt")
+        const imagePosts = await ImagePostModel.find({ author: macha }).select(
+          "_id, updatedAt"
         );
-        posts.push(
-          await VideoPostModel.find({ author: macha }).select("_id, updatedAt")
+        const videoPosts = await VideoPostModel.find({ author: macha }).select(
+          "_id, updatedAt"
         );
-      });
-
-      console.log(posts);
+        posts.push(...textPosts, ...imagePosts, ...videoPosts);
+      }
 
       // Arrange them in chronological order
+
+      let sortedPosts = posts.sort((first, second): number => {
+        const firstDate = Date.parse(first.updatedAt);
+        const secondDate = Date.parse(second.updatedAt);
+        if (firstDate > secondDate) {
+          return 1;
+        } else if (firstDate < secondDate) {
+          return -1;
+        }
+        return 0;
+      });
+
+      // Only keep the top #(limit) posts
+      if (sortedPosts.length > limit!) {
+        sortedPosts = sortedPosts.slice(0, limit! - 1);
+      }
+
+      // Only return the _ids of the posts
+      posts = [];
+      for (const post of sortedPosts) {
+        posts.push(post._id.toString());
+      }
+
+      return { posts };
     } catch (err) {
       return err;
     }

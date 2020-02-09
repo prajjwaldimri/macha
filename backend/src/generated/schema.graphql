@@ -79,7 +79,11 @@ enum PostTypeEnum {
 }
 
 type Query {
-  getFeed: Feed!
+  getFeed(
+    """Cannot be less than 150"""
+    limit: Int = 150
+    skip: Int = 0
+  ): Feed!
   me: User!
 }
 
