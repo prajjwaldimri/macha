@@ -89,18 +89,18 @@ test.before(async () => {
 const CREATEVIDEOPOST = gql`
   mutation createVideoPost(
     $uri: String!
-    $image: String!
+    $video: String!
     $caption: String
     $location: String
   ) {
     createVideoPost(
       uri: $uri
-      image: $image
+      video: $video
       caption: $caption
       location: $location
     ) {
       uri
-      image
+      video
       caption
     }
   }

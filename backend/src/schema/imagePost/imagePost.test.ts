@@ -252,4 +252,57 @@ test.serial("shouldn't update image post (not logged in)", async t => {
 
 //#endregion
 
+//#region Delete ImagePost
+
+const DELETEIMAGEPOST = gql`
+  mutation deleteImagePost($uri: String!) {
+    deleteImagePost(uri: $uri)
+  }
+`;
+
+test.serial("should not delete the post (not loged in)", async t => {
+  const result = await mutate({
+    mutation: DELETEIMAGEPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+  t.assert(imagePost);
+});
+
+test.serial("should not delete the post (wrong-logged-in-user)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETEIMAGEPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+  t.assert(imagePost);
+});
+
+test.serial("should delete the post", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETEIMAGEPOST,
+    variables: {
+      uri: "novel-uri"
+    }
+  });
+
+  const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
+
+  t.assert(result.data);
+  t.assert(!result.errors);
+  t.assert(imagePost);
+});
+//#endregion
 test.after.always(after);
