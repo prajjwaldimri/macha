@@ -3,6 +3,7 @@ import { User } from "./User";
 import { ImagePost } from "./ImagePost";
 import { VideoPost } from "./VideoPost";
 import { TextPost } from "./TextPost";
+import { TimeStamps, Base } from "@typegoose/typegoose/lib/defaultClasses";
 
 enum PostType {
   ImagePost = "ImagePost",
@@ -10,7 +11,7 @@ enum PostType {
   TextPost = "TextPost"
 }
 
-export class Comment {
+export class Comment extends TimeStamps {
   @prop({
     required: true,
     ref: "User"

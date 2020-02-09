@@ -13,6 +13,10 @@ type Comment implements Node {
   text: String!
 }
 
+type Feed {
+  posts: [String!]!
+}
+
 type ImagePost implements Node {
   author: ID!
   authorDetails: User!
@@ -46,6 +50,7 @@ type Like implements Node {
 }
 
 type Mutation {
+  createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
   createTextPost(content: String!, uri: String!): TextPost!
   deleteImagePost(uri: String!): ImagePost!
@@ -54,6 +59,7 @@ type Mutation {
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
+  updateComment(commentId: String!, text: String!): Comment!
   updateImagePost(caption: String, location: String, uri: String!): ImagePost!
   updateTextPost(content: String!, uri: String!): TextPost!
 }
@@ -73,6 +79,11 @@ enum PostTypeEnum {
 }
 
 type Query {
+  getFeed(
+    """Cannot be less than 150"""
+    limit: Int = 150
+    skip: Int = 0
+  ): Feed!
   me: User!
 }
 

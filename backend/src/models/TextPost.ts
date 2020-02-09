@@ -1,7 +1,8 @@
 import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
+import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
-export class TextPost {
+export class TextPost extends TimeStamps {
   @prop({
     required: true,
     ref: "User"
