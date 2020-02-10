@@ -6,6 +6,7 @@ import { ImagePostModel } from "../../models/ImagePost";
 import { VideoPostModel } from "../../models/VideoPost";
 import { LikeModel } from "../../models/Like";
 import { CommentModel } from "../../models/Comment";
+import { resolve } from "dns";
 
 export const likePost = mutationField("likePost", {
   type: "Like",
@@ -75,6 +76,32 @@ export const likeComment = mutationField("likeComment", {
         likableType: "Comment",
         likable: commentId
       });
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const unlikePost = mutationField("unlikePost", {
+  type: "Like",
+  args: {
+    likeId: stringArg({ required: true })
+  },
+  async resolve(_, { likeId }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Cannot like without logging in");
+      }
+
+      const likeIdPost = await LikeModel.findById(likeId);
+
+      if (!likeIdPost) {
+        throw new UserInputError("No like found with the given id");
+      }
+
+      if (likeIdPost) {
+        return await LikeModel.findByIdAndDelete(likeId);
+      }
     } catch (err) {
       return err;
     }

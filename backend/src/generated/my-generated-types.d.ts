@@ -125,6 +125,7 @@ export interface NexusGenFieldTypes {
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
     signup: string; // String!
+    unlikePost: NexusGenRootTypes['Like']; // Like!
     updateComment: NexusGenRootTypes['Comment']; // Comment!
     updateImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     updateTextPost: NexusGenRootTypes['TextPost']; // TextPost!
@@ -210,6 +211,9 @@ export interface NexusGenArgTypes {
       name: string; // String!
       password: string; // String!
       username: string; // String!
+    }
+    unlikePost: { // args
+      likeId: string; // String!
     }
     updateComment: { // args
       commentId: string; // String!
