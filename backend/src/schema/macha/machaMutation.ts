@@ -48,12 +48,12 @@ export const addMacha = mutationField("addMacha", {
         throw new UserInputError("Code expired or never existed");
       }
 
-      if (otc.userCount <= 1) {
-        await OneTimeCodeModel.findByIdAndDelete(otc._id);
-      }
-
       if (otc.author.toString() === ctx.user._id.toString()) {
         throw new UserInputError("Cannot add yourself as your friend :(");
+      }
+
+      if (otc.userCount <= 1) {
+        await OneTimeCodeModel.findByIdAndDelete(otc._id);
       }
 
       await UserModel.findByIdAndUpdate(otc.author, {
@@ -64,6 +64,48 @@ export const addMacha = mutationField("addMacha", {
         ctx.user._id,
         {
           $push: { machas: otc.author }
+        },
+        { new: true }
+      );
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const removeMacha = mutationField("removeMacha", {
+  type: "User",
+  args: {
+    username: stringArg({
+      required: true,
+      description: "Username of the user to be removed"
+    })
+  },
+  async resolve(_, { username }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Cannot add a macha without logging in");
+      }
+
+      const userToBeRemoved = await UserModel.findOne({ username });
+      if (!userToBeRemoved) {
+        throw new UserInputError(
+          "user with the provided username doesn't exist"
+        );
+      }
+
+      if (userToBeRemoved._id.toString() === ctx.user._id.toString()) {
+        throw new UserInputError("Cannot remove yourself as your friend :(");
+      }
+
+      await UserModel.findByIdAndUpdate(userToBeRemoved._id, {
+        $pull: { machas: ctx.user._id }
+      }).select("_id");
+
+      return await UserModel.findByIdAndUpdate(
+        ctx.user._id,
+        {
+          $push: { machas: userToBeRemoved._id }
         },
         { new: true }
       );

@@ -162,6 +162,18 @@ const ADDMACHA = gql`
   }
 `;
 
+test.serial("shouldn't add a macha (adding itself)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: ADDMACHA,
+    variables: {
+      oneTimeCode: createdOTC
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
 test.serial("should add a macha", async t => {
   const result = await authorizedApolloClient2.mutate({
     mutation: ADDMACHA,
@@ -169,8 +181,6 @@ test.serial("should add a macha", async t => {
       oneTimeCode: createdOTC
     }
   });
-
-  console.log(result);
 
   t.assert(result.data);
   t.assert(!result.errors);
@@ -215,6 +225,53 @@ test.serial("shouldn't add a macha (expired one time code)", async t => {
 //#endregion
 
 //#region Remove Macha
+
+const REMOVEMACHA = gql`
+  mutation removeMacha($username: String!) {
+    removeMacha(username: $username) {
+      username
+    }
+  }
+`;
+
+test.serial("shouldn't remove a macha (removing itself)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: REMOVEMACHA,
+    variables: {
+      username: "test@#!use*("
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("should remove a macha", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: REMOVEMACHA,
+    variables: {
+      username: "test@#!use*("
+    }
+  });
+
+  const user = await UserModel.findOne({ username: "test@#!use*(" });
+
+  t.assert(result.data);
+  t.assert(!result.errors);
+  t.assert(user!.machas!.length === 0);
+});
+
+test.serial("shouldn't remove a macha (not logged in)", async t => {
+  const result = await mutate({
+    mutation: REMOVEMACHA,
+    variables: {
+      username: "test@#!use*("
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
 
 //#endregion
 
