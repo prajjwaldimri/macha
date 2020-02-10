@@ -85,23 +85,45 @@ export const likeComment = mutationField("likeComment", {
 export const unlikePost = mutationField("unlikePost", {
   type: "Like",
   args: {
-    likeId: stringArg({ required: true })
+    likePostId: stringArg({ required: true })
   },
-  async resolve(_, { likeId }, ctx: UserContext): Promise<any> {
+  async resolve(_, { likePostId }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
-        throw new AuthenticationError("Cannot like without logging in");
+        throw new AuthenticationError("Cannot unlike without logging in");
       }
 
-      const likeIdPost = await LikeModel.findById(likeId);
+      const like = await LikeModel.findById(likePostId);
 
-      if (!likeIdPost) {
+      if (!like) {
         throw new UserInputError("No like found with the given id");
       }
 
-      if (likeIdPost) {
-        return await LikeModel.findByIdAndDelete(likeId);
+      return await LikeModel.findByIdAndDelete(likePostId);
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const unlikeComment = mutationField("unlikeComment", {
+  type: "Like",
+  args: {
+    likeCommentId: stringArg({ required: true })
+  },
+  async resolve(_, { likeCommentId }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Cannot unlike without logging in");
       }
+
+      const comment = await CommentModel.findById(likeCommentId);
+
+      if (!comment) {
+        throw new UserInputError("No comment found with the given id");
+      }
+
+      return await LikeModel.findByIdAndDelete(likeCommentId);
     } catch (err) {
       return err;
     }
