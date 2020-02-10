@@ -1,5 +1,6 @@
 import { prop, getModelForClass, Ref, arrayProp } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+
 export class User extends TimeStamps {
   @prop({
     required: true,

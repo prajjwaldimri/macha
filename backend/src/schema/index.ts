@@ -23,3 +23,5 @@ export * from "./like/likeMutation";
 
 export * from "./feed/feed";
 export * from "./feed/feedQuery";
+
+export * from "./macha/machaMutation";
