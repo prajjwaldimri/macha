@@ -61,6 +61,8 @@ type Mutation {
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
+  unlikeComment(commentId: String!): Like!
+  unlikePost(postId: String!): Like!
   updateComment(commentId: String!, text: String!): Comment!
   updateImagePost(caption: String, location: String, uri: String!): ImagePost!
   updateTextPost(content: String!, uri: String!): TextPost!
