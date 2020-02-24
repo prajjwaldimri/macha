@@ -22,9 +22,12 @@ import { UserModel } from "../../models/User";
 import { TextPostModel, TextPost } from "../../models/TextPost";
 import { DocumentType } from "@typegoose/typegoose";
 import { CommentModel, Comment } from "../../models/Comment";
+import { LikeModel, Like } from "../../models/Like";
 
 let post: DocumentType<TextPost>;
 let comment: DocumentType<Comment>;
+let like1: DocumentType<Like>;
+let like2: DocumentType<Like>;
 
 test.before(async () => {
   await before();
@@ -70,6 +73,18 @@ test.before(async () => {
     text: "Nice status!!",
     postType: "TextPost",
     post: post!._id
+  });
+
+  like1 = await LikeModel.create({
+    author: user!._id,
+    likableType: "TextPost",
+    likable: post!._id
+  });
+
+  like2 = await LikeModel.create({
+    author: user!._id,
+    likableType: "Comment",
+    likable: comment!._id
   });
 
   authorizedApolloClient = createTestClient(
@@ -197,6 +212,102 @@ test.serial("should not like the comment (Not logged in)", async t => {
   t.assert(result.errors);
 });
 
+//#endregion
+
+//#region Unlike Post
+
+const UNLIKEPOST = gql`
+  mutation unlikePost($postId: String!) {
+    unlikePost(postId: $postId) {
+      author
+    }
+  }
+`;
+
+test.serial("should unlike the post", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: UNLIKEPOST,
+    variables: {
+      postId: post._id.toString()
+    }
+  });
+
+  t.assert(result.data);
+  t.assert(!result.errors);
+});
+
+test.serial("should not unlike the post (Wrong post Id)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: UNLIKEPOST,
+    variables: {
+      postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt"
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("should not unlike the post (Not logged in)", async t => {
+  const result = await mutate({
+    mutation: UNLIKEPOST,
+    variables: {
+      postId: post._id.toString()
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+//#endregion
+
+//#region Unlike Comment
+
+const UNLIKECOMMENT = gql`
+  mutation unlikeComment($commentId: String!) {
+    unlikeComment(commentId: $commentId) {
+      author
+    }
+  }
+`;
+
+test.serial("should unlike the comment", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: UNLIKECOMMENT,
+    variables: {
+      commentId: comment._id.toString()
+    }
+  });
+  const like = await LikeModel.findById(like2._id);
+  t.assert(result.data);
+  t.assert(!result.errors);
+  t.assert(!like);
+});
+
+test.serial("should not unlike the comment (Wrong comment Id)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: UNLIKECOMMENT,
+    variables: {
+      commentId: "hcgsjcsjkjiw67tqyw17@$$mshabhxx"
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("should not unlike the comment (Not logged in)", async t => {
+  const result = await mutate({
+    mutation: UNLIKECOMMENT,
+    variables: {
+      commentId: comment._id.toString()
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
 //#endregion
 
 test.after.always(after);

@@ -214,10 +214,10 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
     unlikeComment: { // args
-      likeCommentId: string; // String!
+      commentId: string; // String!
     }
     unlikePost: { // args
-      likePostId: string; // String!
+      postId: string; // String!
     }
     updateComment: { // args
       commentId: string; // String!
