@@ -242,5 +242,61 @@ test.serial("should not update comment (Empty text)", async t => {
 //#endregion
 
 //#region Delete Comment
+
+const DELETECOMMENT = gql`
+  mutation deleteComment($commentId: String!) {
+    deleteComment(commentId: $commentId) {
+      author
+    }
+  }
+`;
+
+test.serial("should delete the comment", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  t.assert(result.data);
+  t.assert(!result.errors);
+});
+
+test.serial("should not delete the comment (Wrong comment Id)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: "ASKJLDHAKJSDHAJKSU^&*%^&^%$%^&"
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("shoud not delete the comment (Not logged in)", async t => {
+  const result = await mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("should not delete the comment (Wrong logged in user)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
 //#endregion
 test.after.always(after);

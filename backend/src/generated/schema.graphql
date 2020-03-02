@@ -50,16 +50,23 @@ type Like implements Node {
 }
 
 type Mutation {
+  addMacha(oneTimeCode: String!): User!
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
   createTextPost(content: String!, uri: String!): TextPost!
   createVideoPost(caption: String, location: String, uri: String!, video: String!): VideoPost!
+  deleteComment(commentId: String!): Comment!
   deleteImagePost(uri: String!): ImagePost!
   deleteTextPost(uri: String!): TextPost!
   deleteVideoPost(uri: String!): VideoPost!
+  generateMachaOTC(userCount: Int! = 1): String!
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
+  removeMacha(
+    """Username of the user to be removed"""
+    username: String!
+  ): User!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
   unlikeComment(commentId: String!): Like!
   unlikePost(postId: String!): Like!
