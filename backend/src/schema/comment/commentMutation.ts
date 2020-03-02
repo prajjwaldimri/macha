@@ -5,9 +5,9 @@ import {
   UserInputError,
   ForbiddenError
 } from "apollo-server";
-import { TextPostModel } from "../../models/TextPost";
-import { ImagePostModel } from "../../models/ImagePost";
-import { VideoPostModel } from "../../models/VideoPost";
+import { TextPostModel, TextPost } from "../../models/TextPost";
+import { ImagePostModel, ImagePost } from "../../models/ImagePost";
+import { VideoPostModel, VideoPost } from "../../models/VideoPost";
 import { CommentModel } from "../../models/Comment";
 import isLength from "validator/lib/isLength";
 import { resolve } from "dns";
@@ -122,10 +122,30 @@ export const deleteComment = mutationField("deleteComment", {
         throw new UserInputError("No comment with the given id exists");
       }
 
-      if (comment.author.toString() !== ctx.user._id.toString()) {
-        throw new ForbiddenError(
-          "Not allowed to delete the comment as the logged in user is not the author of the comment"
-        );
+      let isPostAuthor = false;
+      let post: TextPost | ImagePost | VideoPost | null = null;
+
+      switch (comment.postType) {
+        case "TextPost":
+          post = await TextPostModel.findById(comment.post);
+          break;
+        case "ImagePost":
+          post = await ImagePostModel.findById(comment.post);
+          break;
+        case "VideoPost":
+          post = await VideoPostModel.findById(comment.post);
+          break;
+      }
+
+      if (!post) {
+        throw new UserInputError("Post doesn't exists");
+      }
+
+      if (
+        comment.author.toString() !== ctx.user._id.toString() &&
+        post?.author.toString() !== ctx.user._id.toString()
+      ) {
+        throw new ForbiddenError("Not allowed to delete the comment");
       }
 
       return await comment.remove();
