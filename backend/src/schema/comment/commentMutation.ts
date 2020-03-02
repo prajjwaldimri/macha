@@ -10,6 +10,7 @@ import { ImagePostModel } from "../../models/ImagePost";
 import { VideoPostModel } from "../../models/VideoPost";
 import { CommentModel } from "../../models/Comment";
 import isLength from "validator/lib/isLength";
+import { resolve } from "dns";
 
 export const createComment = mutationField("createComment", {
   type: "Comment",
@@ -20,7 +21,7 @@ export const createComment = mutationField("createComment", {
   async resolve(_, { postId, text }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
-        throw new AuthenticationError("Cannot like without logging in");
+        throw new AuthenticationError("Cannot comment without logging in");
       }
 
       if (!isLength(text.trim(), { min: 1 })) {
@@ -96,6 +97,38 @@ export const updateComment = mutationField("updateComment", {
         { text: text },
         { new: true }
       );
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const deleteComment = mutationField("deleteComment", {
+  type: "Comment",
+  args: {
+    commentId: stringArg({ required: true })
+  },
+  async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot delete the comment without logging in"
+        );
+      }
+
+      const comment = await CommentModel.findById(commentId);
+
+      if (!comment) {
+        throw new UserInputError("No comment with the given id exists");
+      }
+
+      if (comment.author.toString() !== ctx.user._id.toString()) {
+        throw new ForbiddenError(
+          "Not allowed to delete the comment as the logged in user is not the author of the comment"
+        );
+      }
+
+      return await comment.remove();
     } catch (err) {
       return err;
     }
