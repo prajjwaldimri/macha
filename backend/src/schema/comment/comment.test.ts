@@ -241,4 +241,6 @@ test.serial("should not update comment (Empty text)", async t => {
 
 //#endregion
 
+//#region Delete Comment
+//#endregion
 test.after.always(after);
