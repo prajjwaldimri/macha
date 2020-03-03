@@ -128,6 +128,7 @@ const CREATECOMMENT = gql`
 `;
 
 let createdComment: DocumentType<Comment> | null;
+let createdComment2: DocumentType<Comment> | null;
 
 test.serial("should create a comment", async t => {
   const result = await authorizedApolloClient2.mutate({
@@ -140,6 +141,20 @@ test.serial("should create a comment", async t => {
 
   t.assert(result.data);
   createdComment = await CommentModel.findById(result.data!.createComment.id);
+  t.assert(!result.errors);
+});
+
+test.serial("should create another comment", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: CREATECOMMENT,
+    variables: {
+      postId: postId._id.toString(),
+      text: "Hello World"
+    }
+  });
+
+  t.assert(result.data);
+  createdComment2 = await CommentModel.findById(result.data!.createComment.id);
   t.assert(!result.errors);
 });
 
@@ -276,39 +291,6 @@ const DELETECOMMENT = gql`
   }
 `;
 
-test.serial("should delete the comment (author of the comment)", async t => {
-  const result = await authorizedApolloClient2.mutate({
-    mutation: DELETECOMMENT,
-    variables: {
-      commentId: createdComment!._id.toString()
-    }
-  });
-
-  t.assert(result.data);
-  t.assert(!result.errors);
-});
-
-test.serial("should delete the comment (owner of the post)", async t => {
-  const result = await authorizedApolloClient.mutate({
-    mutation: DELETECOMMENT,
-    variables: {
-      commentId: createdComment!._id.toString()
-    }
-  });
-  console.log(result.errors);
-  //error
-  //[
-  //   [GraphQLError: No comment with the given id exists] {
-  //     message: 'No comment with the given id exists',
-  //     locations: [ [Object] ],
-  //     path: [ 'deleteComment' ],
-  //     extensions: { code: 'BAD_USER_INPUT' }
-  //   }
-  // ]
-  t.assert(result.data);
-  t.assert(!result.errors);
-});
-
 test.serial("should not delete the comment (Wrong comment Id)", async t => {
   const result = await authorizedApolloClient2.mutate({
     mutation: DELETECOMMENT,
@@ -317,6 +299,9 @@ test.serial("should not delete the comment (Wrong comment Id)", async t => {
     }
   });
 
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(comment);
   t.assert(!result.data);
   t.assert(result.errors);
 });
@@ -329,6 +314,9 @@ test.serial("shoud not delete the comment (Not logged in)", async t => {
     }
   });
 
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(comment);
   t.assert(!result.data);
   t.assert(result.errors);
 });
@@ -341,8 +329,42 @@ test.serial("should not delete the comment (Wrong logged in user)", async t => {
     }
   });
 
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(comment);
   t.assert(!result.data);
   t.assert(result.errors);
 });
+
+test.serial("should delete the comment (author of the comment)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(!comment);
+  t.assert(result.data);
+  t.assert(!result.errors);
+});
+
+test.serial("should delete the comment (owner of the post)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment2!._id.toString()
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment2!._id.toString());
+
+  t.assert(!comment);
+  t.assert(result.data);
+  t.assert(!result.errors);
+});
+
 //#endregion
 test.after.always(after);

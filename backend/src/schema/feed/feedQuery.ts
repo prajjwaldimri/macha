@@ -15,7 +15,7 @@ export const getFeed = queryField("getFeed", {
   async resolve(_, { skip, limit }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
-        throw new AuthenticationError("Cannot like without logging in");
+        throw new AuthenticationError("Cannot check feed without logging in");
       }
 
       // Get a user's machas
