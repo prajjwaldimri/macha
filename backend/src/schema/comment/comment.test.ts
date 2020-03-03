@@ -16,6 +16,7 @@ const { query, mutate } = createTestClient(server);
 
 let authorizedApolloClient: ApolloServerTestClient;
 let authorizedApolloClient2: ApolloServerTestClient;
+let authorizedApolloClient3: ApolloServerTestClient;
 
 import { before, after } from "../testutils";
 import { UserModel } from "../../models/User";
@@ -50,11 +51,24 @@ test.before(async () => {
     }
   });
 
+  await mutate({
+    mutation: CREATEUSER,
+    variables: {
+      username: "test@#!use*(--3",
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+      name: "Test User 3"
+    }
+  });
+
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
     "-password"
   );
 
   const user2 = await UserModel.findOne({ username: "test@#!use*(--2" }).select(
+    "-password"
+  );
+
+  const user3 = await UserModel.findOne({ username: "test@#!use*(--3" }).select(
     "-password"
   );
 
@@ -85,6 +99,17 @@ test.before(async () => {
       }
     })
   );
+
+  authorizedApolloClient3 = createTestClient(
+    new ApolloServer({
+      schema,
+      context: () => {
+        return {
+          user: user3
+        };
+      }
+    })
+  );
 });
 
 //#region Create Comment
@@ -103,9 +128,10 @@ const CREATECOMMENT = gql`
 `;
 
 let createdComment: DocumentType<Comment> | null;
+let createdComment2: DocumentType<Comment> | null;
 
 test.serial("should create a comment", async t => {
-  const result = await authorizedApolloClient.mutate({
+  const result = await authorizedApolloClient2.mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: postId._id.toString(),
@@ -118,8 +144,22 @@ test.serial("should create a comment", async t => {
   t.assert(!result.errors);
 });
 
+test.serial("should create another comment", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: CREATECOMMENT,
+    variables: {
+      postId: postId._id.toString(),
+      text: "Hello World"
+    }
+  });
+
+  t.assert(result.data);
+  createdComment2 = await CommentModel.findById(result.data!.createComment.id);
+  t.assert(!result.errors);
+});
+
 test.serial("should not create a comment (Wrong post Id)", async t => {
-  const result = await authorizedApolloClient.mutate({
+  const result = await authorizedApolloClient2.mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt",
@@ -174,7 +214,7 @@ const UPDATECOMMENT = gql`
 `;
 
 test.serial("should update comment", async t => {
-  const result = await authorizedApolloClient.mutate({
+  const result = await authorizedApolloClient2.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
@@ -188,7 +228,7 @@ test.serial("should update comment", async t => {
 });
 
 test.serial("should not update comment (Wrong comment Id)", async t => {
-  const result = await authorizedApolloClient.mutate({
+  const result = await authorizedApolloClient2.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: "ASKJLDHAKJSDHAJKSU^&*%^&^%$%^&",
@@ -214,7 +254,7 @@ test.serial("should not update comment (Not logged in)", async t => {
 });
 
 test.serial("should not update comment (Wrong logged in user)", async t => {
-  const result = await authorizedApolloClient2.mutate({
+  const result = await authorizedApolloClient3.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
@@ -227,7 +267,7 @@ test.serial("should not update comment (Wrong logged in user)", async t => {
 });
 
 test.serial("should not update comment (Empty text)", async t => {
-  const result = await authorizedApolloClient.mutate({
+  const result = await authorizedApolloClient2.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
@@ -241,4 +281,90 @@ test.serial("should not update comment (Empty text)", async t => {
 
 //#endregion
 
+//#region Delete Comment
+
+const DELETECOMMENT = gql`
+  mutation deleteComment($commentId: String!) {
+    deleteComment(commentId: $commentId) {
+      author
+    }
+  }
+`;
+
+test.serial("should not delete the comment (Wrong comment Id)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: "ASKJLDHAKJSDHAJKSU^&*%^&^%$%^&"
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(comment);
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("shoud not delete the comment (Not logged in)", async t => {
+  const result = await mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(comment);
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("should not delete the comment (Wrong logged in user)", async t => {
+  const result = await authorizedApolloClient3.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(comment);
+  t.assert(!result.data);
+  t.assert(result.errors);
+});
+
+test.serial("should delete the comment (author of the comment)", async t => {
+  const result = await authorizedApolloClient2.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment!._id.toString()
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment!._id.toString());
+
+  t.assert(!comment);
+  t.assert(result.data);
+  t.assert(!result.errors);
+});
+
+test.serial("should delete the comment (owner of the post)", async t => {
+  const result = await authorizedApolloClient.mutate({
+    mutation: DELETECOMMENT,
+    variables: {
+      commentId: createdComment2!._id.toString()
+    }
+  });
+
+  const comment = await CommentModel.findById(createdComment2!._id.toString());
+
+  t.assert(!comment);
+  t.assert(result.data);
+  t.assert(!result.errors);
+});
+
+//#endregion
 test.after.always(after);

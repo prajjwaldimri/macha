@@ -114,16 +114,20 @@ export interface NexusGenFieldTypes {
     likableType: NexusGenEnums['LikableTypeEnum']; // LikableTypeEnum!
   }
   Mutation: { // field return type
+    addMacha: NexusGenRootTypes['User']; // User!
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     createVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
+    deleteComment: NexusGenRootTypes['Comment']; // Comment!
     deleteImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     deleteTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     deleteVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
+    generateMachaOTC: string; // String!
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
+    removeMacha: NexusGenRootTypes['User']; // User!
     signup: string; // String!
     unlikeComment: NexusGenRootTypes['Like']; // Like!
     unlikePost: NexusGenRootTypes['Like']; // Like!
@@ -167,6 +171,9 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addMacha: { // args
+      oneTimeCode: string; // String!
+    }
     createComment: { // args
       postId: string; // String!
       text: string; // String!
@@ -187,6 +194,9 @@ export interface NexusGenArgTypes {
       uri: string; // String!
       video: string; // String!
     }
+    deleteComment: { // args
+      commentId: string; // String!
+    }
     deleteImagePost: { // args
       uri: string; // String!
     }
@@ -196,6 +206,9 @@ export interface NexusGenArgTypes {
     deleteVideoPost: { // args
       uri: string; // String!
     }
+    generateMachaOTC: { // args
+      userCount: number; // Int!
+    }
     likeComment: { // args
       commentId: string; // String!
     }
@@ -204,6 +217,9 @@ export interface NexusGenArgTypes {
     }
     login: { // args
       password: string; // String!
+      username: string; // String!
+    }
+    removeMacha: { // args
       username: string; // String!
     }
     signup: { // args
