@@ -11,8 +11,10 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "nuxt": "^2.0.0",
-    "@nuxtjs/pwa": "^3.0.0-0"
+    "@nuxtjs/apollo": "^4.0.0-rc19",
+    "@nuxtjs/pwa": "^3.0.0-0",
+    "graphql-tag": "^2.10.3",
+    "nuxt": "^2.0.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",

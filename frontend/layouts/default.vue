@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    h1 Hello
+    nuxt
 </template>
 
 <script>

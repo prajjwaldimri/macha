@@ -38,7 +38,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/apollo'],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -46,19 +46,17 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
-    defaultAssets: false,
-    theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
+    defaultAssets: false
+  },
+
+  apollo: {
+    cookieAttributes: {
+      secure: true
+    },
+    clientConfigs: {
+      default: {
+        // required
+        httpEndpoint: 'http://localhost:4000'
       }
     }
   },
