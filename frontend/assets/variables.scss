@@ -1,0 +1,14 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+//
+@font-face {
+  font-family: 'Manrope';
+  src: url('~assets/fonts/ManropeGX.ttf') format('truetype-variations');
+  font-weight: 1 999;
+}
+
+// The variables you want to modify
+// $font-size-root: 20px;
+$body-font-family: 'Manrope', sans-serif !default;
+$heading-font-family: 'Manrope', sans-serif !default;
+
+@import '~vuetify/src/styles/styles.sass';
