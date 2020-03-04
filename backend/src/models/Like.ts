@@ -13,7 +13,7 @@ enum LikableType {
   Comment = "Comment"
 }
 
-class Like extends TimeStamps {
+export class Like extends TimeStamps {
   @prop({
     required: true,
     ref: "User"
