@@ -15,6 +15,8 @@ export * from "./videoPost/videoPost";
 export * from "./videoPost/videoPostMutation";
 
 export * from "./imagePost/imagePost";
+export * from "./imagePost/imagePostMutation";
+export * from "./imagePost/imagePostQuery";
 
 export * from "./comment/comment";
 export * from "./comment/commentMutation";

@@ -97,6 +97,10 @@ type Query {
     limit: Int = 150
     skip: Int = 0
   ): Feed!
+  getImagePost(
+    """Can be postId or uri"""
+    identifier: String!
+  ): ImagePost!
   getLike(likeId: String): Like!
   getTextPost(
     """Can be postId or uri"""
