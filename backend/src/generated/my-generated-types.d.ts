@@ -144,6 +144,7 @@ export interface NexusGenFieldTypes {
     getLike: NexusGenRootTypes['Like']; // Like!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
+    isUsernameAvailable: boolean; // Boolean!
     me: NexusGenRootTypes['User']; // User!
   }
   TextPost: { // field return type
@@ -282,6 +283,9 @@ export interface NexusGenArgTypes {
     }
     getVideoPost: { // args
       identifier: string; // String!
+    }
+    isUsernameAvailable: { // args
+      username?: string | null; // String
     }
   }
 }

@@ -111,6 +111,7 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): VideoPost!
+  isUsernameAvailable(username: String): Boolean!
   me: User!
 }
 
