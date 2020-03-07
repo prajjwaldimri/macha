@@ -1,10 +1,10 @@
 <template lang="pug">
-  .login(v-touch:swipe="swipeHandler")
+  .login(v-touch:swipe.left="swipeHandler" v-touch:swipe.right="swipeHandler")
     h1.display-2.macha-logo macha
     span.mt-2.mb-5
-      span.subtitle(:class="{ 'grey--text': !isLogin }") SIGNIN
+      span.subtitle.cursor-pointer(:class="{ 'grey--text': !isLogin }" @click="isLogin = true") SIGNIN
       span.subtitle.pl-2.pr-2 |
-      span.subtitle(:class="{ 'grey--text': isLogin }") SIGNUP
+      span.subtitle.cursor-pointer(:class="{ 'grey--text': isLogin }" @click="isLogin = false") SIGNUP
 
     transition(name="fade" mode="out-in")
       v-form.mt-5.mb-5(v-if="isLogin" key="loginForm")
@@ -29,6 +29,9 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required, minLength } from 'vuelidate/lib/validators';
+
+import login from '~/gql/login';
+import signup from '~/gql/signup';
 
 export default {
   mixins: [validationMixin],
@@ -77,20 +80,49 @@ export default {
     swipeHandler() {
       this.isLogin = !this.isLogin;
     },
-    login() {
+
+    async login() {
       this.$v.$touch();
       if (this.$v.username.$anyError || this.$v.password.$anyError) return;
 
-      console.log('Pass');
+      try {
+        await this.$apollo
+          .mutate({
+            mutation: login,
+            variables: {
+              username: this.username,
+              password: this.password
+            }
+          })
+          .then(({ data }) => this.$apolloHelpers.onLogin(data.login));
+      } catch (e) {
+        console.log(e);
+      }
     },
-    signup() {
+    async signup() {
       this.$v.$touch();
       if (
         this.$v.username.$anyError ||
         this.$v.password.$anyError ||
         this.$v.name.$anyError
-      )
+      ) {
         return;
+      }
+
+      try {
+        await this.$apollo
+          .mutate({
+            mutation: signup,
+            variables: {
+              name: this.name,
+              username: this.username,
+              password: this.password
+            }
+          })
+          .then(({ data }) => this.$apolloHelpers.onLogin(data.signup));
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 };
@@ -109,6 +141,10 @@ export default {
 
 h1.display-2.macha-logo {
   font-weight: 500;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .fade-enter-active,
