@@ -30,7 +30,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [{ src: '~/plugins/vue-touch', ssr: false }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -46,7 +46,10 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
-    defaultAssets: false
+    defaultAssets: false,
+    theme: {
+      dark: false
+    }
   },
 
   apollo: {
