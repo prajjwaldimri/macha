@@ -9,35 +9,88 @@
     transition(name="fade" mode="out-in")
       v-form.mt-5.mb-5(v-if="isLogin" key="loginForm")
         v-container
-          v-text-field(label="Username" clearable)
-          v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1")
+          v-text-field(label="Username" clearable required v-model="username"
+          @input="$v.username.$touch()" @blur="$v.username.$touch()" :error-messages="usernameErrors")
+          v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(outlined color="primary" block) SIGN IN
+          v-btn.mt-5(outlined color="primary" block @click="login") SIGN IN
 
       v-form.mt-5.mb-5(v-else key="signupForm")
         v-container
-          v-text-field(label="Name" clearable)
-          v-text-field(label="Username" clearable)
-          v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show2 ? 'text' : 'password'" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show2 = !show2")
+          v-text-field(label="Name" clearable required v-model="name" @input="$v.name.$touch()" @blur="$v.name.$touch()" :error-messages="nameErrors")
+          v-text-field(label="Username" clearable required v-model="username" @input="$v.username.$touch()" @blur="$v.username.$touch()" :error-messages="usernameErrors")
+          v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show2 ? 'text' : 'password'" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show2 = !show2" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(outlined color="primary" block) SIGN UP
+          v-btn.mt-5(outlined color="primary" block @click="signup") SIGN UP
 
     span.subtitle.grey--text.mt-5 Terms and Conditions
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate';
+import { required, minLength } from 'vuelidate/lib/validators';
+
 export default {
+  mixins: [validationMixin],
+  validations: {
+    name: { required, minLength: minLength(3) },
+    username: { required, minLength: minLength(4) },
+    password: { required, minLength: minLength(8) }
+  },
   data() {
     return {
       isLogin: true,
       show1: false,
-      show2: false
+      show2: false,
+      username: '',
+      name: '',
+      password: ''
     };
+  },
+  computed: {
+    usernameErrors() {
+      const errors = [];
+      if (!this.$v.username.$dirty) return errors;
+      !this.$v.username.minLength &&
+        errors.push('Username must be more than 3 characters');
+      !this.$v.username.required && errors.push('Username is required');
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.password.$dirty) return errors;
+      !this.$v.password.minLength &&
+        errors.push('Password must be more than 8 characters');
+      !this.$v.password.required && errors.push('Password is required');
+      return errors;
+    },
+    nameErrors() {
+      const errors = [];
+      if (!this.$v.name.$dirty) return errors;
+      !this.$v.name.minLength &&
+        errors.push('Name must be more than 3 characters');
+      !this.$v.name.required && errors.push('Name is required');
+      return errors;
+    }
   },
   methods: {
     swipeHandler() {
       this.isLogin = !this.isLogin;
-      // alert('Swiped');
+    },
+    login() {
+      this.$v.$touch();
+      if (this.$v.username.$anyError || this.$v.password.$anyError) return;
+
+      console.log('Pass');
+    },
+    signup() {
+      this.$v.$touch();
+      if (
+        this.$v.username.$anyError ||
+        this.$v.password.$anyError ||
+        this.$v.name.$anyError
+      )
+        return;
     }
   }
 };
