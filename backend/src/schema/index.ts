@@ -17,6 +17,7 @@ export * from "./imagePost/imagePost";
 
 export * from "./comment/comment";
 export * from "./comment/commentMutation";
+export * from "./comment/commentQuery";
 
 export * from "./like/like";
 export * from "./like/likeMutation";

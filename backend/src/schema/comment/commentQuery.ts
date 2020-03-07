@@ -1,12 +1,15 @@
-import { queryField } from "nexus";
+import { queryField, stringArg } from "nexus";
 import { UserContext } from "../types";
-import { AuthenticationError } from "apollo-server";
+import { AuthenticationError, UserInputError } from "apollo-server";
 import { UserModel } from "../../models/User";
+import { CommentModel } from "../../models/Comment";
 
 export const getComment = queryField("getComment", {
   type: "Comment",
-  args: {},
-  async resolve(_, {}, ctx: UserContext): Promise<any> {
+  args: {
+    commentId: stringArg()
+  },
+  async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
@@ -14,7 +17,13 @@ export const getComment = queryField("getComment", {
         );
       }
 
-      const user = await UserModel.findById(ctx.user._id);
+      const comment = await CommentModel.findById(commentId);
+
+      if (!comment) {
+        throw new UserInputError("Given comment id doesn't exist");
+      }
+
+      return comment;
     } catch (err) {
       return err;
     }
