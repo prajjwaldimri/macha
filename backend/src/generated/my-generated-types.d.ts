@@ -138,6 +138,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     getComment: NexusGenRootTypes['Comment']; // Comment!
+    getCommentCount: number; // Int!
     getFeed: NexusGenRootTypes['Feed']; // Feed!
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     getLike: NexusGenRootTypes['Like']; // Like!
@@ -262,6 +263,9 @@ export interface NexusGenArgTypes {
   Query: {
     getComment: { // args
       commentId?: string | null; // String
+    }
+    getCommentCount: { // args
+      postId?: string | null; // String
     }
     getFeed: { // args
       limit?: number | null; // Int

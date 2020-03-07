@@ -92,6 +92,7 @@ enum PostTypeEnum {
 
 type Query {
   getComment(commentId: String): Comment!
+  getCommentCount(postId: String): Int!
   getFeed(
     """Cannot be less than 150"""
     limit: Int = 150
