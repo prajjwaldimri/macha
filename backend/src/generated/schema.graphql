@@ -98,6 +98,10 @@ type Query {
     skip: Int = 0
   ): Feed!
   getLike(likeId: String): Like!
+  getTextPost(
+    """Can be postId or uri"""
+    identifier: String!
+  ): TextPost!
   me: User!
 }
 

@@ -2,7 +2,6 @@ import { queryField, stringArg } from "nexus";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { LikeModel } from "../../models/Like";
-import { resolve } from "dns";
 
 export const getLike = queryField("getLike", {
   type: "Like",

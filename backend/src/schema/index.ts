@@ -9,6 +9,7 @@ export * from "./imagePost/imagePostMutation";
 
 export * from "./textPost/textPost";
 export * from "./textPost/textPostMutation";
+export * from "./textPost/textPostQuery";
 
 export * from "./videoPost/videoPost";
 export * from "./videoPost/videoPostMutation";
