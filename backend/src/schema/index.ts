@@ -21,6 +21,7 @@ export * from "./comment/commentQuery";
 
 export * from "./like/like";
 export * from "./like/likeMutation";
+export * from "./like/likeQuery";
 
 export * from "./feed/feed";
 export * from "./feed/feedQuery";

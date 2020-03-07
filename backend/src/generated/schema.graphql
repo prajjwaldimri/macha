@@ -97,6 +97,7 @@ type Query {
     limit: Int = 150
     skip: Int = 0
   ): Feed!
+  getLike(likeId: String): Like!
   me: User!
 }
 

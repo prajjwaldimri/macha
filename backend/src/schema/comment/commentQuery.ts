@@ -1,7 +1,6 @@
 import { queryField, stringArg } from "nexus";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
-import { UserModel } from "../../models/User";
 import { CommentModel } from "../../models/Comment";
 
 export const getComment = queryField("getComment", {
