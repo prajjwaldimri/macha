@@ -9,16 +9,16 @@
     transition(name="fade" mode="out-in")
       v-form.mt-5.mb-5(v-if="isLogin" key="loginForm")
         v-container
-          v-text-field(label="Username")
-          v-text-field(label="Password" type="password")
+          v-text-field(label="Username" clearable)
+          v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1")
 
           v-btn.mt-5(outlined color="primary" block) SIGN IN
 
       v-form.mt-5.mb-5(v-else key="signupForm")
         v-container
-          v-text-field(label="Name")
-          v-text-field(label="Username")
-          v-text-field(label="Password" type="password")
+          v-text-field(label="Name" clearable)
+          v-text-field(label="Username" clearable)
+          v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show2 ? 'text' : 'password'" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show2 = !show2")
 
           v-btn.mt-5(outlined color="primary" block) SIGN UP
 
@@ -29,7 +29,9 @@
 export default {
   data() {
     return {
-      isLogin: true
+      isLogin: true,
+      show1: false,
+      show2: false
     };
   },
   methods: {
