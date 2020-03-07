@@ -106,6 +106,10 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): TextPost!
+  getVideoPost(
+    """Can be postId or uri"""
+    identifier: String!
+  ): VideoPost!
   me: User!
 }
 

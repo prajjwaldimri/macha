@@ -142,6 +142,7 @@ export interface NexusGenFieldTypes {
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     getLike: NexusGenRootTypes['Like']; // Like!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     me: NexusGenRootTypes['User']; // User!
   }
   TextPost: { // field return type
@@ -273,6 +274,9 @@ export interface NexusGenArgTypes {
       likeId?: string | null; // String
     }
     getTextPost: { // args
+      identifier: string; // String!
+    }
+    getVideoPost: { // args
       identifier: string; // String!
     }
   }
