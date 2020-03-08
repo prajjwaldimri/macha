@@ -11,6 +11,7 @@
         v-container
           v-text-field(label="Username" clearable required v-model="username"
           @input="$v.username.$touch()" @blur="$v.username.$touch()" :error-messages="usernameErrors")
+
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
           v-btn.mt-5(outlined color="primary" block @click="login") SIGN IN
@@ -18,7 +19,9 @@
       v-form.mt-5.mb-5(v-else key="signupForm")
         v-container
           v-text-field(label="Name" clearable required v-model="name" @input="$v.name.$touch()" @blur="$v.name.$touch()" :error-messages="nameErrors")
+
           v-text-field(label="Username" clearable required v-model="username" @input="$v.username.$touch()" @blur="$v.username.$touch()" :error-messages="usernameErrors")
+
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show2 ? 'text' : 'password'" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show2 = !show2" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
           v-btn.mt-5(outlined color="primary" block @click="signup") SIGN UP
@@ -94,9 +97,16 @@ export default {
               password: this.password
             }
           })
-          .then(({ data }) => this.$apolloHelpers.onLogin(data.login));
+          .then(({ data }) => {
+            this.$apolloHelpers.onLogin(data.login);
+            this.$notifier.showSuccessMessage({
+              content: 'Signed in successfully'
+            });
+          });
       } catch (e) {
-        console.log(e);
+        this.$notifier.showErrorMessage({
+          content: e.graphQLErrors[0].message
+        });
       }
     },
     async signup() {
@@ -119,9 +129,16 @@ export default {
               password: this.password
             }
           })
-          .then(({ data }) => this.$apolloHelpers.onLogin(data.signup));
+          .then(({ data }) => {
+            this.$apolloHelpers.onLogin(data.signup);
+            this.$notifier.showSuccessMessage({
+              content: 'Account created successfully'
+            });
+          });
       } catch (e) {
-        console.log(e);
+        this.$notifier.showErrorMessage({
+          content: e.graphQLErrors[0].message
+        });
       }
     }
   }

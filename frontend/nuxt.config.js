@@ -39,7 +39,8 @@ export default {
    */
   plugins: [
     { src: '~/plugins/vue-touch', ssr: false },
-    { src: '~/plugins/vuelidate' }
+    { src: '~/plugins/vuelidate' },
+    { src: '~/plugins/notifier.js' }
   ],
   /*
    ** Nuxt.js dev-modules
