@@ -111,6 +111,10 @@ type Query {
     """Can be postId or commentId"""
     identifier: String
   ): Likers!
+  getLikersCount(
+    """Can be postId or commentId"""
+    identifier: String
+  ): Int!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!
