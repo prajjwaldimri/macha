@@ -28,6 +28,14 @@ export const likePost = mutationField("likePost", {
         throw new UserInputError("No post found with the given id");
       }
 
+      const like = await LikeModel.findOne({
+        likable: postId,
+        author: ctx.user._id
+      });
+      if (like) {
+        return like;
+      }
+
       if (textPost) {
         return await LikeModel.create({
           author: ctx.user._id,
@@ -66,8 +74,17 @@ export const likeComment = mutationField("likeComment", {
 
       const comment = await CommentModel.findById(commentId);
 
+      const like = await LikeModel.findOne({
+        likable: commentId,
+        author: ctx.user._id
+      });
+
       if (!comment) {
         throw new UserInputError("No comment found with the given id");
+      }
+
+      if (like) {
+        return like;
       }
 
       return await LikeModel.create({

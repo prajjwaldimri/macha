@@ -48,7 +48,7 @@ export const getLikersPost = queryField("getLikersPost", {
       if (!likes) {
         throw new UserInputError("Given postid doesn't exist");
       }
-      console.log(likes);
+
       return { likes };
     } catch (err) {
       return err;
