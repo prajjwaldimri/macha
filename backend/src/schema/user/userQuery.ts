@@ -1,5 +1,4 @@
 import { stringArg, queryField } from "nexus";
-import { UserContext } from "../types";
 import { UserModel } from "../../models/User";
 
 export const me = queryField("me", {

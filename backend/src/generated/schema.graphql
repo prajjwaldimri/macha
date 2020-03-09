@@ -49,6 +49,10 @@ type Like implements Node {
   likableType: LikableTypeEnum!
 }
 
+type Likers {
+  likes: [Like!]!
+}
+
 type Mutation {
   addMacha(oneTimeCode: String!): User!
   createComment(postId: String!, text: String!): Comment!
@@ -103,6 +107,7 @@ type Query {
     identifier: String!
   ): ImagePost!
   getLike(likeId: String): Like!
+  getLikersPost(identifier: String): Likers!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!
