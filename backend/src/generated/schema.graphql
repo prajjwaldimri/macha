@@ -107,7 +107,10 @@ type Query {
     identifier: String!
   ): ImagePost!
   getLike(likeId: String): Like!
-  getLikersPost(identifier: String): Likers!
+  getLikers(
+    """Can be postId or commentId"""
+    identifier: String
+  ): Likers!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!

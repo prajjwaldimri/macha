@@ -28,10 +28,10 @@ export const getLike = queryField("getLike", {
   }
 });
 
-export const getLikersPost = queryField("getLikersPost", {
+export const getLikers = queryField("getLikers", {
   type: "Likers",
   args: {
-    identifier: stringArg()
+    identifier: stringArg({ description: "Can be postId or commentId" })
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -40,13 +40,15 @@ export const getLikersPost = queryField("getLikersPost", {
           "Cannot get the likers detail without logging in"
         );
       }
-
+      if (!isMongoId(identifier!)) {
+        throw new UserInputError("identifier should be a post or comment id");
+      }
       const likes = await LikeModel.find({ likable: identifier }).select(
         "author"
       );
 
       if (!likes) {
-        throw new UserInputError("Given postid doesn't exist");
+        throw new UserInputError("Given identifier doesn't exist");
       }
 
       return { likes };

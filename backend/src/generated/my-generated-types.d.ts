@@ -148,7 +148,7 @@ export interface NexusGenFieldTypes {
     getFeed: NexusGenRootTypes['Feed']; // Feed!
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     getLike: NexusGenRootTypes['Like']; // Like!
-    getLikersPost: NexusGenRootTypes['Likers']; // Likers!
+    getLikers: NexusGenRootTypes['Likers']; // Likers!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     isUsernameAvailable: boolean; // Boolean!
@@ -285,7 +285,7 @@ export interface NexusGenArgTypes {
     getLike: { // args
       likeId?: string | null; // String
     }
-    getLikersPost: { // args
+    getLikers: { // args
       identifier?: string | null; // String
     }
     getTextPost: { // args
