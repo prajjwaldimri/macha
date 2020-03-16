@@ -17,7 +17,14 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css'
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color
@@ -30,7 +37,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/vue-touch', ssr: false },
+    { src: '~/plugins/vuelidate' },
+    { src: '~/plugins/notifier.js' }
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -46,12 +57,23 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
-    defaultAssets: false
+    defaultAssets: false,
+    theme: {
+      dark: false,
+      themes: {
+        light: {
+          primary: '#05DFD7'
+        },
+        dark: {
+          primary: '#05DFD7'
+        }
+      }
+    }
   },
 
   apollo: {
     cookieAttributes: {
-      secure: true
+      expires: 15
     },
     clientConfigs: {
       default: {
