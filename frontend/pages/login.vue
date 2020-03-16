@@ -89,7 +89,7 @@ export default {
       if (this.$v.username.$anyError || this.$v.password.$anyError) return;
 
       try {
-        await this.$apollo
+        const token = await this.$apollo
           .mutate({
             mutation: login,
             variables: {
@@ -97,12 +97,11 @@ export default {
               password: this.password
             }
           })
-          .then(({ data }) => {
-            this.$apolloHelpers.onLogin(data.login);
-            this.$notifier.showSuccessMessage({
-              content: 'Signed in successfully'
-            });
-          });
+          .then(({ data }) => data.login);
+        await this.$apolloHelpers.onLogin(token);
+        this.$notifier.showSuccessMessage({
+          content: 'Signed in successfully'
+        });
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
@@ -129,8 +128,8 @@ export default {
               password: this.password
             }
           })
-          .then(({ data }) => {
-            this.$apolloHelpers.onLogin(data.signup);
+          .then(async ({ data }) => {
+            await this.$apolloHelpers.onLogin(data.signup);
             this.$notifier.showSuccessMessage({
               content: 'Account created successfully'
             });

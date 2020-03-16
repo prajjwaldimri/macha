@@ -59,13 +59,21 @@ export default {
     treeShake: true,
     defaultAssets: false,
     theme: {
-      dark: false
+      dark: false,
+      themes: {
+        light: {
+          primary: '#05DFD7'
+        },
+        dark: {
+          primary: '#05DFD7'
+        }
+      }
     }
   },
 
   apollo: {
     cookieAttributes: {
-      secure: true
+      expires: 15
     },
     clientConfigs: {
       default: {
