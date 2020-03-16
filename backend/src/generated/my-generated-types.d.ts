@@ -46,6 +46,9 @@ export interface NexusGenRootTypes {
     likable: string; // ID!
     likableType: NexusGenEnums['LikableTypeEnum']; // LikableTypeEnum!
   }
+  Likers: { // root type
+    likes: NexusGenRootTypes['Like'][]; // [Like!]!
+  }
   Mutation: {};
   Query: {};
   TextPost: { // root type
@@ -70,7 +73,7 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['User'] | NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Like'];
+  Node: NexusGenRootTypes['Comment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
   String: string;
   Int: number;
   Float: number;
@@ -113,6 +116,9 @@ export interface NexusGenFieldTypes {
     likable: string; // ID!
     likableType: NexusGenEnums['LikableTypeEnum']; // LikableTypeEnum!
   }
+  Likers: { // field return type
+    likes: NexusGenRootTypes['Like'][]; // [Like!]!
+  }
   Mutation: { // field return type
     addMacha: NexusGenRootTypes['User']; // User!
     createComment: NexusGenRootTypes['Comment']; // Comment!
@@ -137,7 +143,16 @@ export interface NexusGenFieldTypes {
     updateVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
   }
   Query: { // field return type
+    getComment: NexusGenRootTypes['Comment']; // Comment!
+    getCommentCount: number; // Int!
     getFeed: NexusGenRootTypes['Feed']; // Feed!
+    getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
+    getLike: NexusGenRootTypes['Like']; // Like!
+    getLikers: NexusGenRootTypes['Likers']; // Likers!
+    getLikersCount: number; // Int!
+    getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
+    isUsernameAvailable: boolean; // Boolean!
     me: NexusGenRootTypes['User']; // User!
   }
   TextPost: { // field return type
@@ -255,9 +270,36 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    getComment: { // args
+      commentId?: string | null; // String
+    }
+    getCommentCount: { // args
+      postId?: string | null; // String
+    }
     getFeed: { // args
       limit?: number | null; // Int
       skip?: number | null; // Int
+    }
+    getImagePost: { // args
+      identifier: string; // String!
+    }
+    getLike: { // args
+      likeId?: string | null; // String
+    }
+    getLikers: { // args
+      identifier?: string | null; // String
+    }
+    getLikersCount: { // args
+      identifier?: string | null; // String
+    }
+    getTextPost: { // args
+      identifier: string; // String!
+    }
+    getVideoPost: { // args
+      identifier: string; // String!
+    }
+    isUsernameAvailable: { // args
+      username?: string | null; // String
     }
   }
 }
@@ -265,12 +307,12 @@ export interface NexusGenArgTypes {
 export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
-  Node: "User" | "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "Like"
+  Node: "Comment" | "User" | "ImagePost" | "Like" | "TextPost" | "VideoPost"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "Like" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "Like" | "Likers" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 

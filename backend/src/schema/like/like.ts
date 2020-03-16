@@ -35,3 +35,10 @@ export const Like = objectType({
     t.id("likable", { nullable: false });
   }
 });
+
+export const Likers = objectType({
+  name: "Likers",
+  definition(t) {
+    t.list.field("likes", { type: "Like" });
+  }
+});

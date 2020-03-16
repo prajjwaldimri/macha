@@ -49,6 +49,10 @@ type Like implements Node {
   likableType: LikableTypeEnum!
 }
 
+type Likers {
+  likes: [Like!]!
+}
+
 type Mutation {
   addMacha(oneTimeCode: String!): User!
   createComment(postId: String!, text: String!): Comment!
@@ -91,11 +95,35 @@ enum PostTypeEnum {
 }
 
 type Query {
+  getComment(commentId: String): Comment!
+  getCommentCount(postId: String): Int!
   getFeed(
     """Cannot be less than 150"""
     limit: Int = 150
     skip: Int = 0
   ): Feed!
+  getImagePost(
+    """Can be postId or uri"""
+    identifier: String!
+  ): ImagePost!
+  getLike(likeId: String): Like!
+  getLikers(
+    """Can be postId or commentId"""
+    identifier: String
+  ): Likers!
+  getLikersCount(
+    """Can be postId or commentId"""
+    identifier: String
+  ): Int!
+  getTextPost(
+    """Can be postId or uri"""
+    identifier: String!
+  ): TextPost!
+  getVideoPost(
+    """Can be postId or uri"""
+    identifier: String!
+  ): VideoPost!
+  isUsernameAvailable(username: String): Boolean!
   me: User!
 }
 
