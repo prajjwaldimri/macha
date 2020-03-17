@@ -53,6 +53,15 @@ export default {
       password: ''
     };
   },
+  mounted() {
+    const hasToken = !!this.$apolloHelpers.getToken();
+    if (hasToken) {
+      this.$notifier.showSuccessMessage({
+        content: 'Already signed in'
+      });
+      this.$router.push('/');
+    }
+  },
   computed: {
     usernameErrors() {
       const errors = [];
@@ -99,6 +108,7 @@ export default {
           })
           .then(({ data }) => data.login);
         await this.$apolloHelpers.onLogin(token);
+        this.$router.push('/');
         this.$notifier.showSuccessMessage({
           content: 'Signed in successfully'
         });
@@ -130,6 +140,7 @@ export default {
           })
           .then(async ({ data }) => {
             await this.$apolloHelpers.onLogin(data.signup);
+            this.$router.push('/');
             this.$notifier.showSuccessMessage({
               content: 'Account created successfully'
             });

@@ -63,6 +63,7 @@ export interface NexusGenRootTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    uniqueMachaId: string; // String!
     username: string; // String!
   }
   VideoPost: { // root type
@@ -120,7 +121,7 @@ export interface NexusGenFieldTypes {
     likes: NexusGenRootTypes['Like'][]; // [Like!]!
   }
   Mutation: { // field return type
-    addMacha: NexusGenRootTypes['User']; // User!
+    addMacha: boolean; // Boolean!
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
@@ -129,11 +130,10 @@ export interface NexusGenFieldTypes {
     deleteImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     deleteTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     deleteVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
-    generateMachaOTC: string; // String!
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
-    removeMacha: NexusGenRootTypes['User']; // User!
+    resetUniqueMachaId: string; // String!
     signup: string; // String!
     unlikeComment: NexusGenRootTypes['Like']; // Like!
     unlikePost: NexusGenRootTypes['Like']; // Like!
@@ -168,6 +168,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    uniqueMachaId: string; // String!
     username: string; // String!
   }
   VideoPost: { // field return type
@@ -187,7 +188,7 @@ export interface NexusGenFieldTypes {
 export interface NexusGenArgTypes {
   Mutation: {
     addMacha: { // args
-      oneTimeCode: string; // String!
+      uniqueMachaId: string; // String!
     }
     createComment: { // args
       postId: string; // String!
@@ -221,9 +222,6 @@ export interface NexusGenArgTypes {
     deleteVideoPost: { // args
       uri: string; // String!
     }
-    generateMachaOTC: { // args
-      userCount: number; // Int!
-    }
     likeComment: { // args
       commentId: string; // String!
     }
@@ -232,9 +230,6 @@ export interface NexusGenArgTypes {
     }
     login: { // args
       password: string; // String!
-      username: string; // String!
-    }
-    removeMacha: { // args
       username: string; // String!
     }
     signup: { // args

@@ -40,7 +40,9 @@ export default {
   plugins: [
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
-    { src: '~/plugins/notifier.js' }
+    { src: '~/plugins/notifier.js' },
+    { src: '~/plugins/sharer.js' },
+    { src: '@/plugins/qrCodeReader.js', mode: 'client' }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -62,10 +64,10 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: '#05DFD7'
+          primary: '#00c07f'
         },
         dark: {
-          primary: '#05DFD7'
+          primary: '#00c07f'
         }
       }
     }
@@ -78,7 +80,7 @@ export default {
     clientConfigs: {
       default: {
         // required
-        httpEndpoint: 'http://localhost:4000'
+        httpEndpoint: 'http://192.168.0.103:4000'
       }
     }
   },

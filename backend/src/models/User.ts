@@ -1,6 +1,6 @@
 import { prop, getModelForClass, Ref, arrayProp } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-
+import nanoid from "nanoid";
 export class User extends TimeStamps {
   @prop({
     required: true,
@@ -25,6 +25,13 @@ export class User extends TimeStamps {
 
   @prop({ required: true })
   name?: string;
+
+  @prop({
+    required: true,
+    unique: true,
+    default: () => nanoid()
+  })
+  uniqueMachaId!: string;
 
   @prop({
     required: true,
