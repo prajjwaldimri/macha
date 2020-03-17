@@ -19,6 +19,10 @@
 
     v-dialog(v-model="dialog" width="85%" height="85%")
       v-card
+
+        v-overlay(absolute :value="generatingUrl")
+          v-progress-circular(indeterminate size="64")
+
         v-card-title.headline Add a Macha
         v-card-text You can add a macha by sharing them your link or asking them to scan your QR Code.
 
@@ -29,20 +33,23 @@
             | Share your link
         h3(style="text-align: center").heading.mt-3.mb-2 OR
         v-card-text From your friend's device scan this QR Code
-        .qr-code.mb-2
+        .qr-code.mb-4
           v-img(:src="qrUrl" max-height="128" max-width="128" aspect-ratio="1")
 
         v-card-actions
-          v-btn(@click="generateNew" small)
+          v-btn(@click="refreshUrl" small outlined :loading="generatingUrl")
             v-icon(small).mr-2 mdi-refresh
             | Generate new link
           v-spacer
-          v-btn(@click="dialog = false" outlined color="primary" small) Done
+          v-btn(@click="dialog = false" color="success" small) 
+            v-icon(small).mr-2 mdi-check
+            | Done
 
 </template>
 
 <script>
 import profile from '~/gql/profile';
+import resetUniqueMachaId from '~/gql/resetUniqueMachaId';
 import qrcode from 'qrcode';
 
 export default {
@@ -51,7 +58,8 @@ export default {
       tab: 'profile-tab',
       user: {},
       dialog: false,
-      qrUrl: ''
+      qrUrl: '',
+      generatingUrl: false
     };
   },
   async mounted() {
@@ -90,6 +98,18 @@ export default {
           url: `https://macha.in/addFriend/${this.user.uniqueMachaId}`
         });
       }
+    },
+    async refreshUrl() {
+      this.generatingUrl = true;
+      this.user.uniqueMachaId = await this.$apollo
+        .mutate({
+          mutation: resetUniqueMachaId
+        })
+        .then(({ data }) => data.resetUniqueMachaId);
+      this.qrUrl = await qrcode.toDataURL(
+        `https://macha.in/addFriend/${this.user.uniqueMachaId}`
+      );
+      this.generatingUrl = false;
     }
   }
 };
