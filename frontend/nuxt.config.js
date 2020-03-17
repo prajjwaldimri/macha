@@ -84,6 +84,7 @@ export default {
       }
     }
   },
+
   /*
    ** Build configuration
    */
