@@ -145,6 +145,7 @@ type User implements Node {
   """Unique identifier for the resource"""
   id: ID!
   name: String!
+  uniqueMachaId: String!
   username: String!
 }
 

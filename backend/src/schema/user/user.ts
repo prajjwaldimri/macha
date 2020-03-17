@@ -10,6 +10,7 @@ export const User = objectType({
     t.string("age", {
       nullable: true
     });
+    t.string("uniqueMachaId", { nullable: false });
     t.id("authToken");
   }
 });

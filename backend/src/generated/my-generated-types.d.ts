@@ -63,6 +63,7 @@ export interface NexusGenRootTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    uniqueMachaId: string; // String!
     username: string; // String!
   }
   VideoPost: { // root type
@@ -168,6 +169,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    uniqueMachaId: string; // String!
     username: string; // String!
   }
   VideoPost: { // field return type
