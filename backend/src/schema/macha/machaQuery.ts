@@ -1,9 +1,9 @@
-import { mutationField } from "nexus";
+import { queryField } from "nexus";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { UserModel } from "../../models/User";
 
-export const getMachas = mutationField("getMachas", {
+export const getMachas = queryField("getMachas", {
   type: "Machas",
   async resolve(_, {}, ctx: UserContext): Promise<any> {
     try {

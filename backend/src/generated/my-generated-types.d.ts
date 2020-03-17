@@ -136,7 +136,6 @@ export interface NexusGenFieldTypes {
     deleteImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     deleteTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     deleteVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
-    getMachas: NexusGenRootTypes['Machas']; // Machas!
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
@@ -157,6 +156,7 @@ export interface NexusGenFieldTypes {
     getLike: NexusGenRootTypes['Like']; // Like!
     getLikers: NexusGenRootTypes['Likers']; // Likers!
     getLikersCount: number; // Int!
+    getMachas: NexusGenRootTypes['Machas']; // Machas!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     isUsernameAvailable: boolean; // Boolean!

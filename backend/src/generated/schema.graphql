@@ -67,7 +67,6 @@ type Mutation {
   deleteImagePost(uri: String!): ImagePost!
   deleteTextPost(uri: String!): TextPost!
   deleteVideoPost(uri: String!): VideoPost!
-  getMachas: Machas!
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
@@ -116,6 +115,7 @@ type Query {
     """Can be postId or commentId"""
     identifier: String
   ): Int!
+  getMachas: Machas!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!
