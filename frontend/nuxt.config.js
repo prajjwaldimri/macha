@@ -41,7 +41,8 @@ export default {
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
     { src: '~/plugins/notifier.js' },
-    { src: '~/plugins/sharer.js' }
+    { src: '~/plugins/sharer.js' },
+    { src: '@/plugins/qrCodeReader.js', mode: 'client' }
   ],
   /*
    ** Nuxt.js dev-modules

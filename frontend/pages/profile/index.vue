@@ -13,13 +13,27 @@
           v-tab(key="photos") Photos
           v-tab(key="settings") Settings
 
-    v-fab-transition
-      v-btn(color="primary" fixed fab large bottom right @click.stop="dialog=true")
+    v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition")
+      template(v-slot:activator)
+        v-btn(v-model="fab" fab color="primary")
+          v-icon(v-if="fab") mdi-close
+          v-icon(v-else) mdi-plus
+
+      v-btn(color="primary" fab @click.stop="addDialog=true")
         v-icon mdi-account-multiple-plus
+      v-btn(color="primary" fab @click.stop="scanDialog=true")
+        v-icon mdi-qrcode-scan
 
-    v-dialog(v-model="dialog" width="85%" height="85%")
+    v-dialog(v-model="scanDialog" :visibility="scanVisibility" width="85%" height="85%")
       v-card
+        v-card-title.headline QR Scanner
+        v-card-text You can quickly add a macha by scanning the QR code on their mobile screen
+        v-btn(@click="camera='auto'" block) Scan QR Code
+        qrcode-stream(:camera="camera" @decode="onQRDecode")
 
+
+    v-dialog(v-model="addDialog" width="85%" height="85%")
+      v-card
         v-overlay(absolute :value="generatingUrl")
           v-progress-circular(indeterminate size="64")
 
@@ -41,7 +55,7 @@
             v-icon(small).mr-2 mdi-refresh
             | Generate new link
           v-spacer
-          v-btn(@click="dialog = false" color="success" small) 
+          v-btn(@click="addDialog = false" color="success" small)
             v-icon(small).mr-2 mdi-check
             | Done
 
@@ -57,13 +71,26 @@ export default {
     return {
       tab: 'profile-tab',
       user: {},
-      dialog: false,
+      addDialog: false,
+      scanDialog: false,
       qrUrl: '',
-      generatingUrl: false
+      fab: false,
+      generatingUrl: false,
+      scanVisibility: false,
+      camera: 'off',
+      error: ''
     };
   },
   async mounted() {
     try {
+      // Check if the device can support qr scanning
+      if (
+        !'mediaDevices' in navigator ||
+        !'getUserMedia' in navigator.mediaDevices
+      ) {
+        this.scanVisibility = false;
+      }
+
       const token = this.$apolloHelpers.getToken();
       if (!token) {
         throw new Error('No token found');
@@ -77,9 +104,8 @@ export default {
         `https://macha.in/addFriend/${this.user.uniqueMachaId}`
       );
     } catch (e) {
-      console.log(e);
-      // await this.$apolloHelpers.onLogout();
-      // this.$router.replace('/login');
+      await this.$apolloHelpers.onLogout();
+      this.$router.replace('/login');
       this.$notifier.showErrorMessage({
         content: 'You need to be logged in to view the profile page'
       });
@@ -110,6 +136,28 @@ export default {
         `https://macha.in/addFriend/${this.user.uniqueMachaId}`
       );
       this.generatingUrl = false;
+    },
+    onQRDecode(decodedString) {
+      alert(decodedString);
+    },
+    async onInit(promise) {
+      try {
+        await promise;
+      } catch (error) {
+        if (error.name === 'NotAllowedError') {
+          this.error = 'ERROR: you need to grant camera access permisson';
+        } else if (error.name === 'NotFoundError') {
+          this.error = 'ERROR: no camera on this device';
+        } else if (error.name === 'NotSupportedError') {
+          this.error = 'ERROR: secure context required (HTTPS, localhost)';
+        } else if (error.name === 'NotReadableError') {
+          this.error = 'ERROR: is the camera already in use?';
+        } else if (error.name === 'OverconstrainedError') {
+          this.error = 'ERROR: installed cameras are not suitable';
+        } else if (error.name === 'StreamApiNotSupportedError') {
+          this.error = 'ERROR: Stream API is not supported in this browser';
+        }
+      }
     }
   }
 };
