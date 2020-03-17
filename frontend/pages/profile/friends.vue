@@ -1,13 +1,13 @@
 <template lang="pug">
 v-list(flat two-line)
-  v-list-item(v-for="macha in machas" :key="macha.username" @click="")
+  v-list-item(v-for="macha in machas" :key="macha.username")
     v-list-item-avatar
       v-avatar
-        img(src="https://cdn.vuetifyjs.com/images/john.jpg")
+        img(:src="'https://api.adorable.io/avatars/128/' + macha.username +'.png'")
 
     v-list-item-content
       v-list-item-title(v-text="macha.name")
-      v-list-item-subtitle(v-text="macha.username")
+      v-list-item-subtitle @{{macha.username}}
 
     v-list-item-action
       v-btn(icon)
@@ -20,9 +20,23 @@ import getMachas from '~/gql/getMachas';
 export default {
   data() {
     return {
-      machas: [{ name: 'Hello', username: 'asiusaui' }]
+      machas: []
     };
   },
-  async mounted() {}
+  async mounted() {
+    try {
+      this.machas = await this.$apollo
+        .query({
+          query: getMachas
+        })
+        .then(({ data }) => data.getMachas.machas)
+        .catch(err => {
+          console.log(err);
+        });
+      console.log(this.machas);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 };
 </script>

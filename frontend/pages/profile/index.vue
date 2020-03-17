@@ -1,6 +1,6 @@
 <template lang="pug">
   .profile
-    v-toolbar(prominent flat height="160")
+    v-toolbar(prominent flat height="120")
       .top-profile.pt-5
         v-avatar(color="primary" size="80")
           v-img(:src="profileImage")
