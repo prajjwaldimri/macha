@@ -100,9 +100,7 @@ export default {
           query: profile
         })
         .then(({ data }) => data.me);
-      this.qrUrl = await qrcode.toDataURL(
-        `https://macha.in/addFriend/${this.user.uniqueMachaId}`
-      );
+      this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
     } catch (e) {
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');
@@ -132,9 +130,7 @@ export default {
           mutation: resetUniqueMachaId
         })
         .then(({ data }) => data.resetUniqueMachaId);
-      this.qrUrl = await qrcode.toDataURL(
-        `https://macha.in/addFriend/${this.user.uniqueMachaId}`
-      );
+      this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       this.generatingUrl = false;
     },
     onQRDecode(decodedString) {
