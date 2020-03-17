@@ -29,13 +29,11 @@ export default {
         .query({
           query: getMachas
         })
-        .then(({ data }) => data.getMachas.machas)
-        .catch(err => {
-          console.log(err);
-        });
-      console.log(this.machas);
+        .then(({ data }) => data.getMachas.machas);
     } catch (e) {
-      console.log(e);
+      this.$notifier.showErrorMessage({
+        content: 'Not able to get machas'
+      });
     }
   }
 };
