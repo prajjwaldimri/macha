@@ -1,10 +1,12 @@
 <template lang="pug">
   .profile
-    v-toolbar(prominent flat height="240")
+    v-toolbar(prominent flat height="160")
       .top-profile.pt-5
         v-avatar(color="primary" size="80")
-          span.white--text.headline PD
-        span.title.pt-2 {{user.name}}
+          v-img(:src="profileImage")
+        .column.ml-4
+          span.title {{user.name}}
+          span.subtitle @{{user.username}}
 
       template(v-slot:extension)
         v-tabs(v-model="tab" grow show-arrows)
@@ -12,6 +14,15 @@
           v-tab(key="friends") Friends
           v-tab(key="photos") Photos
           v-tab(key="settings") Settings
+
+          v-tab-item(key="profile")
+            h1 Profile
+          v-tab-item(key="friends")
+            Friends
+          v-tab-item(key="photos")
+            h1 Photos
+          v-tab-item(key="settings")
+            h1 Settings
 
     v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition")
       template(v-slot:activator)
@@ -66,7 +77,12 @@ import profile from '~/gql/profile';
 import resetUniqueMachaId from '~/gql/resetUniqueMachaId';
 import qrcode from 'qrcode';
 
+import Friends from './friends.vue';
+
 export default {
+  components: {
+    Friends
+  },
   data() {
     return {
       tab: 'profile-tab',
@@ -78,7 +94,7 @@ export default {
       generatingUrl: false,
       scanVisibility: false,
       camera: 'off',
-      error: ''
+      profileImage: ''
     };
   },
   async mounted() {
@@ -100,6 +116,7 @@ export default {
           query: profile
         })
         .then(({ data }) => data.me);
+      this.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
       this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
     } catch (e) {
       await this.$apolloHelpers.onLogout();
@@ -143,7 +160,6 @@ export default {
 <style lang="scss">
 .top-profile {
   display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -159,5 +175,10 @@ export default {
   display: flex;
   width: 100%;
   justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
 }
 </style>
