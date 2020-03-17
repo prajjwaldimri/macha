@@ -54,7 +54,7 @@ type Likers {
 }
 
 type Mutation {
-  addmacha(uniqueMachaId: String!): Boolean!
+  addMacha(uniqueMachaId: String!): Boolean!
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
   createTextPost(content: String!, uri: String!): TextPost!
@@ -66,7 +66,7 @@ type Mutation {
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
-  resetuniquemachaid: String!
+  resetUniqueMachaId: String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
   unlikeComment(commentId: String!): Like!
   unlikePost(postId: String!): Like!

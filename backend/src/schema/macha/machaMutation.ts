@@ -5,7 +5,7 @@ import { UserModel } from "../../models/User";
 import { UserContext } from "../types";
 import nanoid from "nanoid";
 
-export const addMacha = mutationField("addmacha", {
+export const addMacha = mutationField("addMacha", {
   type: "Boolean",
   args: {
     uniqueMachaId: stringArg({ required: true })
@@ -45,7 +45,7 @@ export const addMacha = mutationField("addmacha", {
   }
 });
 
-export const resetUniqueMachaId = mutationField("resetuniquemachaid", {
+export const resetUniqueMachaId = mutationField("resetUniqueMachaId", {
   type: "String",
   async resolve(_, {}, ctx: UserContext): Promise<any> {
     try {

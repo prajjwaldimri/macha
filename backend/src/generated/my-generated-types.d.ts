@@ -121,7 +121,7 @@ export interface NexusGenFieldTypes {
     likes: NexusGenRootTypes['Like'][]; // [Like!]!
   }
   Mutation: { // field return type
-    addmacha: boolean; // Boolean!
+    addMacha: boolean; // Boolean!
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
@@ -133,7 +133,7 @@ export interface NexusGenFieldTypes {
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
-    resetuniquemachaid: string; // String!
+    resetUniqueMachaId: string; // String!
     signup: string; // String!
     unlikeComment: NexusGenRootTypes['Like']; // Like!
     unlikePost: NexusGenRootTypes['Like']; // Like!
@@ -187,7 +187,7 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    addmacha: { // args
+    addMacha: { // args
       uniqueMachaId: string; // String!
     }
     createComment: { // args
