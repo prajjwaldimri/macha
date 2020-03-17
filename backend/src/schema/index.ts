@@ -29,3 +29,4 @@ export * from "./feed/feedQuery";
 
 export * from "./macha/macha";
 export * from "./macha/machaMutation";
+export * from "./macha/machaQuery";
