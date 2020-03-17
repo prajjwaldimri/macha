@@ -3,6 +3,7 @@ import { stringArg, mutationField, intArg } from "nexus";
 
 import { UserModel } from "../../models/User";
 import { UserContext } from "../types";
+import nanoid from "nanoid";
 
 export const addMacha = mutationField("addmacha", {
   type: "Boolean",
@@ -38,6 +39,37 @@ export const addMacha = mutationField("addmacha", {
       });
 
       return true;
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const resetUniqueMachaId = mutationField("resetuniquemachaid", {
+  type: "String",
+  async resolve(_, {}, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot reset uniqueMachaId without logging in"
+        );
+      }
+
+      let newUniqueMachaId = nanoid();
+      const user = await UserModel.findOne({
+        uniqueMachaId: newUniqueMachaId
+      });
+
+      //If any duplicate id gets created then this will create a new value
+      if (user) {
+        newUniqueMachaId = nanoid();
+      }
+
+      await UserModel.findByIdAndUpdate(ctx.user._id, {
+        $set: { uniqueMachaId: newUniqueMachaId }
+      });
+
+      return newUniqueMachaId;
     } catch (err) {
       return err;
     }

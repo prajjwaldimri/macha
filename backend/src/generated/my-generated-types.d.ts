@@ -133,6 +133,7 @@ export interface NexusGenFieldTypes {
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
+    resetuniquemachaid: string; // String!
     signup: string; // String!
     unlikeComment: NexusGenRootTypes['Like']; // Like!
     unlikePost: NexusGenRootTypes['Like']; // Like!
