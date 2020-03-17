@@ -53,6 +53,10 @@ type Likers {
   likes: [Like!]!
 }
 
+type Machas {
+  machas: [User!]!
+}
+
 type Mutation {
   addMacha(uniqueMachaId: String!): Boolean!
   createComment(postId: String!, text: String!): Comment!
@@ -63,6 +67,7 @@ type Mutation {
   deleteImagePost(uri: String!): ImagePost!
   deleteTextPost(uri: String!): TextPost!
   deleteVideoPost(uri: String!): VideoPost!
+  getMachas: Machas!
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!

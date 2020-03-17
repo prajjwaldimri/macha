@@ -49,6 +49,9 @@ export interface NexusGenRootTypes {
   Likers: { // root type
     likes: NexusGenRootTypes['Like'][]; // [Like!]!
   }
+  Machas: { // root type
+    machas: NexusGenRootTypes['User'][]; // [User!]!
+  }
   Mutation: {};
   Query: {};
   TextPost: { // root type
@@ -120,6 +123,9 @@ export interface NexusGenFieldTypes {
   Likers: { // field return type
     likes: NexusGenRootTypes['Like'][]; // [Like!]!
   }
+  Machas: { // field return type
+    machas: NexusGenRootTypes['User'][]; // [User!]!
+  }
   Mutation: { // field return type
     addMacha: boolean; // Boolean!
     createComment: NexusGenRootTypes['Comment']; // Comment!
@@ -130,6 +136,7 @@ export interface NexusGenFieldTypes {
     deleteImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     deleteTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     deleteVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
+    getMachas: NexusGenRootTypes['Machas']; // Machas!
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
@@ -307,7 +314,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "Like" | "Likers" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 
