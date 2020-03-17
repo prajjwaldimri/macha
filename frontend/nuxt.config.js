@@ -63,10 +63,10 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: '#a9b1ff'
+          primary: '#00c07f'
         },
         dark: {
-          primary: '#a9b1ff'
+          primary: '#00c07f'
         }
       }
     }

@@ -32,7 +32,7 @@
             v-icon(small).mr-2 mdi-share
             | Share your link
         h3(style="text-align: center").heading.mt-3.mb-2 OR
-        v-card-text From your friend's device scan this QR Code
+        v-card-text Scan this QR Code from your friend's device
         .qr-code.mb-4
           v-img(:src="qrUrl" max-height="128" max-width="128" aspect-ratio="1")
 

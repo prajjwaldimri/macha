@@ -63,6 +63,8 @@ export default {
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       this.$vuetify.theme.dark = true;
+    } else {
+      this.$vuetify.theme.dark = false;
     }
 
     window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
