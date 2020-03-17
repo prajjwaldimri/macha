@@ -29,9 +29,11 @@
             | Share your link
         h3(style="text-align: center").heading.mt-3.mb-2 OR
         v-card-text From your friend's device scan this QR Code
+        .qr-code.mb-2
+          v-img(:src="qrUrl" max-height="128" max-width="128" aspect-ratio="1")
 
         v-card-actions
-          v-btn(@click="dialog = false" small)
+          v-btn(@click="generateNew" small)
             v-icon(small).mr-2 mdi-refresh
             | Generate new link
           v-spacer
@@ -48,7 +50,8 @@ export default {
     return {
       tab: 'profile-tab',
       user: {},
-      dialog: false
+      dialog: false,
+      qrUrl: ''
     };
   },
   async mounted() {
@@ -62,9 +65,13 @@ export default {
           query: profile
         })
         .then(({ data }) => data.me);
+      this.qrUrl = await qrcode.toDataURL(
+        `https://macha.in/addFriend/${this.user.uniqueMachaId}`
+      );
     } catch (e) {
-      await this.$apolloHelpers.onLogout();
-      this.$router.replace('/login');
+      console.log(e);
+      // await this.$apolloHelpers.onLogout();
+      // this.$router.replace('/login');
       this.$notifier.showErrorMessage({
         content: 'You need to be logged in to view the profile page'
       });
@@ -101,5 +108,11 @@ export default {
 
 .profile {
   height: 100vh;
+}
+
+.qr-code {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 </style>
