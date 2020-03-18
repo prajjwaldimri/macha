@@ -27,4 +27,6 @@ export * from "./like/likeQuery";
 export * from "./feed/feed";
 export * from "./feed/feedQuery";
 
+export * from "./macha/macha";
 export * from "./macha/machaMutation";
+export * from "./macha/machaQuery";

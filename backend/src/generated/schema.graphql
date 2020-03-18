@@ -53,6 +53,10 @@ type Likers {
   likes: [Like!]!
 }
 
+type Machas {
+  machas: [User!]!
+}
+
 type Mutation {
   addMacha(uniqueMachaId: String!): Boolean!
   createComment(postId: String!, text: String!): Comment!
@@ -111,6 +115,7 @@ type Query {
     """Can be postId or commentId"""
     identifier: String
   ): Int!
+  getMachas: Machas!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!
