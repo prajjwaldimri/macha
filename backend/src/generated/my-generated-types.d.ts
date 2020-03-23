@@ -139,6 +139,7 @@ export interface NexusGenFieldTypes {
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
+    removeMacha: boolean; // Boolean!
     resetUniqueMachaId: string; // String!
     signup: string; // String!
     unlikeComment: NexusGenRootTypes['Like']; // Like!
@@ -238,6 +239,9 @@ export interface NexusGenArgTypes {
     login: { // args
       password: string; // String!
       username: string; // String!
+    }
+    removeMacha: { // args
+      uniqueMachaId: string; // String!
     }
     signup: { // args
       age?: number | null; // Int

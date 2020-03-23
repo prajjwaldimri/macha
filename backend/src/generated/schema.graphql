@@ -70,6 +70,7 @@ type Mutation {
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
+  removeMacha(uniqueMachaId: String!): Boolean!
   resetUniqueMachaId: String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
   unlikeComment(commentId: String!): Like!
