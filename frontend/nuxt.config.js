@@ -80,7 +80,7 @@ export default {
     clientConfigs: {
       default: {
         // required
-        httpEndpoint: 'http://192.168.0.103:4000'
+        httpEndpoint: 'http://localhost:4000'
       }
     }
   },

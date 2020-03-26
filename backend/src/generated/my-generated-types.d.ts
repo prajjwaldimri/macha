@@ -4,9 +4,17 @@
  */
 
 
-
-
-
+import { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    upload<FieldName extends string>(fieldName: FieldName, opts?: core.ScalarInputFieldConfig<core.GetGen3<"inputTypes", TypeName, FieldName>>): void // "Upload";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    upload<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "Upload";
+  }
+}
 
 
 declare global {
@@ -66,6 +74,7 @@ export interface NexusGenRootTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    profileImage?: string | null; // String
     uniqueMachaId: string; // String!
     username: string; // String!
   }
@@ -83,6 +92,7 @@ export interface NexusGenRootTypes {
   Float: number;
   Boolean: boolean;
   ID: string;
+  Upload: any;
   LikableType: NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
   PostType: NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
 }
@@ -128,6 +138,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addMacha: boolean; // Boolean!
+    changeProfilePicture: boolean; // Boolean!
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
@@ -176,6 +187,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    profileImage: string | null; // String
     uniqueMachaId: string; // String!
     username: string; // String!
   }
@@ -197,6 +209,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     addMacha: { // args
       uniqueMachaId: string; // String!
+    }
+    changeProfilePicture: { // args
+      file?: any | null; // Upload
     }
     createComment: { // args
       postId: string; // String!
@@ -305,7 +320,7 @@ export interface NexusGenArgTypes {
       identifier: string; // String!
     }
     isUsernameAvailable: { // args
-      username?: string | null; // String
+      username: string; // String!
     }
   }
 }
@@ -326,7 +341,7 @@ export type NexusGenEnumNames = "LikableTypeEnum" | "PostTypeEnum";
 
 export type NexusGenInterfaceNames = "Node";
 
-export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String";
+export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String" | "Upload";
 
 export type NexusGenUnionNames = "LikableType" | "PostType";
 

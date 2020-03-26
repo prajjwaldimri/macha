@@ -1,9 +1,11 @@
 <template lang="pug">
   .profile
     v-toolbar(prominent flat height="120")
+      input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="changeProfilePicture")
       .top-profile.pt-5
-        v-avatar(color="primary" size="80")
-          v-img(:src="profileImage")
+        v-avatar(color="primary" size="80" @click="$refs.profilePicture.click()")
+          v-progress-circular(v-if="isProfileImageLoading" indeterminate)
+          v-img(v-else :src="user.profileImage")
         .column.ml-4
           span.title {{user.name}}
           span.subtitle @{{user.username}}
@@ -75,6 +77,8 @@
 <script>
 import profile from '~/gql/profile';
 import resetUniqueMachaId from '~/gql/resetUniqueMachaId';
+import changeProfilePictureMutation from '~/gql/changeProfilePicture';
+
 import qrcode from 'qrcode';
 
 import Friends from './friends.vue';
@@ -94,39 +98,48 @@ export default {
       generatingUrl: false,
       scanVisibility: false,
       camera: 'off',
-      profileImage: ''
+      profileImage: '',
+      isProfileImageLoading: false
     };
   },
   async mounted() {
-    try {
-      // Check if the device can support qr scanning
-      if (
-        !'mediaDevices' in navigator ||
-        !'getUserMedia' in navigator.mediaDevices
-      ) {
-        this.scanVisibility = false;
-      }
-
-      const token = this.$apolloHelpers.getToken();
-      if (!token) {
-        throw new Error('No token found');
-      }
-      this.user = await this.$apollo
-        .query({
-          query: profile
-        })
-        .then(({ data }) => data.me);
-      this.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-      this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
-    } catch (e) {
-      await this.$apolloHelpers.onLogout();
-      this.$router.replace('/login');
-      this.$notifier.showErrorMessage({
-        content: 'You need to be logged in to view the profile page'
-      });
-    }
+    await this.refresh();
   },
   methods: {
+    async refresh() {
+      try {
+        // Check if the device can support qr scanning
+        if (
+          !'mediaDevices' in navigator ||
+          !'getUserMedia' in navigator.mediaDevices
+        ) {
+          this.scanVisibility = false;
+        }
+
+        // #region Check if the user is logged in
+        const token = this.$apolloHelpers.getToken();
+        if (!token) {
+          throw new Error('No token found');
+        }
+        this.user = await this.$apollo
+          .query({
+            query: profile
+          })
+          .then(({ data }) => data.me);
+        console.log(this.user);
+        if (!this.user.profileImage) {
+          this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+        }
+        this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
+      } catch (e) {
+        console.log(e);
+        await this.$apolloHelpers.onLogout();
+        this.$router.replace('/login');
+        this.$notifier.showErrorMessage({
+          content: 'You need to be logged in to view the profile page'
+        });
+      }
+    },
     async share() {
       if (navigator.share) {
         await navigator.share({
@@ -152,6 +165,27 @@ export default {
     },
     onQRDecode(decodedString) {
       this.$router.push(`/addMacha/${decodedString}`);
+    },
+    async changeProfilePicture({ target: { files = [] } }) {
+      try {
+        this.isProfileImageLoading = true;
+        if (!files.length) {
+          return;
+        }
+        await this.$apollo.mutate({
+          mutation: changeProfilePictureMutation,
+          variables: {
+            file: files[0]
+          }
+        });
+        await this.refresh();
+      } catch (e) {
+        this.$notifier.showErrorMessage({
+          content: 'Unable to upload your picture'
+        });
+      } finally {
+        this.isProfileImageLoading = false;
+      }
     }
   }
 };

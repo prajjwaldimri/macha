@@ -1,10 +1,18 @@
 import isLength from "validator/lib/isLength";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserInputError } from "apollo-server";
-import { stringArg, mutationField, intArg } from "nexus";
+import {
+  UserInputError,
+  GraphQLUpload,
+  AuthenticationError
+} from "apollo-server";
+import { stringArg, mutationField, intArg, asNexusMethod, arg } from "nexus";
+import matches from "validator/lib/matches";
+
+import { uploadSingleImage } from "../../cloudinary/imageUpload";
 
 import { UserModel } from "../../models/User";
+import { UserContext } from "../types";
 
 export const loginUser = mutationField("login", {
   type: "String",
@@ -66,6 +74,39 @@ export const signUpUser = mutationField("signup", {
       return jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET!, {
         expiresIn: "15d"
       });
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+// https://github.com/graphql-nexus/schema/issues/128
+export const Upload = asNexusMethod(GraphQLUpload!, "upload");
+
+export const changeProfilePicture = mutationField("changeProfilePicture", {
+  type: "Boolean",
+  args: {
+    file: arg({ type: "Upload" })
+  },
+  async resolve(_, { file }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot change profile picture without logging in"
+        );
+      }
+      const { mimetype, createReadStream } = await file;
+
+      if (matches(mimetype, new RegExp("image/*"))) {
+        const result: any = await uploadSingleImage(createReadStream());
+
+        const user = await UserModel.findOne({ _id: ctx.user._id });
+        user!.profileImage = result.url;
+        await user!.save();
+
+        return true;
+      }
+      return false;
     } catch (err) {
       return err;
     }
