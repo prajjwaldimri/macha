@@ -23,6 +23,9 @@ export class User extends TimeStamps {
   })
   email!: string;
 
+  @prop({ lowercase: true, trim: true })
+  profileImage?: string;
+
   @prop({ required: true })
   name?: string;
 

@@ -59,6 +59,7 @@ type Machas {
 
 type Mutation {
   addMacha(uniqueMachaId: String!): Boolean!
+  changeProfilePicture(file: Upload): Boolean!
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
   createTextPost(content: String!, uri: String!): TextPost!
@@ -138,6 +139,9 @@ type TextPost implements Node {
   id: ID!
   uri: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User implements Node {
   age: String
