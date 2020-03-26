@@ -126,7 +126,7 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): VideoPost!
-  isUsernameAvailable(username: String): Boolean!
+  isUsernameAvailable(username: String!): Boolean!
   me: User!
 }
 
@@ -151,6 +151,7 @@ type User implements Node {
   """Unique identifier for the resource"""
   id: ID!
   name: String!
+  profileImage: String
   uniqueMachaId: String!
   username: String!
 }

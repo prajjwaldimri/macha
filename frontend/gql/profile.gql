@@ -3,5 +3,6 @@ query {
     username
     name
     uniqueMachaId
+    profileImage
   }
 }

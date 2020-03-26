@@ -74,6 +74,7 @@ export interface NexusGenRootTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    profileImage?: string | null; // String
     uniqueMachaId: string; // String!
     username: string; // String!
   }
@@ -186,6 +187,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // ID!
     name: string; // String!
+    profileImage: string | null; // String
     uniqueMachaId: string; // String!
     username: string; // String!
   }
@@ -318,7 +320,7 @@ export interface NexusGenArgTypes {
       identifier: string; // String!
     }
     isUsernameAvailable: { // args
-      username?: string | null; // String
+      username: string; // String!
     }
   }
 }
