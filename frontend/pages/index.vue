@@ -1,7 +1,15 @@
 <template lang="pug">
-  h1 Hello
+  div
+    h1 Hello
+    bottomNav
 </template>
 
 <script>
-export default {};
+import bottomNav from '../components/bottomNav/bottomNav';
+
+export default {
+  components: {
+    bottomNav
+  }
+};
 </script>

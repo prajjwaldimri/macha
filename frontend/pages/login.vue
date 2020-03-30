@@ -14,7 +14,7 @@
 
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(outlined color="primary" block @click="login") SIGN IN
+          v-btn.mt-5(outlined color="primary" block @click="login" :disabled="$v.username.$anyError || $v.password.$anyError") SIGN IN
 
       v-form.mt-5.mb-5(v-else key="signupForm")
         v-container
