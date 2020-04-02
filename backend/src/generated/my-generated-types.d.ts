@@ -141,6 +141,7 @@ export interface NexusGenFieldTypes {
     changeProfilePicture: boolean; // Boolean!
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
+    createImagePostBase64: NexusGenRootTypes['ImagePost']; // ImagePost!
     createTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     createVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     deleteComment: NexusGenRootTypes['Comment']; // Comment!
@@ -222,6 +223,10 @@ export interface NexusGenArgTypes {
       image: string; // String!
       location?: string | null; // String
       uri: string; // String!
+    }
+    createImagePostBase64: { // args
+      caption?: string | null; // String
+      file: string; // String!
     }
     createTextPost: { // args
       content: string; // String!

@@ -12,7 +12,7 @@
             v-icon mdi-close
           v-toolbar-title Posting Image
           v-spacer
-          v-btn(outlined @click="createImagePost")
+          v-btn(outlined @click="createImagePost" :loading="newImageDialogLoading")
             | Post
             v-icon(small).pl-2 mdi-send
 
@@ -42,7 +42,8 @@ export default {
   },
   data() {
     return {
-      newImageDialogVisible: true,
+      newImageDialogVisible: false,
+      newImageDialogLoading: false,
       newVideoDialogVisible: false,
       caption: '',
       captionErrors: '',
@@ -60,10 +61,28 @@ export default {
     },
     async createImagePost() {
       try {
+        this.newImageDialogLoading = true;
+        await this.$apollo
+          .mutate({
+            mutation: createImagePostMutation,
+            variables: {
+              file: this.imageData,
+              caption: this.caption
+            }
+          })
+          .then(() => {
+            this.$notifier.showSuccessMessage({
+              content: 'Post uploaded successfully'
+            });
+          });
       } catch (e) {
+        console.log(e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });
+      } finally {
+        this.newImageDialogVisible = false;
+        this.newImageDialogLoading = false;
       }
     }
   }

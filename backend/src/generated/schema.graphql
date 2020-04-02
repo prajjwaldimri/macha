@@ -62,6 +62,7 @@ type Mutation {
   changeProfilePicture(file: Upload): Boolean!
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
+  createImagePostBase64(caption: String, file: String!): ImagePost!
   createTextPost(content: String!, uri: String!): TextPost!
   createVideoPost(caption: String, location: String, uri: String!, video: String!): VideoPost!
   deleteComment(commentId: String!): Comment!

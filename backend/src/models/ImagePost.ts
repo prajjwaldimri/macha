@@ -1,6 +1,7 @@
 import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import nanoid from "nanoid";
 
 export class ImagePost extends TimeStamps {
   @prop({
@@ -11,7 +12,8 @@ export class ImagePost extends TimeStamps {
 
   @prop({
     required: true,
-    unique: true
+    unique: true,
+    default: () => nanoid()
   })
   uri!: string;
 

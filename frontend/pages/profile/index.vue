@@ -126,7 +126,6 @@ export default {
             query: profile
           })
           .then(({ data }) => data.me);
-        console.log(this.user);
         if (!this.user.profileImage) {
           this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
         }
