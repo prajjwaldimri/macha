@@ -3,19 +3,18 @@
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
       v-card(height="100%")
         v-form(key="imagePostForm").pt-2
-          v-container(fluid).px-5
-           v-image-input(v-model="imageData" :imageQuality="1" clearable   :imageHeight="256" :imageWidth="256")
-            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()")
+          v-container(fluid).image-input-container
+            v-image-input(v-model="imageData" :imageQuality="1" clearable full-height :image-height="400" :image-width="200")
+          v-container(fluid).py-2
+            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small)
         v-toolbar(color="primary" bottom)
           v-btn(icon @click="newImageDialogVisible=false")
             v-icon mdi-close
-          v-toolbar-title Creating new image post
+          v-toolbar-title Posting Image
           v-spacer
-          v-btn(text @click="createImagePost") Post
-
-        //- v-card-actions
-        //-   v-btn(color="primary" @click="newImageDialogVisible=false") Cancel
-        //-   v-btn(color="primary" @click="createImagePost") POST
+          v-btn(outlined @click="createImagePost")
+            | Post
+            v-icon(small).pl-2 mdi-send
 
     #newPostText.mb-3
       v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()").newPost
@@ -93,5 +92,10 @@ export default {
 #newPostText .v-input__control .v-input__slot .v-input__append-inner,
 #newPostText .v-input__control .v-input__slot .v-input__prepend-inner {
   margin: auto;
+}
+
+.image-input-container {
+  height: 75vh;
+  width: 100vw;
 }
 </style>
