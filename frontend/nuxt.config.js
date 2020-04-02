@@ -40,6 +40,7 @@ export default {
   plugins: [
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
+    { src: '~/plugins/vuetifyImageInput', mode: 'client', ssr: false },
     { src: '~/plugins/notifier.js' },
     { src: '~/plugins/sharer.js' },
     { src: '@/plugins/qrCodeReader.js', mode: 'client' }
