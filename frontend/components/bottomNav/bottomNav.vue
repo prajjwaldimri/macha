@@ -1,17 +1,31 @@
 <template lang="pug">
   div
-    newImageDialog(:isVisible="newImageDialogVisible" @newImageDialogClosed="newImageDialogVisible=false")
+    v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
+      v-card(height="100%")
+        v-form(key="imagePostForm").pt-2
+          v-container(fluid).px-5
+           v-image-input(v-model="imageData" :imageQuality="1" clearable   :imageHeight="256" :imageWidth="256")
+            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()")
+        v-toolbar(color="primary" bottom)
+          v-btn(icon @click="newImageDialogVisible=false")
+            v-icon mdi-close
+          v-toolbar-title Creating new image post
+          v-spacer
+          v-btn(text @click="createImagePost") Post
+
+        //- v-card-actions
+        //-   v-btn(color="primary" @click="newImageDialogVisible=false") Cancel
+        //-   v-btn(color="primary" @click="createImagePost") POST
 
     #newPostText.mb-3
-      v-text-field(solo outlined label="What's new with you?" hide-details height="48").newPost
+      v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()").newPost
         v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost")
           v-icon mdi-plus
-        newPost(slot="append" @newImageDialogOpened="newImageDialogVisible=true")
+        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true")
 </template>
 
 <script>
-import newPost from './newPost';
-import newImageDialog from './newImageDialog';
+import newPostSpeedDial from './newPostSpeedDial';
 
 import { validationMixin } from 'vuelidate';
 import { required, minLength } from 'vuelidate/lib/validators';
@@ -22,21 +36,30 @@ import createImagePostMutation from '../../gql/createImagePost';
 export default {
   mixins: [validationMixin],
   validations: {
-    imagePostCaption: { minLength: minLength(3) }
+    caption: { minLength: minLength(3) }
   },
   components: {
-    newPost,
-    newImageDialog
+    newPostSpeedDial
   },
   data() {
     return {
-      newImageDialogVisible: false,
+      newImageDialogVisible: true,
       newVideoDialogVisible: false,
-      imagePostCaption: ''
+      caption: '',
+      captionErrors: '',
+      imageData: ''
     };
   },
   methods: {
     async createTextPost() {
+      try {
+      } catch (e) {
+        this.$notifier.showErrorMessage({
+          content: e.graphQLErrors[0].message
+        });
+      }
+    },
+    async createImagePost() {
       try {
       } catch (e) {
         this.$notifier.showErrorMessage({
