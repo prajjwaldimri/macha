@@ -4,6 +4,8 @@ import {
   ForbiddenError
 } from "apollo-server";
 import { stringArg, mutationField, intArg } from "nexus";
+
+import { uploadSingleImageBase64Encoded } from "../../cloudinary/imageUpload";
 import { ImagePostModel } from "../../models/ImagePost";
 import isLatLong from "validator/lib/isLatLong";
 import { UserContext } from "../types";
@@ -41,6 +43,32 @@ export const createImagePost = mutationField("createImagePost", {
         uri,
         image,
         location,
+        caption
+      });
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const createImagePostBase64 = mutationField("createImagePostBase64", {
+  type: "ImagePost",
+  args: {
+    file: stringArg({ required: true }),
+    caption: stringArg()
+  },
+  async resolve(_, { file, caption }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot update a post without logging in"
+        );
+      }
+
+      const result: any = await uploadSingleImageBase64Encoded(file);
+      return await ImagePostModel.create({
+        author: ctx.user._id,
+        image: result.url,
         caption
       });
     } catch (err) {
