@@ -22,7 +22,7 @@
           v-tab-item(key="friends")
             Friends
           v-tab-item(key="photos")
-            h1 Photos
+            Photos
           v-tab-item(key="settings")
             h1 Settings
 
@@ -82,10 +82,12 @@ import changeProfilePictureMutation from '~/gql/changeProfilePicture';
 import qrcode from 'qrcode';
 
 import Friends from './friends.vue';
+import Photos from './photos.vue';
 
 export default {
   components: {
-    Friends
+    Friends,
+    Photos
   },
   data() {
     return {
@@ -131,7 +133,6 @@ export default {
         }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
-        console.log(e);
         await this.$apolloHelpers.onLogout();
         this.$router.replace('/login');
         this.$notifier.showErrorMessage({

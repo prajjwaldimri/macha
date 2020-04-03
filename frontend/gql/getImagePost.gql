@@ -1,0 +1,6 @@
+query getImagePost($identifier: String!) {
+  getImagePost(identifier: $identifier) {
+    image
+    caption
+  }
+}

@@ -1,0 +1,8 @@
+query getImagePostsOfUser($count: Int, $skip: Int) {
+  getImagePostsOfUser(count: $count, skip: $skip) {
+    imagePosts {
+      image
+      uri
+    }
+  }
+}

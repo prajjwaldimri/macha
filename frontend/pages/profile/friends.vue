@@ -3,7 +3,7 @@ v-list(flat two-line)
   v-list-item(v-for="macha in machas" :key="macha.username")
     v-list-item-avatar
       v-avatar
-        img(:src="'https://api.adorable.io/avatars/128/' + macha.username +'.png'")
+        img(:src="macha.profileImage")
 
     v-list-item-content
       v-list-item-title(v-text="macha.name")
