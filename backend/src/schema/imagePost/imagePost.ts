@@ -18,3 +18,10 @@ export const ImagePost = objectType({
     t.string("caption", { nullable: true });
   }
 });
+
+export const ImagePostList = objectType({
+  name: "ImagePostList",
+  definition(t) {
+    t.list.field("imagePosts", { type: "ImagePost" });
+  }
+});

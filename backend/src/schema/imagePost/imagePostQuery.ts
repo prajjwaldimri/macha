@@ -1,4 +1,4 @@
-import { queryField, stringArg } from "nexus";
+import { queryField, stringArg, intArg } from "nexus";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { ImagePostModel } from "../../models/ImagePost";
@@ -31,6 +31,28 @@ export const getImagePost = queryField("getImagePost", {
       }
 
       return imagePost;
+    } catch (err) {
+      return err;
+    }
+  }
+});
+
+export const getImagePostsOfUser = queryField("getImagePostsOfUser", {
+  type: "ImagePostList",
+  args: {
+    count: intArg({ default: 9 }),
+    skip: intArg({ default: 0 })
+  },
+  async resolve(_, { count, skip }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot get image posts without logging in"
+        );
+      }
+
+      const imagePosts = await ImagePostModel.find({ author: ctx.user._id });
+      return { imagePosts };
     } catch (err) {
       return err;
     }

@@ -29,6 +29,10 @@ type ImagePost implements Node {
   uri: String!
 }
 
+type ImagePostList {
+  imagePosts: [ImagePost!]!
+}
+
 """ImagePost / VideoPost / TextPost / Comment"""
 union LikableType = Comment | ImagePost | TextPost | VideoPost
 
@@ -109,6 +113,7 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): ImagePost!
+  getImagePostsOfUser(count: Int = 9, skip: Int = 0): ImagePostList!
   getLike(likeId: String): Like!
   getLikers(
     """Can be postId or commentId"""

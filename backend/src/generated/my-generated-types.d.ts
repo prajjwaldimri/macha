@@ -48,6 +48,9 @@ export interface NexusGenRootTypes {
     location?: string | null; // String
     uri: string; // String!
   }
+  ImagePostList: { // root type
+    imagePosts: NexusGenRootTypes['ImagePost'][]; // [ImagePost!]!
+  }
   Like: { // root type
     author: string; // ID!
     id: string; // ID!
@@ -123,6 +126,9 @@ export interface NexusGenFieldTypes {
     location: string | null; // String
     uri: string; // String!
   }
+  ImagePostList: { // field return type
+    imagePosts: NexusGenRootTypes['ImagePost'][]; // [ImagePost!]!
+  }
   Like: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
@@ -166,6 +172,7 @@ export interface NexusGenFieldTypes {
     getCommentCount: number; // Int!
     getFeed: NexusGenRootTypes['Feed']; // Feed!
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
+    getImagePostsOfUser: NexusGenRootTypes['ImagePostList']; // ImagePostList!
     getLike: NexusGenRootTypes['Like']; // Like!
     getLikers: NexusGenRootTypes['Likers']; // Likers!
     getLikersCount: number; // Int!
@@ -309,6 +316,10 @@ export interface NexusGenArgTypes {
     getImagePost: { // args
       identifier: string; // String!
     }
+    getImagePostsOfUser: { // args
+      count?: number | null; // Int
+      skip?: number | null; // Int
+    }
     getLike: { // args
       likeId?: string | null; // String
     }
@@ -338,7 +349,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 
