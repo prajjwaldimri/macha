@@ -1,10 +1,10 @@
 <template lang="pug">
   div
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
-      v-card(height="100%")
+      v-card(height="120%")
         v-form(key="imagePostForm").pt-2
-          v-container(fluid).image-input-container
-            v-image-input(v-model="imageData" :imageQuality="1" clearable full-height :image-height="400" :image-width="200")
+          v-container.image-input-container.pa-0
+            v-image-input(v-model="imageData" :imageQuality="0.99" clearable fullHeight fullWidth :imageHeight="550" :imageWidth="300" imageMinScaling="contain" :debounce="250" overlayPadding="0")
           v-container(fluid).py-2
             v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small)
         v-toolbar(color="primary" bottom)
@@ -114,7 +114,7 @@ export default {
 }
 
 .image-input-container {
-  height: 75vh;
+  height: 95vh;
   width: 100vw;
 }
 </style>
