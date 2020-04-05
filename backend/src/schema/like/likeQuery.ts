@@ -6,7 +6,7 @@ import isMongoId from "validator/lib/isMongoId";
 
 export const getLike = queryField("getLike", {
   type: "Like",
-  args: { likeId: stringArg() },
+  args: { likeId: stringArg({ required: true }) },
   async resolve(_, { likeId }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
@@ -25,13 +25,16 @@ export const getLike = queryField("getLike", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const getLikers = queryField("getLikers", {
   type: "Likers",
   args: {
-    identifier: stringArg({ description: "Can be postId or commentId" })
+    identifier: stringArg({
+      description: "Can be postId or commentId",
+      required: true,
+    }),
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -45,7 +48,7 @@ export const getLikers = queryField("getLikers", {
         throw new UserInputError("identifier should be a post or comment id");
       }
 
-      const likes = await LikeModel.find({ likable: identifier }).select(
+      const likes = await LikeModel.find({ likable: identifier! }).select(
         "author"
       );
 
@@ -57,13 +60,16 @@ export const getLikers = queryField("getLikers", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const getLikersCount = queryField("getLikersCount", {
   type: "Int",
   args: {
-    identifier: stringArg({ description: "Can be postId or commentId" })
+    identifier: stringArg({
+      description: "Can be postId or commentId",
+      required: true,
+    }),
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -77,11 +83,35 @@ export const getLikersCount = queryField("getLikersCount", {
         throw new UserInputError("identifier should be a post or comment id");
       }
 
-      let likes = await LikeModel.find({ likable: identifier });
+      let likes = await LikeModel.find({ likable: identifier! });
 
       return likes.length;
     } catch (err) {
       return err;
     }
-  }
+  },
+});
+
+export const isCurrentUserLiker = queryField("isCurrentUserLiker", {
+  type: "Boolean",
+  args: {
+    identifier: stringArg({
+      description: "Can be postId or commentId",
+      required: true,
+    }),
+  },
+  async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Not logged in");
+      }
+      let likes = await LikeModel.find({ likable: identifier }).select(
+        "author"
+      );
+      let flattenedLikes = likes.flatMap((el) => el.author.toString());
+      return flattenedLikes.indexOf(ctx.user._id.toString()) >= 0;
+    } catch (err) {
+      return err;
+    }
+  },
 });

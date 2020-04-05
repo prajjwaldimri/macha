@@ -1,10 +1,10 @@
 <template lang="pug">
   div
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
-      v-card(height="100%")
+      v-card(height="120%")
         v-form(key="imagePostForm").pt-2
-          v-container(fluid).image-input-container
-            v-image-input(v-model="imageData" :imageQuality="1" clearable full-height :image-height="400" :image-width="200")
+          v-container.image-input-container.pa-0
+            v-image-input(v-model="imageData" :imageQuality="0.99" clearable fullHeight fullWidth :imageHeight="550" :imageWidth="300" imageMinScaling="contain" :debounce="250" overlayPadding="0")
           v-container(fluid).py-2
             v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small)
         v-toolbar(color="primary" bottom)
@@ -18,8 +18,9 @@
 
     #newPostText.mb-3
       v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()").newPost
-        v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost")
-          v-icon mdi-plus
+        v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost" nuxt to="/profile")
+          v-avatar(v-if="user" size="32")
+            img(:src="user.profileImage")
         newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true")
 </template>
 
@@ -31,6 +32,7 @@ import { required, minLength } from 'vuelidate/lib/validators';
 
 import createTextPostMutation from '../../gql/createTextPost';
 import createImagePostMutation from '../../gql/createImagePost';
+import profileQuery from '../../gql/profile';
 
 export default {
   mixins: [validationMixin],
@@ -47,8 +49,32 @@ export default {
       newVideoDialogVisible: false,
       caption: '',
       captionErrors: '',
-      imageData: ''
+      imageData: '',
+      user: {}
     };
+  },
+  async mounted() {
+    try {
+      const token = this.$apolloHelpers.getToken();
+      if (!token) {
+        throw new Error('No token found');
+      }
+      this.user = await this.$apollo
+        .query({
+          query: profileQuery
+        })
+        .then(({ data }) => data.me);
+      if (!this.user.profileImage) {
+        this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+      }
+    } catch (e) {
+      console.log(e);
+      await this.$apolloHelpers.onLogout();
+      this.$router.replace('/login');
+      this.$notifier.showErrorMessage({
+        content: 'Please login first'
+      });
+    }
   },
   methods: {
     async createTextPost() {
@@ -114,7 +140,7 @@ export default {
 }
 
 .image-input-container {
-  height: 75vh;
+  height: 95vh;
   width: 100vw;
 }
 </style>

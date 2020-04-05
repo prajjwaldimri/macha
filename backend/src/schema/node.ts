@@ -5,5 +5,5 @@ export const Node = interfaceType({
   definition(t) {
     t.id("id", { description: "Unique identifier for the resource" });
     t.resolveType(() => null);
-  }
+  },
 });

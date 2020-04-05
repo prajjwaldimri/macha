@@ -121,8 +121,10 @@ export interface NexusGenFieldTypes {
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     caption: string | null; // String
+    hasCurrentUserLikedImage: boolean; // Boolean!
     id: string; // ID!
     image: string; // String!
+    isCurrentUserAuthor: boolean; // Boolean!
     location: string | null; // String
     uri: string; // String!
   }
@@ -179,6 +181,7 @@ export interface NexusGenFieldTypes {
     getMachas: NexusGenRootTypes['Machas']; // Machas!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
+    isCurrentUserLiker: boolean; // Boolean!
     isUsernameAvailable: boolean; // Boolean!
     me: NexusGenRootTypes['User']; // User!
   }
@@ -321,18 +324,21 @@ export interface NexusGenArgTypes {
       skip?: number | null; // Int
     }
     getLike: { // args
-      likeId?: string | null; // String
+      likeId: string; // String!
     }
     getLikers: { // args
-      identifier?: string | null; // String
+      identifier: string; // String!
     }
     getLikersCount: { // args
-      identifier?: string | null; // String
+      identifier: string; // String!
     }
     getTextPost: { // args
       identifier: string; // String!
     }
     getVideoPost: { // args
+      identifier: string; // String!
+    }
+    isCurrentUserLiker: { // args
       identifier: string; // String!
     }
     isUsernameAvailable: { // args

@@ -1,6 +1,16 @@
 query getImagePost($identifier: String!) {
   getImagePost(identifier: $identifier) {
+    id
     image
     caption
+    authorDetails {
+      name
+      username
+      profileImage
+      id
+    }
+    isCurrentUserAuthor
+    hasCurrentUserLikedImage
+    uri
   }
 }
