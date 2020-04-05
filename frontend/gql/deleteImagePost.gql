@@ -1,0 +1,5 @@
+mutation deleteImagePost($uri: String!) {
+  deleteImagePost(uri: $uri) {
+    id
+  }
+}

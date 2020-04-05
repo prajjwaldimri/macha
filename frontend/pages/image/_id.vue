@@ -1,11 +1,11 @@
 <template lang="pug">
   v-card(:loading="isImageLoading" flat)
-    v-list-item(v-if="imagePost.authorDetails")
-      v-list-item-avatar
+    v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
+      v-list-item-avatar()
         img(:src="imagePost.authorDetails.profileImage")
       v-list-item-content
-        v-list-item-title {{imagePost.authorDetails.name}}
-        v-list-item-subtitle @{{imagePost.authorDetails.username}}
+        v-list-item-title() {{imagePost.authorDetails.name}}
+        v-list-item-subtitle() @{{imagePost.authorDetails.username}}
     v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage")
       template(v-slot:placeholder)
         v-row(align="center" justify="center").fill-height.ma-0
@@ -34,6 +34,7 @@ import getImagePost from '../../gql/getImagePost';
 import likePost from '../../gql/likePost';
 import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
+import deleteImagePost from '../../gql/deleteImagePost';
 
 export default {
   async mounted() {
@@ -78,10 +79,20 @@ export default {
     },
     async deleteImagePost() {
       try {
+        this.isImageLoading = true;
+        await this.$apollo.mutate({
+          mutation: deleteImagePost,
+          variables: {
+            uri: this.imagePost.uri
+          }
+        });
+        this.$router.replace('/');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your image'
         });
+      } finally {
+        this.isImageLoading = false;
       }
     },
     async toggleLikeImagePost() {
