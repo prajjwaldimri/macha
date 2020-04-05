@@ -8,5 +8,7 @@ query getImagePost($identifier: String!) {
       profileImage
       id
     }
+    isCurrentUserAuthor
+    hasCurrentUserLikedImage
   }
 }

@@ -8,14 +8,16 @@
         v-list-item-subtitle @{{imagePost.authorDetails.username}}
     v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage")
     v-card-actions
-      v-btn(icon)
+      v-btn(icon v-if="imagePost.hasCurrentUserLikedImage")
         v-icon mdi-heart
+      v-btn(icon v-else)
+        v-icon mdi-heart-outline
       v-btn(icon)
         v-icon mdi-comment
       v-btn(icon)
         v-icon mdi-share
       v-spacer
-      v-btn(icon)
+      v-btn(icon v-if="imagePost.isCurrentUserAuthor")
         v-icon mdi-delete
 
     v-card-subtitle.pt-0 {{imagePost.caption}}
@@ -49,6 +51,7 @@ export default {
           );
         });
     } catch (e) {
+      console.log(e);
     } finally {
       this.isImageLoading = false;
     }

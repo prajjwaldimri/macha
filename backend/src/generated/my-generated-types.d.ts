@@ -121,8 +121,10 @@ export interface NexusGenFieldTypes {
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     caption: string | null; // String
+    hasCurrentUserLikedImage: boolean; // Boolean!
     id: string; // ID!
     image: string; // String!
+    isCurrentUserAuthor: boolean; // Boolean!
     location: string | null; // String
     uri: string; // String!
   }
@@ -321,10 +323,10 @@ export interface NexusGenArgTypes {
       skip?: number | null; // Int
     }
     getLike: { // args
-      likeId?: string | null; // String
+      likeId: string; // String!
     }
     getLikers: { // args
-      identifier?: string | null; // String
+      identifier: string; // String!
     }
     getLikersCount: { // args
       identifier?: string | null; // String

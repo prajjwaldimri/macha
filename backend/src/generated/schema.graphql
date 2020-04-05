@@ -21,10 +21,12 @@ type ImagePost implements Node {
   author: ID!
   authorDetails: User!
   caption: String
+  hasCurrentUserLikedImage: Boolean!
 
   """Unique identifier for the resource"""
   id: ID!
   image: String!
+  isCurrentUserAuthor: Boolean!
   location: String
   uri: String!
 }
@@ -114,10 +116,10 @@ type Query {
     identifier: String!
   ): ImagePost!
   getImagePostsOfUser(count: Int = 9, skip: Int = 0): ImagePostList!
-  getLike(likeId: String): Like!
+  getLike(likeId: String!): Like!
   getLikers(
     """Can be postId or commentId"""
-    identifier: String
+    identifier: String!
   ): Likers!
   getLikersCount(
     """Can be postId or commentId"""
