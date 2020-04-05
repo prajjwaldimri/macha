@@ -66,7 +66,10 @@ export const getLikers = queryField("getLikers", {
 export const getLikersCount = queryField("getLikersCount", {
   type: "Int",
   args: {
-    identifier: stringArg({ description: "Can be postId or commentId" }),
+    identifier: stringArg({
+      description: "Can be postId or commentId",
+      required: true,
+    }),
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -83,6 +86,30 @@ export const getLikersCount = queryField("getLikersCount", {
       let likes = await LikeModel.find({ likable: identifier! });
 
       return likes.length;
+    } catch (err) {
+      return err;
+    }
+  },
+});
+
+export const isCurrentUserLiker = queryField("isCurrentUserLiker", {
+  type: "Boolean",
+  args: {
+    identifier: stringArg({
+      description: "Can be postId or commentId",
+      required: true,
+    }),
+  },
+  async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError("Not logged in");
+      }
+      let likes = await LikeModel.find({ likable: identifier }).select(
+        "author"
+      );
+      let flattenedLikes = likes.flatMap((el) => el.author.toString());
+      return flattenedLikes.indexOf(ctx.user._id.toString()) >= 0;
     } catch (err) {
       return err;
     }

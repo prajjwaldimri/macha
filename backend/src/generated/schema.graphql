@@ -123,7 +123,7 @@ type Query {
   ): Likers!
   getLikersCount(
     """Can be postId or commentId"""
-    identifier: String
+    identifier: String!
   ): Int!
   getMachas: Machas!
   getTextPost(
@@ -134,6 +134,10 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): VideoPost!
+  isCurrentUserLiker(
+    """Can be postId or commentId"""
+    identifier: String!
+  ): Boolean!
   isUsernameAvailable(username: String!): Boolean!
   me: User!
 }

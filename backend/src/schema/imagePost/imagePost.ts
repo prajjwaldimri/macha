@@ -24,10 +24,11 @@ export const ImagePost = objectType({
       type: "Boolean",
       async resolve(root, args, ctx, info): Promise<any> {
         try {
-          const likes = await LikeModel.find({ likable: root.id! }).select(
+          let likes = await LikeModel.find({ likable: root.id! }).select(
             "author"
           );
-          return likes.indexOf(ctx.user._id.toString()) < 0;
+          let flattenedLikes = likes.flatMap((el) => el.author.toString());
+          return flattenedLikes.indexOf(ctx.user._id.toString()) >= 0;
         } catch (err) {
           return err;
         }

@@ -1,5 +1,6 @@
 query getImagePost($identifier: String!) {
   getImagePost(identifier: $identifier) {
+    id
     image
     caption
     authorDetails {
@@ -10,5 +11,6 @@ query getImagePost($identifier: String!) {
     }
     isCurrentUserAuthor
     hasCurrentUserLikedImage
+    uri
   }
 }

@@ -10,7 +10,7 @@ import { CommentModel } from "../../models/Comment";
 export const likePost = mutationField("likePost", {
   type: "Like",
   args: {
-    postId: stringArg({ required: true })
+    postId: stringArg({ required: true }),
   },
   async resolve(_, { postId }, ctx: UserContext): Promise<any> {
     try {
@@ -30,7 +30,7 @@ export const likePost = mutationField("likePost", {
 
       const like = await LikeModel.findOne({
         likable: postId,
-        author: ctx.user._id
+        author: ctx.user._id,
       });
       if (like) {
         return like;
@@ -40,31 +40,31 @@ export const likePost = mutationField("likePost", {
         return await LikeModel.create({
           author: ctx.user._id,
           likableType: "TextPost",
-          likable: postId
+          likable: postId,
         });
       } else if (imagePost) {
         return await LikeModel.create({
           author: ctx.user._id,
           likableType: "ImagePost",
-          likable: postId
+          likable: postId,
         });
       } else if (videoPost) {
         return await LikeModel.create({
           author: ctx.user._id,
           likableType: "VideoPost",
-          likable: postId
+          likable: postId,
         });
       }
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const likeComment = mutationField("likeComment", {
   type: "Like",
   args: {
-    commentId: stringArg({ required: true })
+    commentId: stringArg({ required: true }),
   },
   async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
     try {
@@ -76,7 +76,7 @@ export const likeComment = mutationField("likeComment", {
 
       const like = await LikeModel.findOne({
         likable: commentId,
-        author: ctx.user._id
+        author: ctx.user._id,
       });
 
       if (!comment) {
@@ -90,18 +90,18 @@ export const likeComment = mutationField("likeComment", {
       return await LikeModel.create({
         author: ctx.user._id,
         likableType: "Comment",
-        likable: commentId
+        likable: commentId,
       });
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const unlikePost = mutationField("unlikePost", {
   type: "Like",
   args: {
-    postId: stringArg({ required: true })
+    postId: stringArg({ required: true }),
   },
   async resolve(_, { postId }, ctx: UserContext): Promise<any> {
     try {
@@ -121,31 +121,31 @@ export const unlikePost = mutationField("unlikePost", {
         return await LikeModel.findOneAndDelete({
           author: ctx.user!._id,
           likableType: "TextPost",
-          likable: textPost._id
+          likable: textPost._id,
         });
       } else if (imagePost) {
         return await LikeModel.findOneAndDelete({
           author: ctx.user!._id,
           likableType: "ImagePost",
-          likable: imagePost._id
+          likable: imagePost._id,
         });
       } else if (videoPost) {
         return await LikeModel.findOneAndDelete({
           author: ctx.user!._id,
           likableType: "VideoPost",
-          likable: videoPost._id
+          likable: videoPost._id,
         });
       }
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const unlikeComment = mutationField("unlikeComment", {
   type: "Like",
   args: {
-    commentId: stringArg({ required: true })
+    commentId: stringArg({ required: true }),
   },
   async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
     try {
@@ -162,10 +162,10 @@ export const unlikeComment = mutationField("unlikeComment", {
       return await LikeModel.findOneAndDelete({
         author: ctx.user!._id,
         likableType: "Comment",
-        likable: comment._id
+        likable: comment._id,
       });
     } catch (err) {
       return err;
     }
-  }
+  },
 });
