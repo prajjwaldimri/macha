@@ -112,6 +112,8 @@ export default {
       try {
         // Check if the device can support qr scanning
         if (
+          !navigator ||
+          !navigator.mediaDevices ||
           !'mediaDevices' in navigator ||
           !'getUserMedia' in navigator.mediaDevices
         ) {
@@ -133,8 +135,9 @@ export default {
         }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
-        await this.$apolloHelpers.onLogout();
-        this.$router.replace('/login');
+        console.log(e);
+        // await this.$apolloHelpers.onLogout();
+        // this.$router.replace('/login');
         this.$notifier.showErrorMessage({
           content: 'You need to be logged in to view the profile page'
         });
