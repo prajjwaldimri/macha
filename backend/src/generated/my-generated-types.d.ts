@@ -240,12 +240,10 @@ export interface NexusGenArgTypes {
     }
     createTextPost: { // args
       content: string; // String!
-      uri: string; // String!
     }
     createVideoPost: { // args
       caption?: string | null; // String
       location?: string | null; // String
-      uri: string; // String!
       video: string; // String!
     }
     deleteComment: { // args

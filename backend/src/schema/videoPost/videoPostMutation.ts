@@ -1,7 +1,7 @@
 import {
   UserInputError,
   AuthenticationError,
-  ForbiddenError
+  ForbiddenError,
 } from "apollo-server";
 import { stringArg, mutationField, intArg } from "nexus";
 import { VideoPostModel } from "../../models/VideoPost";
@@ -11,14 +11,13 @@ import { UserContext } from "../types";
 export const createVideoPost = mutationField("createVideoPost", {
   type: "VideoPost",
   args: {
-    uri: stringArg({ required: true }),
     location: stringArg(),
     caption: stringArg(),
-    video: stringArg({ required: true })
+    video: stringArg({ required: true }),
   },
   async resolve(
     _,
-    { uri, location, caption, video },
+    { location, caption, video },
     ctx: UserContext
   ): Promise<any> {
     try {
@@ -28,25 +27,20 @@ export const createVideoPost = mutationField("createVideoPost", {
         );
       }
 
-      if (await VideoPostModel.findOne({ uri })) {
-        throw new UserInputError("uri already exists");
-      }
-
       if (location && !isLatLong(location)) {
         throw new UserInputError("location is not in latitude,longitude form");
       }
 
       return await VideoPostModel.create({
         author: ctx.user._id,
-        uri,
         video,
         caption,
-        location
+        location,
       });
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const updateVideoPost = mutationField("updateVideoPost", {
@@ -54,7 +48,7 @@ export const updateVideoPost = mutationField("updateVideoPost", {
   args: {
     uri: stringArg({ required: true }),
     location: stringArg(),
-    caption: stringArg()
+    caption: stringArg(),
   },
   async resolve(_, { uri, location, caption }, ctx: UserContext): Promise<any> {
     try {
@@ -80,20 +74,20 @@ export const updateVideoPost = mutationField("updateVideoPost", {
         { uri },
         {
           location,
-          caption
+          caption,
         },
         { new: true }
       );
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const deleteVideoPost = mutationField("deleteVideoPost", {
   type: "VideoPost",
   args: {
-    uri: stringArg({ required: true })
+    uri: stringArg({ required: true }),
   },
   async resolve(_, { uri }, ctx: UserContext): Promise<any> {
     try {
@@ -119,5 +113,5 @@ export const deleteVideoPost = mutationField("deleteVideoPost", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

@@ -69,8 +69,8 @@ type Mutation {
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
   createImagePostBase64(caption: String, file: String!): ImagePost!
-  createTextPost(content: String!, uri: String!): TextPost!
-  createVideoPost(caption: String, location: String, uri: String!, video: String!): VideoPost!
+  createTextPost(content: String!): TextPost!
+  createVideoPost(caption: String, location: String, video: String!): VideoPost!
   deleteComment(commentId: String!): Comment!
   deleteImagePost(uri: String!): ImagePost!
   deleteTextPost(uri: String!): TextPost!
