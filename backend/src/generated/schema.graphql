@@ -15,6 +15,7 @@ type Comment implements Node {
 
 type Feed {
   posts: [String!]!
+  postsType: [String!]!
 }
 
 type ImagePost implements Node {

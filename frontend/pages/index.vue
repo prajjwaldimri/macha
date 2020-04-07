@@ -15,16 +15,20 @@ export default {
   },
   data() {
     return {
-      posts: []
+      posts: [],
+      postsType: []
     };
   },
   async mounted() {
     try {
-      this.posts = await this.$apollo
+      await this.$apollo
         .query({
           query: getFeed
         })
-        .then(({ data }) => data.getFeed.posts);
+        .then(({ data }) => {
+          this.posts = data.getFeed.posts;
+          this.postsType = data.getFeed.postsType;
+        });
     } catch (err) {
       console.log(err);
     }
