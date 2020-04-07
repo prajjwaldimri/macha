@@ -36,19 +36,27 @@ export const getFeed = queryField("getFeed", {
       for (const macha of machas) {
         const textPosts = await TextPostModel.find({
           author: macha,
-        }).select("_id, updatedAt");
+        })
+          .skip(skip!)
+          .limit(limit!)
+          .select("_id, updatedAt")
+          .exec();
         for (const textPost of textPosts) {
           postsType.push("TextPost");
         }
-        const imagePosts = await ImagePostModel.find({ author: macha }).select(
-          "_id, updatedAt"
-        );
+        const imagePosts = await ImagePostModel.find({ author: macha })
+          .skip(skip!)
+          .limit(limit!)
+          .select("_id, updatedAt")
+          .exec();
         for (const imagePost of imagePosts) {
           postsType.push("ImagePost");
         }
-        const videoPosts = await VideoPostModel.find({ author: macha }).select(
-          "_id, updatedAt"
-        );
+        const videoPosts = await VideoPostModel.find({ author: macha })
+          .skip(skip!)
+          .limit(limit!)
+          .select("_id, updatedAt")
+          .exec();
         for (const videoPost of videoPosts) {
           postsType.push("ImagePost");
         }

@@ -23,7 +23,10 @@ export default {
     try {
       await this.$apollo
         .query({
-          query: getFeed
+          query: getFeed,
+          variables: {
+            skip: 0
+          }
         })
         .then(({ data }) => {
           this.posts = data.getFeed.posts;
