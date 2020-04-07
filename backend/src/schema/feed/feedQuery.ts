@@ -10,7 +10,7 @@ export const getFeed = queryField("getFeed", {
   type: "Feed",
   args: {
     skip: intArg({ default: 0 }),
-    limit: intArg({ default: 150, description: "Cannot be less than 150" })
+    limit: intArg({ default: 150, description: "Cannot be less than 150" }),
   },
   async resolve(_, { skip, limit }, ctx: UserContext): Promise<any> {
     try {
@@ -21,9 +21,10 @@ export const getFeed = queryField("getFeed", {
       // Get a user's machas
       const user = await UserModel.findById(ctx.user._id).populate({
         path: "machas",
-        select: "_id"
+        select: "_id",
       });
-      const machas = user!.machas;
+      let machas = user!.machas?.flatMap((macha) => macha._id);
+      machas?.push(ctx.user._id);
 
       // Get their latest posts
       if (!machas) {
@@ -72,5 +73,5 @@ export const getFeed = queryField("getFeed", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
