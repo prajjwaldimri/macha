@@ -1,9 +1,9 @@
 <template lang="pug">
   div
-    v-container(fluid).pt-0
+    v-container(fluid style="padding-bottom:50px").pt-0
       v-row(v-for="(post, index) in posts" :key="index")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post")
-        TextPost(v-else-if="postsType[index] === 'TextPost'")
+        TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
     bottomNav
 </template>

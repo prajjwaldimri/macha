@@ -1,0 +1,5 @@
+mutation deleteTextPost($uri: String!) {
+  deleteTextPost(uri: $uri) {
+    id
+  }
+}
