@@ -1,5 +1,6 @@
 <template lang="pug">
   v-app
+    AppBar
     v-content
       v-snackbar(v-model="show" top absolute :color="color")
         | {{message}}
@@ -32,7 +33,12 @@
 </template>
 
 <script>
+import AppBar from '../components/appBar';
+
 export default {
+  components: {
+    AppBar
+  },
   data() {
     return {
       show: false,
