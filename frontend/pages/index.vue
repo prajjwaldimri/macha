@@ -4,8 +4,7 @@
       v-row(v-for="(post, index) in posts" :key="index")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post")
         TextPost(v-else-if="postsType[index] === 'TextPost'")
-    v-card(v-intersect="onIntersect" )
-      v-card-title Loading....
+    v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
     bottomNav
 </template>
 
@@ -26,7 +25,10 @@ export default {
     return {
       posts: [],
       postsType: [],
-      isIntersecting: false
+      isIntersecting: false,
+      skip: 0,
+      limit: 10,
+      isPostsEndingReached: false
     };
   },
   async mounted() {
@@ -35,7 +37,8 @@ export default {
         .query({
           query: getFeed,
           variables: {
-            skip: 0
+            skip: this.skip,
+            limit: this.limit
           }
         })
         .then(({ data }) => {
@@ -56,7 +59,30 @@ export default {
   watch: {
     async isIntersecting(val) {
       if (val) {
-        console.log('loading new');
+        this.skip += this.limit;
+        try {
+          await this.$apollo
+            .query({
+              query: getFeed,
+              variables: {
+                skip: this.skip,
+                limit: this.limit
+              },
+              fetchPolicy: 'network-only'
+            })
+            .then(({ data }) => {
+              if (data.getFeed.posts.length <= 0) {
+                this.isPostsEndingReached = true;
+              } else {
+                this.posts.push(...data.getFeed.posts);
+                this.postsType.push(...data.getFeed.postsType);
+              }
+            });
+        } catch (e) {
+          this.$notifier.showErrorMessage({
+            content: e.graphQLErrors[0].message
+          });
+        }
       }
     }
   }
