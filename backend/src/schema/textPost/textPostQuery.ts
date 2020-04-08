@@ -1,16 +1,16 @@
-import { queryField, stringArg } from "nexus";
+import { queryField, stringArg, intArg } from "nexus";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { TextPostModel } from "../../models/TextPost";
 import isMongoId from "validator/lib/isMongoId";
 
-export const geTextPost = queryField("getTextPost", {
+export const getTextPost = queryField("getTextPost", {
   type: "TextPost",
   args: {
     identifier: stringArg({
       description: "Can be postId or uri",
-      required: true
-    })
+      required: true,
+    }),
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -34,5 +34,27 @@ export const geTextPost = queryField("getTextPost", {
     } catch (err) {
       return err;
     }
-  }
+  },
+});
+
+export const getTextPostsOfUser = queryField("getTextPostsOfUser", {
+  type: "TextPostList",
+  args: {
+    count: intArg({ default: 9 }),
+    skip: intArg({ default: 0 }),
+  },
+  async resolve(_, { count, skip }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot get text posts without logging in"
+        );
+      }
+
+      const textPosts = await TextPostModel.find({ author: ctx.user._id });
+      return { textPosts };
+    } catch (err) {
+      return err;
+    }
+  },
 });

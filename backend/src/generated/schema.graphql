@@ -130,6 +130,7 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): TextPost!
+  getTextPostsOfUser(count: Int = 9, skip: Int = 0): TextPostList!
   getVideoPost(
     """Can be postId or uri"""
     identifier: String!
@@ -146,10 +147,16 @@ type TextPost implements Node {
   author: ID!
   authorDetails: User!
   content: String!
+  hasCurrentUserLikedTextPost: Boolean!
 
   """Unique identifier for the resource"""
   id: ID!
+  isCurrentUserAuthor: Boolean!
   uri: String!
+}
+
+type TextPostList {
+  textPosts: [TextPost!]!
 }
 
 """The `Upload` scalar type represents a file upload."""
