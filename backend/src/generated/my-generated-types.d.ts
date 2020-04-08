@@ -72,6 +72,9 @@ export interface NexusGenRootTypes {
     id: string; // ID!
     uri: string; // String!
   }
+  TextPostList: { // root type
+    textPosts: NexusGenRootTypes['TextPost'][]; // [TextPost!]!
+  }
   User: { // root type
     age?: string | null; // String
     authToken: string; // ID!
@@ -182,6 +185,7 @@ export interface NexusGenFieldTypes {
     getLikersCount: number; // Int!
     getMachas: NexusGenRootTypes['Machas']; // Machas!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    getTextPostsOfUser: NexusGenRootTypes['TextPostList']; // TextPostList!
     getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
     isCurrentUserLiker: boolean; // Boolean!
     isUsernameAvailable: boolean; // Boolean!
@@ -191,8 +195,13 @@ export interface NexusGenFieldTypes {
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     content: string; // String!
+    hasCurrentUserLikedTextPost: boolean; // Boolean!
     id: string; // ID!
+    isCurrentUserAuthor: boolean; // Boolean!
     uri: string; // String!
+  }
+  TextPostList: { // field return type
+    textPosts: NexusGenRootTypes['TextPost'][]; // [TextPost!]!
   }
   User: { // field return type
     age: string | null; // String
@@ -242,12 +251,10 @@ export interface NexusGenArgTypes {
     }
     createTextPost: { // args
       content: string; // String!
-      uri: string; // String!
     }
     createVideoPost: { // args
       caption?: string | null; // String
       location?: string | null; // String
-      uri: string; // String!
       video: string; // String!
     }
     deleteComment: { // args
@@ -337,6 +344,10 @@ export interface NexusGenArgTypes {
     getTextPost: { // args
       identifier: string; // String!
     }
+    getTextPostsOfUser: { // args
+      count?: number | null; // Int
+      skip?: number | null; // Int
+    }
     getVideoPost: { // args
       identifier: string; // String!
     }
@@ -357,7 +368,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "TextPostList" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 

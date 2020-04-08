@@ -1,7 +1,7 @@
 import {
   UserInputError,
   AuthenticationError,
-  ForbiddenError
+  ForbiddenError,
 } from "apollo-server";
 import { stringArg, mutationField, intArg } from "nexus";
 import { TextPostModel } from "../../models/TextPost";
@@ -11,19 +11,14 @@ import { UserContext } from "../types";
 export const createTextPost = mutationField("createTextPost", {
   type: "TextPost",
   args: {
-    uri: stringArg({ required: true }),
-    content: stringArg({ required: true })
+    content: stringArg({ required: true }),
   },
-  async resolve(_, { uri, content }, ctx: UserContext): Promise<any> {
+  async resolve(_, { content }, ctx: UserContext): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError(
           "Cannot create a post without logging in"
         );
-      }
-
-      if (await TextPostModel.findOne({ uri })) {
-        throw new UserInputError("uri already exists");
       }
 
       if (!isLength(content.trim(), { min: 1 })) {
@@ -32,20 +27,19 @@ export const createTextPost = mutationField("createTextPost", {
 
       return await TextPostModel.create({
         author: ctx.user._id,
-        uri,
-        content
+        content,
       });
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const updateTextPost = mutationField("updateTextPost", {
   type: "TextPost",
   args: {
     uri: stringArg({ required: true }),
-    content: stringArg({ required: true })
+    content: stringArg({ required: true }),
   },
   async resolve(_, { uri, content }, ctx: UserContext): Promise<any> {
     try {
@@ -74,20 +68,20 @@ export const updateTextPost = mutationField("updateTextPost", {
       return await TextPostModel.findOneAndUpdate(
         { uri },
         {
-          content
+          content,
         },
         { new: true }
       );
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const deleteTextPost = mutationField("deleteTextPost", {
   type: "TextPost",
   args: {
-    uri: stringArg({ required: true })
+    uri: stringArg({ required: true }),
   },
   async resolve(_, { uri }, ctx: UserContext): Promise<any> {
     try {
@@ -113,5 +107,5 @@ export const deleteTextPost = mutationField("deleteTextPost", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
