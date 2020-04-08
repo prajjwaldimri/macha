@@ -21,7 +21,7 @@
         v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost" nuxt to="/profile")
           v-avatar(v-if="user" size="32")
             img(:src="user.profileImage")
-        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true")
+        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()")
 </template>
 
 <script>
@@ -79,7 +79,21 @@ export default {
   methods: {
     async createTextPost() {
       try {
+        await this.$apollo
+          .mutate({
+            mutation: createTextPostMutation,
+            variables: {
+              content: this.caption
+            }
+          })
+          .then(() => {
+            this.$notifier.showSuccessMessage({
+              content: 'Post uploaded successfully'
+            });
+            this.caption = '';
+          });
       } catch (e) {
+        console.log(e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });
