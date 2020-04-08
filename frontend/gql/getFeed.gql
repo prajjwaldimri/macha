@@ -1,0 +1,6 @@
+query getFeed($skip: Int, $limit: Int) {
+  getFeed(skip: $skip, limit: $limit) {
+    posts
+    postsType
+  }
+}

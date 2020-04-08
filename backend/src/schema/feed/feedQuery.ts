@@ -10,7 +10,7 @@ export const getFeed = queryField("getFeed", {
   type: "Feed",
   args: {
     skip: intArg({ default: 0 }),
-    limit: intArg({ default: 150, description: "Cannot be less than 150" })
+    limit: intArg({ default: 25, description: "Cannot be less than 25" }),
   },
   async resolve(_, { skip, limit }, ctx: UserContext): Promise<any> {
     try {
@@ -21,9 +21,10 @@ export const getFeed = queryField("getFeed", {
       // Get a user's machas
       const user = await UserModel.findById(ctx.user._id).populate({
         path: "machas",
-        select: "_id"
+        select: "_id",
       });
-      const machas = user!.machas;
+      let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
+      machas?.push(ctx.user._id);
 
       // Get their latest posts
       if (!machas) {
@@ -31,24 +32,48 @@ export const getFeed = queryField("getFeed", {
       }
 
       let posts: Array<any> = [];
+      let postsType: Array<any> = [];
       for (const macha of machas) {
-        const textPosts = await TextPostModel.find({ author: macha }).select(
-          "_id, updatedAt"
-        );
-        const imagePosts = await ImagePostModel.find({ author: macha }).select(
-          "_id, updatedAt"
-        );
-        const videoPosts = await VideoPostModel.find({ author: macha }).select(
-          "_id, updatedAt"
-        );
+        const textPosts = await TextPostModel.find({
+          author: macha,
+        })
+          .skip(skip!)
+          .limit(limit!)
+          .select("_id, updatedAt")
+          .exec();
+        for (const textPost of textPosts) {
+          postsType.push("TextPost");
+        }
+        const imagePosts = await ImagePostModel.find({ author: macha })
+          .skip(skip!)
+          .limit(limit!)
+          .select("_id, updatedAt")
+          .exec();
+        for (const imagePost of imagePosts) {
+          postsType.push("ImagePost");
+        }
+        const videoPosts = await VideoPostModel.find({ author: macha })
+          .skip(skip!)
+          .limit(limit!)
+          .select("_id, updatedAt")
+          .exec();
+        for (const videoPost of videoPosts) {
+          postsType.push("ImagePost");
+        }
         posts.push(...textPosts, ...imagePosts, ...videoPosts);
       }
 
-      // Arrange them in chronological order
+      // Arrange them in chronological order in three steps
+      //1. First merge posts and postsType arrays
+      const mergedArray = [];
+      for (let i = 0; i < posts.length; i++) {
+        mergedArray.push({ post: posts[i], type: postsType[i] });
+      }
 
-      let sortedPosts = posts.sort((first, second): number => {
-        const firstDate = Date.parse(first.updatedAt);
-        const secondDate = Date.parse(second.updatedAt);
+      //2. Sort merged Array
+      mergedArray.sort((first, second): any => {
+        const firstDate = Date.parse(first.post.updatedAt);
+        const secondDate = Date.parse(second.post.updatedAt);
         if (firstDate > secondDate) {
           return 1;
         } else if (firstDate < secondDate) {
@@ -57,20 +82,28 @@ export const getFeed = queryField("getFeed", {
         return 0;
       });
 
+      //3. Separate arrays
+      let sortedPosts: any = [];
+      for (let i = 0; i < posts.length; i++) {
+        sortedPosts[i] = mergedArray[i].post;
+        postsType[i] = mergedArray[i].type;
+      }
+
       // Only keep the top #(limit) posts
       if (sortedPosts.length > limit!) {
         sortedPosts = sortedPosts.slice(0, limit! - 1);
+        postsType = postsType.slice(0, limit! - 1);
       }
 
-      // Only return the _ids of the posts
+      // Only return the _ids and type of the post
       posts = [];
       for (const post of sortedPosts) {
         posts.push(post._id.toString());
       }
 
-      return { posts };
+      return { posts, postsType };
     } catch (err) {
       return err;
     }
-  }
+  },
 });

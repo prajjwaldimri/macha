@@ -39,6 +39,7 @@ export interface NexusGenRootTypes {
   }
   Feed: { // root type
     posts: string[]; // [String!]!
+    postsType: string[]; // [String!]!
   }
   ImagePost: { // root type
     author: string; // ID!
@@ -116,6 +117,7 @@ export interface NexusGenFieldTypes {
   }
   Feed: { // field return type
     posts: string[]; // [String!]!
+    postsType: string[]; // [String!]!
   }
   ImagePost: { // field return type
     author: string; // ID!

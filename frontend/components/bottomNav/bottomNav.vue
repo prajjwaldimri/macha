@@ -17,11 +17,12 @@
             v-icon(small).pl-2 mdi-send
 
     #newPostText.mb-3
-      v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()").newPost
-        v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost" nuxt to="/profile")
-          v-avatar(v-if="user" size="32")
-            img(:src="user.profileImage")
-        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true")
+      v-card(style="width:100%")
+        v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()").newPost
+          v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost" nuxt to="/profile")
+            v-avatar(v-if="user" size="32")
+              img(:src="user.profileImage")
+          newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true")
 </template>
 
 <script>
