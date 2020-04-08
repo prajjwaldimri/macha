@@ -108,8 +108,8 @@ type Query {
   getComment(commentId: String): Comment!
   getCommentCount(postId: String): Int!
   getFeed(
-    """Cannot be less than 150"""
-    limit: Int = 150
+    """Cannot be less than 25"""
+    limit: Int = 25
     skip: Int = 0
   ): Feed!
   getImagePost(

@@ -10,7 +10,7 @@ export const getFeed = queryField("getFeed", {
   type: "Feed",
   args: {
     skip: intArg({ default: 0 }),
-    limit: intArg({ default: 150, description: "Cannot be less than 150" }),
+    limit: intArg({ default: 25, description: "Cannot be less than 25" }),
   },
   async resolve(_, { skip, limit }, ctx: UserContext): Promise<any> {
     try {
