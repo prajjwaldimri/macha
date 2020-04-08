@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    v-container(fluid)
+    v-container(fluid).pt-0
       v-row(v-for="(post, index) in posts" :key="index")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post")
         TextPost(v-else-if="postsType[index] === 'TextPost'")
