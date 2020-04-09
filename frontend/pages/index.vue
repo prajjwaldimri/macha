@@ -5,7 +5,7 @@
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
-    bottomNav
+    bottomNav(@refreshFeed="refresh('network-only')")
 </template>
 
 <script>
@@ -32,26 +32,30 @@ export default {
     };
   },
   async mounted() {
-    try {
-      await this.$apollo
-        .query({
-          query: getFeed,
-          variables: {
-            skip: this.skip,
-            limit: this.limit
-          }
-        })
-        .then(({ data }) => {
-          this.posts = data.getFeed.posts;
-          this.postsType = data.getFeed.postsType;
-        });
-    } catch (e) {
-      this.$notifier.showErrorMessage({
-        content: e.graphQLErrors[0].message
-      });
-    }
+    await this.refresh();
   },
   methods: {
+    async refresh(fetchPolicy = 'cache-first') {
+      try {
+        await this.$apollo
+          .query({
+            query: getFeed,
+            variables: {
+              skip: this.skip,
+              limit: this.limit
+            },
+            fetchPolicy
+          })
+          .then(({ data }) => {
+            this.posts = data.getFeed.posts;
+            this.postsType = data.getFeed.postsType;
+          });
+      } catch (e) {
+        this.$notifier.showErrorMessage({
+          content: e.graphQLErrors[0].message
+        });
+      }
+    },
     onIntersect(entries, observer) {
       this.isIntersecting = entries[0].isIntersecting;
     },

@@ -18,8 +18,8 @@
 
     #newPostText.mb-3
       v-card(style="width:100%")
-        v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()").newPost
-          v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost" nuxt to="/profile")
+        v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
+          v-btn(fab color="primary" x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
             v-avatar(v-if="user" size="32")
               img(:src="user.profileImage")
           newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()")
@@ -51,7 +51,8 @@ export default {
       caption: '',
       captionErrors: '',
       imageData: '',
-      user: {}
+      user: {},
+      isLoading: false
     };
   },
   async mounted() {
@@ -80,6 +81,7 @@ export default {
   methods: {
     async createTextPost() {
       try {
+        this.isLoading = true;
         await this.$apollo
           .mutate({
             mutation: createTextPostMutation,
@@ -92,16 +94,19 @@ export default {
               content: 'Post uploaded successfully'
             });
             this.caption = '';
+            this.$emit('refreshFeed');
           });
       } catch (e) {
-        console.log(e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });
+      } finally {
+        this.isLoading = false;
       }
     },
     async createImagePost() {
       try {
+        this.isLoading = true;
         this.newImageDialogLoading = true;
         await this.$apollo
           .mutate({
@@ -115,15 +120,16 @@ export default {
             this.$notifier.showSuccessMessage({
               content: 'Post uploaded successfully'
             });
+            this.$emit('refreshFeed');
           });
       } catch (e) {
-        console.log(e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });
       } finally {
         this.newImageDialogVisible = false;
         this.newImageDialogLoading = false;
+        this.isLoading = false;
       }
     }
   }
