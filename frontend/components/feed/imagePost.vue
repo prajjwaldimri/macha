@@ -84,13 +84,25 @@ export default {
     async deleteImagePost() {
       try {
         this.isImageLoading = true;
-        await this.$apollo.mutate({
-          mutation: deleteImagePost,
-          variables: {
-            uri: this.imagePost.uri
-          }
-        });
-        this.$router.replace('/');
+        await this.$apollo
+          .mutate({
+            mutation: deleteImagePost,
+            variables: {
+              uri: this.imagePost.uri
+            }
+          })
+          .then(({ data }) => {
+            if (data.deleteImagePost) {
+              this.$emit('postDeleted');
+              this.$notifier.showSuccessMessage({
+                content: 'Successfully deleted your image'
+              });
+            } else {
+              this.$notifier.showErrorMessage({
+                content: 'Error deleting your image'
+              });
+            }
+          });
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your image'
