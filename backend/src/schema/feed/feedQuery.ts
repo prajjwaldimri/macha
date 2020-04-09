@@ -84,9 +84,13 @@ export const getFeed = queryField("getFeed", {
 
       //3. Separate arrays
       let sortedPosts: any = [];
-      for (let i = 0; i < posts.length; i++) {
-        sortedPosts[i] = mergedArray[i].post;
-        postsType[i] = mergedArray[i].type;
+      for (
+        let i = posts.length - 1, j = 0;
+        i >= 0 && j < posts.length;
+        i--, j++
+      ) {
+        sortedPosts[j] = mergedArray[i].post;
+        postsType[j] = mergedArray[i].type;
       }
 
       // Only keep the top #(limit) posts
