@@ -108,7 +108,7 @@ export default {
     await this.refresh();
   },
   methods: {
-    async refresh() {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
         // Check if the device can support qr scanning
         if (
@@ -127,7 +127,8 @@ export default {
         }
         this.user = await this.$apollo
           .query({
-            query: profile
+            query: profile,
+            fetchPolicy
           })
           .then(({ data }) => data.me);
         if (!this.user.profileImage) {
@@ -181,7 +182,7 @@ export default {
             file: files[0]
           }
         });
-        await this.refresh();
+        await this.refresh('network-only');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Unable to upload your picture'
