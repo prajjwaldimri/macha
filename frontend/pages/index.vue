@@ -48,7 +48,6 @@ export default {
             fetchPolicy
           })
           .then(({ data }) => {
-            console.log(data);
             this.posts = data.getFeed.posts;
             this.postsType = data.getFeed.postsType;
           });
@@ -65,7 +64,6 @@ export default {
       const index = this.posts.indexOf(postId);
       this.$delete(this.posts, index);
       this.$delete(this.postsType, index);
-      await this.refresh('network-only', 0);
     }
   },
   watch: {

@@ -136,9 +136,8 @@ export default {
         }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
-        console.log(e);
-        // await this.$apolloHelpers.onLogout();
-        // this.$router.replace('/login');
+        await this.$apolloHelpers.onLogout();
+        this.$router.replace('/login');
         this.$notifier.showErrorMessage({
           content: 'You need to be logged in to view the profile page'
         });

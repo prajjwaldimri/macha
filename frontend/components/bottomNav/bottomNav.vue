@@ -70,7 +70,6 @@ export default {
         this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
       }
     } catch (e) {
-      console.log(e);
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');
       this.$notifier.showErrorMessage({
