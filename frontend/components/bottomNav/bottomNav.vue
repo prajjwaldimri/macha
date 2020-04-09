@@ -22,7 +22,7 @@
           v-btn(fab color="primary" x-small slot="prepend-inner" @click.stop="createTextPost" nuxt to="/profile")
             v-avatar(v-if="user" size="32")
               img(:src="user.profileImage")
-        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()")
+          newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()")
 </template>
 
 <script>
