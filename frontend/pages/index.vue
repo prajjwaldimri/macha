@@ -1,11 +1,11 @@
 <template lang="pug">
   div
     v-container(fluid style="padding-bottom:50px").pt-0
-      v-row(v-for="(post, index) in posts" :key="index")
+      v-row(v-for="(post, index) in posts" :key="post")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
-    bottomNav(@refreshFeed="refresh('network-only')")
+    bottomNav(@refreshFeed="refresh('network-only', 0)")
 </template>
 
 <script>
@@ -35,8 +35,9 @@ export default {
     await this.refresh();
   },
   methods: {
-    async refresh(fetchPolicy = 'cache-first') {
+    async refresh(fetchPolicy = 'cache-first', skipValue = this.skip) {
       try {
+        this.skip = skipValue;
         await this.$apollo
           .query({
             query: getFeed,
@@ -47,6 +48,7 @@ export default {
             fetchPolicy
           })
           .then(({ data }) => {
+            console.log(data);
             this.posts = data.getFeed.posts;
             this.postsType = data.getFeed.postsType;
           });
@@ -59,10 +61,11 @@ export default {
     onIntersect(entries, observer) {
       this.isIntersecting = entries[0].isIntersecting;
     },
-    removePost(postId) {
+    async removePost(postId) {
       const index = this.posts.indexOf(postId);
       this.$delete(this.posts, index);
       this.$delete(this.postsType, index);
+      await this.refresh('network-only', 0);
     }
   },
   watch: {

@@ -9,7 +9,7 @@
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
       v-card-subtitle.pt-0 {{textPost.content}}
       v-card-actions
-        v-btn(icon v-if="textPost.hasCurrentUserLikedImage" @click="toggleLikeImagePost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
+        v-btn(icon v-if="textPost.hasCurrentUserLikedImage" @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
         v-btn(icon v-else @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart-outline
@@ -79,10 +79,10 @@ export default {
             uri: this.textPost.uri
           }
         });
-        this.$router.replace('/');
+        this.$emit('postDeleted');
       } catch (e) {
         this.$notifier.showErrorMessage({
-          content: 'Error deleting your image'
+          content: 'Error deleting your text'
         });
       } finally {
         this.isTextPostLoading = false;
