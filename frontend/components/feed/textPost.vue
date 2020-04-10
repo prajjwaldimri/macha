@@ -1,18 +1,20 @@
 <template lang="pug">
   v-container(fluid)
-    v-card(:loading="isTextPostLoading" flat).ma-3
+    v-card(:loading="isTextPostLoading" flat).mx-3
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
-          img(:src="textPost.authorDetails.profileImage")
+          v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
         v-list-item-content
           v-list-item-title() {{textPost.authorDetails.name}}
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
       v-card-subtitle.pt-0 {{textPost.content}}
       v-card-actions
-        v-btn(icon v-if="textPost.hasCurrentUserLikedImage" @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
+        v-btn(v-if="textPost.hasCurrentUserLikedTextPost" icon @click="toggleLikeTextPost" color="pink" left :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
-        v-btn(icon v-else @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
+          span.pl-1 {{textPost.likeCount}}
+        v-btn(icon @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading" v-else)
           v-icon mdi-heart-outline
+          span.pl-1 {{textPost.likeCount}}
         v-btn(icon :disabled="isTextPostLoading")
           v-icon mdi-comment
         v-btn(icon :disabled="isTextPostLoading" @click="share")
@@ -90,13 +92,14 @@ export default {
     async toggleLikeTextPost() {
       try {
         this.isLikeLoading = true;
-        if (this.textPost.hasCurrentUserLikedImage) {
+        if (this.textPost.hasCurrentUserLikedTextPost) {
           await this.$apollo.mutate({
             mutation: unlikePost,
             variables: {
               postId: this.textPost.id
             }
           });
+          this.textPost.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likePost,
@@ -104,13 +107,15 @@ export default {
               postId: this.textPost.id
             }
           });
+          this.textPost.likeCount += 1;
         }
-        this.textPost.hasCurrentUserLikedImage = await this.$apollo
+        this.textPost.hasCurrentUserLikedTextPost = await this.$apollo
           .query({
             query: isCurrentUserLiker,
             variables: {
               identifier: this.textPost.id
-            }
+            },
+            fetchPolicy: 'network-only'
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {

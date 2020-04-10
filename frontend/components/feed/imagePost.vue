@@ -1,9 +1,9 @@
 <template lang="pug">
   v-container(fluid)
-    v-card(:loading="isImageLoading" flat).ma-3
+    v-card(:loading="isImageLoading" flat).mx-3
       v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
-          img(:src="imagePost.authorDetails.profileImage")
+          v-img(:src="imagePost.authorDetails.profileImage" aspect-ratio="1")
         v-list-item-content
           v-list-item-title() {{imagePost.authorDetails.name}}
           v-list-item-subtitle() @{{imagePost.authorDetails.username}}
@@ -14,8 +14,10 @@
       v-card-actions
         v-btn(icon v-if="imagePost.hasCurrentUserLikedImage" @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart
+          span.pl-1 {{imagePost.likeCount}}
         v-btn(icon v-else @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart-outline
+          span.pl-1 {{imagePost.likeCount}}
         v-btn(icon :disabled="isImageLoading")
           v-icon mdi-comment
         v-btn(icon :disabled="isImageLoading" @click="share")
@@ -120,6 +122,7 @@ export default {
               postId: this.imagePost.id
             }
           });
+          this.imagePost.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likePost,
@@ -127,13 +130,15 @@ export default {
               postId: this.imagePost.id
             }
           });
+          this.imagePost.likeCount += 1;
         }
         this.imagePost.hasCurrentUserLikedImage = await this.$apollo
           .query({
             query: isCurrentUserLiker,
             variables: {
               identifier: this.imagePost.id
-            }
+            },
+            fetchPolicy: 'network-only'
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {

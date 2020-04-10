@@ -130,6 +130,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     image: string; // String!
     isCurrentUserAuthor: boolean; // Boolean!
+    likeCount: number; // Int!
     location: string | null; // String
     uri: string; // String!
   }
@@ -198,6 +199,7 @@ export interface NexusGenFieldTypes {
     hasCurrentUserLikedTextPost: boolean; // Boolean!
     id: string; // ID!
     isCurrentUserAuthor: boolean; // Boolean!
+    likeCount: number; // Int!
     uri: string; // String!
   }
   TextPostList: { // field return type
