@@ -9,10 +9,12 @@
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
       v-card-subtitle.pt-0 {{textPost.content}}
       v-card-actions
-        v-btn(icon v-if="textPost.hasCurrentUserLikedImage" @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
+        v-btn(icon v-if="textPost.hasCurrentUserLikedTextPost" @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
+          span.pl-1 {{textPost.likeCount}}
         v-btn(icon v-else @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart-outline
+          span.pl-1 {{textPost.likeCount}}
         v-btn(icon :disabled="isTextPostLoading")
           v-icon mdi-comment
         v-btn(icon :disabled="isTextPostLoading" @click="share")

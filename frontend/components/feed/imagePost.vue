@@ -14,8 +14,10 @@
       v-card-actions
         v-btn(icon v-if="imagePost.hasCurrentUserLikedImage" @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart
+          span.pl-1 {{imagePost.likeCount}}
         v-btn(icon v-else @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart-outline
+          span.pl-1 {{imagePost.likeCount}}
         v-btn(icon :disabled="isImageLoading")
           v-icon mdi-comment
         v-btn(icon :disabled="isImageLoading" @click="share")
