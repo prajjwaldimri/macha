@@ -122,6 +122,7 @@ export default {
               postId: this.imagePost.id
             }
           });
+          this.imagePost.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likePost,
@@ -129,13 +130,15 @@ export default {
               postId: this.imagePost.id
             }
           });
+          this.imagePost.likeCount += 1;
         }
         this.imagePost.hasCurrentUserLikedImage = await this.$apollo
           .query({
             query: isCurrentUserLiker,
             variables: {
               identifier: this.imagePost.id
-            }
+            },
+            fetchPolicy: 'network-only'
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {

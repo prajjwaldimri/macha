@@ -9,10 +9,10 @@
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
       v-card-subtitle.pt-0 {{textPost.content}}
       v-card-actions
-        v-btn(icon v-if="textPost.hasCurrentUserLikedTextPost" @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
+        v-btn(v-if="textPost.hasCurrentUserLikedTextPost" icon @click="toggleLikeTextPost" color="pink" left :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
           span.pl-1 {{textPost.likeCount}}
-        v-btn(icon v-else @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading")
+        v-btn(icon @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading" v-else)
           v-icon mdi-heart-outline
           span.pl-1 {{textPost.likeCount}}
         v-btn(icon :disabled="isTextPostLoading")
@@ -92,13 +92,14 @@ export default {
     async toggleLikeTextPost() {
       try {
         this.isLikeLoading = true;
-        if (this.textPost.hasCurrentUserLikedImage) {
+        if (this.textPost.hasCurrentUserLikedTextPost) {
           await this.$apollo.mutate({
             mutation: unlikePost,
             variables: {
               postId: this.textPost.id
             }
           });
+          this.textPost.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likePost,
@@ -106,13 +107,15 @@ export default {
               postId: this.textPost.id
             }
           });
+          this.textPost.likeCount += 1;
         }
-        this.textPost.hasCurrentUserLikedImage = await this.$apollo
+        this.textPost.hasCurrentUserLikedTextPost = await this.$apollo
           .query({
             query: isCurrentUserLiker,
             variables: {
               identifier: this.textPost.id
-            }
+            },
+            fetchPolicy: 'network-only'
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {
