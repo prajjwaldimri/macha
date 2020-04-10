@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container(fluid)
-    v-card(:loading="isImageLoading" flat).ma-3
+    v-card(:loading="isImageLoading" flat).mx-3
       v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
           v-img(:src="imagePost.authorDetails.profileImage" aspect-ratio="1")
