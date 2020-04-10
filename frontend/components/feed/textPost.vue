@@ -3,7 +3,7 @@
     v-card(:loading="isTextPostLoading" flat).ma-3
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
-          img(:src="textPost.authorDetails.profileImage")
+          v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
         v-list-item-content
           v-list-item-title() {{textPost.authorDetails.name}}
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
