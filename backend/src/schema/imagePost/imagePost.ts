@@ -43,7 +43,6 @@ export const ImagePost = objectType({
           })
             .countDocuments({})
             .exec();
-          console.log(likes);
           return likes;
         } catch (err) {
           return err;

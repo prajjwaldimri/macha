@@ -154,6 +154,7 @@ type TextPost implements Node {
   """Unique identifier for the resource"""
   id: ID!
   isCurrentUserAuthor: Boolean!
+  likeCount: Int!
   uri: String!
 }
 

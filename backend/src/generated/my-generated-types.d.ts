@@ -199,6 +199,7 @@ export interface NexusGenFieldTypes {
     hasCurrentUserLikedTextPost: boolean; // Boolean!
     id: string; // ID!
     isCurrentUserAuthor: boolean; // Boolean!
+    likeCount: number; // Int!
     uri: string; // String!
   }
   TextPostList: { // field return type

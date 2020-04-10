@@ -33,6 +33,21 @@ export const TextPost = objectType({
         }
       },
     });
+    t.field("likeCount", {
+      type: "Int",
+      async resolve(root, args, ctx, info): Promise<any> {
+        try {
+          let likes = await LikeModel.find({
+            likable: root.id!,
+          })
+            .countDocuments({})
+            .exec();
+          return likes;
+        } catch (err) {
+          return err;
+        }
+      },
+    });
     t.string("uri", { nullable: false });
     t.string("content", { nullable: false });
   },
