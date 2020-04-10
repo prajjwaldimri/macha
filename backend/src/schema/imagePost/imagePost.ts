@@ -34,6 +34,22 @@ export const ImagePost = objectType({
         }
       },
     });
+    t.field("likeCount", {
+      type: "Int",
+      async resolve(root, args, ctx, info): Promise<any> {
+        try {
+          let likes = await LikeModel.find({
+            likable: root.id!,
+          })
+            .countDocuments({})
+            .exec();
+          console.log(likes);
+          return likes;
+        } catch (err) {
+          return err;
+        }
+      },
+    });
     t.string("uri", { nullable: false });
     t.string("image", { nullable: false });
     t.string("location", { nullable: true });

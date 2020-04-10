@@ -130,6 +130,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     image: string; // String!
     isCurrentUserAuthor: boolean; // Boolean!
+    likeCount: number; // Int!
     location: string | null; // String
     uri: string; // String!
   }

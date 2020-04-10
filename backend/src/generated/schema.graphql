@@ -28,6 +28,7 @@ type ImagePost implements Node {
   id: ID!
   image: String!
   isCurrentUserAuthor: Boolean!
+  likeCount: Int!
   location: String
   uri: String!
 }
