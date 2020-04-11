@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container(fluid)
-    v-card(:loading="isTextPostLoading" flat).mx-3
+  div
+    v-card(:loading="isTextPostLoading" flat outlined tile)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
           v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
@@ -15,7 +15,7 @@
         v-btn(icon @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading" v-else)
           v-icon mdi-heart-outline
           span.pl-1 {{textPost.likeCount}}
-        v-btn(icon v-if="textPost" :disabled="isTextPostLoading" :to="'/text/'+ textPost.uri" nuxt).pl-4
+        v-btn(icon v-if="textPost" :disabled="isTextPostLoading").pl-4
           v-icon mdi-comment
           span.pl-1 {{textPost.commentCount}}
         v-btn(icon :disabled="isTextPostLoading" @click="share")
@@ -37,9 +37,6 @@ import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteTextPost from '../../gql/deleteTextPost';
 
 export default {
-  props: {
-    postId: String
-  },
   async mounted() {
     await this.refresh();
   },
@@ -58,7 +55,7 @@ export default {
           .query({
             query: getTextPost,
             variables: {
-              identifier: this.postId
+              identifier: this.$route.params.id
             }
           })
           .then(({ data }) => {
@@ -81,7 +78,7 @@ export default {
             uri: this.textPost.uri
           }
         });
-        this.$emit('postDeleted');
+        this.$router.replace('/');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your text'
