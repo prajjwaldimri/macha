@@ -5,11 +5,11 @@
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
-    bottomNav(@refreshFeed="refresh('network-only', 0)")
+    bottomPoster(@refreshFeed="refresh('network-only', 0)")
 </template>
 
 <script>
-import bottomNav from '../components/bottomNav/bottomNav';
+import bottomPoster from '../components/bottomPoster/bottomPoster';
 import ImagePost from '../components/feed/imagePost';
 import TextPost from '../components/feed/textPost';
 
@@ -17,7 +17,7 @@ import getFeed from '../gql/getFeed';
 
 export default {
   components: {
-    bottomNav,
+    bottomPoster,
     ImagePost,
     TextPost
   },

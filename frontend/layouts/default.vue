@@ -6,6 +6,7 @@
         | {{message}}
         v-btn(text @click="show = false") Close
       nuxt
+      BottomNav
       v-bottom-sheet(v-model="sheet")
         v-list
           v-subheader Share with
@@ -34,10 +35,12 @@
 
 <script>
 import AppBar from '../components/appBar';
+import BottomNav from '../components/bottomNav';
 
 export default {
   components: {
-    AppBar
+    AppBar,
+    BottomNav
   },
   data() {
     return {

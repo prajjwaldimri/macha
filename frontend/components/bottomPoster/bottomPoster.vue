@@ -140,7 +140,7 @@ export default {
   display: flex;
   width: 95vw;
   position: fixed;
-  bottom: 0;
+  bottom: 42px;
   margin: auto;
   left: 0;
   right: 0;
