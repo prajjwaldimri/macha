@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app-bar(app elevate-on-scroll dense)
+  v-app-bar(app dense flat)
     v-btn(icon @click="goBack" tile :disabled="isBackButtonDisabled")
       v-icon mdi-arrow-left
     v-toolbar-title(@click="$router.push('/')" style="cursor: pointer").px-5

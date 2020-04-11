@@ -1,6 +1,6 @@
 <template lang="pug">
-  .mt-1
-    v-card(:loading="isTextPostLoading" flat)
+  div
+    v-card(:loading="isTextPostLoading" flat outlined tile)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
           v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
