@@ -2,6 +2,7 @@ import { objectType } from "nexus";
 import { UserModel } from "../../models/User";
 import { resolve } from "path";
 import { LikeModel } from "../../models/Like";
+import { CommentModel } from "../../models/Comment";
 
 export const ImagePost = objectType({
   name: "ImagePost",
@@ -44,6 +45,21 @@ export const ImagePost = objectType({
             .countDocuments({})
             .exec();
           return likes;
+        } catch (err) {
+          return err;
+        }
+      },
+    });
+    t.field("commentCount", {
+      type: "Int",
+      async resolve(root, args, ctx, info): Promise<any> {
+        try {
+          let comments = await CommentModel.find({
+            post: root.id!,
+          })
+            .countDocuments({})
+            .exec();
+          return comments;
         } catch (err) {
           return err;
         }

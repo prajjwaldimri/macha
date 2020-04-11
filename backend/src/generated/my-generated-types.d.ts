@@ -113,7 +113,6 @@ export interface NexusGenFieldTypes {
   Comment: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
-    commentCount: number; // Int!
     id: string; // ID!
     post: string; // ID!
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
@@ -127,6 +126,7 @@ export interface NexusGenFieldTypes {
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     caption: string | null; // String
+    commentCount: number; // Int!
     hasCurrentUserLikedImage: boolean; // Boolean!
     id: string; // ID!
     image: string; // String!
@@ -196,6 +196,7 @@ export interface NexusGenFieldTypes {
   TextPost: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
+    commentCount: number; // Int!
     content: string; // String!
     hasCurrentUserLikedTextPost: boolean; // Boolean!
     id: string; // ID!

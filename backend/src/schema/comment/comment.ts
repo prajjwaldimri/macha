@@ -1,6 +1,5 @@
 import { objectType, enumType, unionType } from "nexus";
 import { UserModel } from "../../models/User";
-import { CommentModel } from "../../models/Comment";
 
 export const PostTypeEnum = enumType({
   name: "PostTypeEnum",
@@ -31,21 +30,6 @@ export const Comment = objectType({
         return await UserModel.findById(root.author).select("-password -age");
       },
       nullable: false,
-    });
-    t.field("commentCount", {
-      type: "Int",
-      async resolve(root, args, ctx, info): Promise<any> {
-        try {
-          let comments = await CommentModel.find({
-            post: root.id!,
-          })
-            .countDocuments({})
-            .exec();
-          return comments;
-        } catch (err) {
-          return err;
-        }
-      },
     });
 
     t.string("text", { nullable: false });
