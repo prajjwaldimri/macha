@@ -6,7 +6,7 @@ import { CommentModel } from "../../models/Comment";
 export const getComment = queryField("getComment", {
   type: "Comment",
   args: {
-    commentId: stringArg()
+    commentId: stringArg(),
   },
   async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
     try {
@@ -26,13 +26,13 @@ export const getComment = queryField("getComment", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const getCommentCount = queryField("getCommentCount", {
   type: "Int",
   args: {
-    postId: stringArg()
+    postId: stringArg(),
   },
   async resolve(_, { postId }, ctx: UserContext): Promise<any> {
     try {
@@ -42,11 +42,11 @@ export const getCommentCount = queryField("getCommentCount", {
         );
       }
 
-      let comments = await CommentModel.find({ post: postId });
+      let comments = await CommentModel.find({ post: postId! });
 
       return comments.length;
     } catch (err) {
       return err;
     }
-  }
+  },
 });
