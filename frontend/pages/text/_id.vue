@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container(fluid)
-    v-card(:loading="isTextPostLoading" flat).mx-3
+  .mt-1
+    v-card(:loading="isTextPostLoading" flat)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
           v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
@@ -15,7 +15,7 @@
         v-btn(icon @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading" v-else)
           v-icon mdi-heart-outline
           span.pl-1 {{textPost.likeCount}}
-        v-btn(icon :disabled="isTextPostLoading" :to="'/text/' + textPost.uri" nuxt)
+        v-btn(icon v-if="textPost" :disabled="isTextPostLoading").pl-4
           v-icon mdi-comment
           span.pl-1 {{textPost.commentCount}}
         v-btn(icon :disabled="isTextPostLoading" @click="share")
@@ -78,7 +78,7 @@ export default {
             uri: this.textPost.uri
           }
         });
-        this.$emit('postDeleted');
+        this.$router.replace('/');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your text'

@@ -18,7 +18,7 @@
         v-btn(icon v-else @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart-outline
           span.pl-1 {{imagePost.likeCount}}
-        v-btn(icon :disabled="isImageLoading" :to="'/image/' + textPost.uri" nuxt)
+        v-btn(icon :disabled="isImageLoading").pl-4
           v-icon mdi-comment
           span.pl-1 {{imagePost.commentCount}}
         v-btn(icon :disabled="isImageLoading" @click="share")
@@ -92,7 +92,7 @@ export default {
           })
           .then(({ data }) => {
             if (data.deleteImagePost) {
-              this.$emit('postDeleted');
+              this.$router.replace('/');
               this.$notifier.showSuccessMessage({
                 content: 'Successfully deleted your image'
               });
