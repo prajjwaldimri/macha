@@ -113,6 +113,7 @@ export interface NexusGenFieldTypes {
   Comment: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
+    commentCount: number; // Int!
     id: string; // ID!
     post: string; // ID!
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!

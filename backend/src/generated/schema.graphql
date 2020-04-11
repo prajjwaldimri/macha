@@ -5,6 +5,7 @@
 type Comment implements Node {
   author: ID!
   authorDetails: User!
+  commentCount: Int!
 
   """Unique identifier for the resource"""
   id: ID!
