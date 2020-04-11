@@ -2,7 +2,7 @@
   .profile
     v-toolbar(prominent flat height="120")
       input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="changeProfilePicture")
-      .top-profile.pt-5
+      .top-profile
         v-avatar(color="primary" size="80" @click="$refs.profilePicture.click()")
           v-progress-circular(v-if="isProfileImageLoading" indeterminate)
           v-img(v-else :src="user.profileImage")
@@ -24,9 +24,9 @@
           v-tab-item(key="photos")
             Photos
           v-tab-item(key="settings")
-            h1 Settings
+            Settings
 
-    v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition")
+    v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition" style="bottom: 52px;")
       template(v-slot:activator)
         v-btn(v-model="fab" fab color="primary")
           v-icon(v-if="fab") mdi-close
@@ -83,11 +83,13 @@ import qrcode from 'qrcode';
 
 import Friends from './friends.vue';
 import Photos from './photos.vue';
+import Settings from './settings.vue';
 
 export default {
   components: {
     Friends,
-    Photos
+    Photos,
+    Settings
   },
   data() {
     return {
