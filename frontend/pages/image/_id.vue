@@ -1,29 +1,33 @@
 <template lang="pug">
-  v-card(:loading="isImageLoading" flat)
-    v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
-      v-list-item-avatar()
-        img(:src="imagePost.authorDetails.profileImage")
-      v-list-item-content
-        v-list-item-title() {{imagePost.authorDetails.name}}
-        v-list-item-subtitle() @{{imagePost.authorDetails.username}}
-    v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage")
-      template(v-slot:placeholder)
-        v-row(align="center" justify="center").fill-height.ma-0
-          v-progress-circular(indeterminate color="primary")
-    v-card-actions
-      v-btn(icon v-if="imagePost.hasCurrentUserLikedImage" @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
-        v-icon mdi-heart
-      v-btn(icon v-else @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
-        v-icon mdi-heart-outline
-      v-btn(icon :disabled="isImageLoading")
-        v-icon mdi-comment
-      v-btn(icon :disabled="isImageLoading" @click="share")
-        v-icon mdi-share
-      v-spacer
-      v-btn(icon v-if="imagePost.isCurrentUserAuthor" @click="deleteImagePost" color="error" :disabled="isImageLoading")
-        v-icon mdi-delete
+  v-container(fluid)
+    v-card(:loading="isImageLoading" flat).mx-3
+      v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
+        v-list-item-avatar()
+          v-img(:src="imagePost.authorDetails.profileImage" aspect-ratio="1")
+        v-list-item-content
+          v-list-item-title() {{imagePost.authorDetails.name}}
+          v-list-item-subtitle() @{{imagePost.authorDetails.username}}
+      v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage")
+        template(v-slot:placeholder)
+          v-row(align="center" justify="center").fill-height.ma-0
+            v-progress-circular(indeterminate color="primary")
+      v-card-actions
+        v-btn(icon v-if="imagePost.hasCurrentUserLikedImage" @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
+          v-icon mdi-heart
+          span.pl-1 {{imagePost.likeCount}}
+        v-btn(icon v-else @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
+          v-icon mdi-heart-outline
+          span.pl-1 {{imagePost.likeCount}}
+        v-btn(icon :disabled="isImageLoading" :to="'/image/' + textPost.uri" nuxt)
+          v-icon mdi-comment
+          span.pl-1 {{imagePost.commentCount}}
+        v-btn(icon :disabled="isImageLoading" @click="share")
+          v-icon mdi-share
+        v-spacer
+        v-btn(icon v-if="imagePost.isCurrentUserAuthor" @click="deleteImagePost" color="error" :disabled="isImageLoading")
+          v-icon mdi-delete
 
-    v-card-subtitle.pt-0 {{imagePost.caption}}
+      v-card-subtitle.pt-0 {{imagePost.caption}}
 </template>
 
 <style lang="scss">
@@ -79,13 +83,25 @@ export default {
     async deleteImagePost() {
       try {
         this.isImageLoading = true;
-        await this.$apollo.mutate({
-          mutation: deleteImagePost,
-          variables: {
-            uri: this.imagePost.uri
-          }
-        });
-        this.$router.replace('/');
+        await this.$apollo
+          .mutate({
+            mutation: deleteImagePost,
+            variables: {
+              uri: this.imagePost.uri
+            }
+          })
+          .then(({ data }) => {
+            if (data.deleteImagePost) {
+              this.$emit('postDeleted');
+              this.$notifier.showSuccessMessage({
+                content: 'Successfully deleted your image'
+              });
+            } else {
+              this.$notifier.showErrorMessage({
+                content: 'Error deleting your image'
+              });
+            }
+          });
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your image'
@@ -104,6 +120,7 @@ export default {
               postId: this.imagePost.id
             }
           });
+          this.imagePost.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likePost,
@@ -111,13 +128,15 @@ export default {
               postId: this.imagePost.id
             }
           });
+          this.imagePost.likeCount += 1;
         }
         this.imagePost.hasCurrentUserLikedImage = await this.$apollo
           .query({
             query: isCurrentUserLiker,
             variables: {
               identifier: this.imagePost.id
-            }
+            },
+            fetchPolicy: 'network-only'
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {

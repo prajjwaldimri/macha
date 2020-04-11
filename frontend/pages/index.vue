@@ -53,7 +53,7 @@ export default {
           });
       } catch (e) {
         this.$notifier.showErrorMessage({
-          content: e.graphQLErrors[0].message
+          content: e
         });
       }
     },

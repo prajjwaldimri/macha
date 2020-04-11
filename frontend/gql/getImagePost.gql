@@ -12,6 +12,7 @@ query getImagePost($identifier: String!) {
     isCurrentUserAuthor
     hasCurrentUserLikedImage
     likeCount
+    commentCount
     uri
   }
 }
