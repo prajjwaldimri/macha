@@ -1,6 +1,7 @@
 import { objectType } from "nexus";
 import { UserModel } from "../../models/User";
 import { LikeModel } from "../../models/Like";
+import { CommentModel } from "../../models/Comment";
 
 export const TextPost = objectType({
   name: "TextPost",
@@ -43,6 +44,21 @@ export const TextPost = objectType({
             .countDocuments({})
             .exec();
           return likes;
+        } catch (err) {
+          return err;
+        }
+      },
+    });
+    t.field("commentCount", {
+      type: "Int",
+      async resolve(root, args, ctx, info): Promise<any> {
+        try {
+          let comments = await CommentModel.find({
+            post: root.id!,
+          })
+            .countDocuments({})
+            .exec();
+          return comments;
         } catch (err) {
           return err;
         }

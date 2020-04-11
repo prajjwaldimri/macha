@@ -37,6 +37,9 @@ export interface NexusGenRootTypes {
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
     text: string; // String!
   }
+  Comments: { // root type
+    comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
+  }
   Feed: { // root type
     posts: string[]; // [String!]!
     postsType: string[]; // [String!]!
@@ -118,6 +121,9 @@ export interface NexusGenFieldTypes {
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
     text: string; // String!
   }
+  Comments: { // field return type
+    comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
+  }
   Feed: { // field return type
     posts: string[]; // [String!]!
     postsType: string[]; // [String!]!
@@ -126,6 +132,7 @@ export interface NexusGenFieldTypes {
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     caption: string | null; // String
+    commentCount: number; // Int!
     hasCurrentUserLikedImage: boolean; // Boolean!
     id: string; // ID!
     image: string; // String!
@@ -178,6 +185,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getComment: NexusGenRootTypes['Comment']; // Comment!
     getCommentCount: number; // Int!
+    getCommentsForThePost: NexusGenRootTypes['Comments']; // Comments!
     getFeed: NexusGenRootTypes['Feed']; // Feed!
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     getImagePostsOfUser: NexusGenRootTypes['ImagePostList']; // ImagePostList!
@@ -195,6 +203,7 @@ export interface NexusGenFieldTypes {
   TextPost: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
+    commentCount: number; // Int!
     content: string; // String!
     hasCurrentUserLikedTextPost: boolean; // Boolean!
     id: string; // ID!
@@ -323,6 +332,11 @@ export interface NexusGenArgTypes {
     getCommentCount: { // args
       postId?: string | null; // String
     }
+    getCommentsForThePost: { // args
+      limit?: number | null; // Int
+      postId: string; // String!
+      skip?: number | null; // Int
+    }
     getFeed: { // args
       limit?: number | null; // Int
       skip?: number | null; // Int
@@ -370,7 +384,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Feed" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "TextPostList" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Comments" | "Feed" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "TextPostList" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 

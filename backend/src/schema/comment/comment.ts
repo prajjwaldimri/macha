@@ -6,8 +6,8 @@ export const PostTypeEnum = enumType({
   members: {
     ImagePost: "ImagePost",
     VideoPost: "VideoPost",
-    TextPost: "TextPost"
-  }
+    TextPost: "TextPost",
+  },
 });
 
 export const PostType = unionType({
@@ -16,7 +16,7 @@ export const PostType = unionType({
   definition(t) {
     t.members("ImagePost", "VideoPost", "TextPost");
     t.resolveType(() => null);
-  }
+  },
 });
 
 export const Comment = objectType({
@@ -29,10 +29,18 @@ export const Comment = objectType({
       async resolve(root): Promise<any> {
         return await UserModel.findById(root.author).select("-password -age");
       },
-      nullable: false
+      nullable: false,
     });
+
     t.string("text", { nullable: false });
     t.field("postType", { type: "PostTypeEnum", nullable: false });
     t.id("post", { nullable: false });
-  }
+  },
+});
+
+export const Comments = objectType({
+  name: "Comments",
+  definition(t) {
+    t.list.field("comments", { type: "Comment" });
+  },
 });
