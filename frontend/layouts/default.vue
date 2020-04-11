@@ -36,12 +36,16 @@
 <script>
 import AppBar from '../components/appBar';
 import BottomNav from '../components/bottomNav';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     AppBar,
     BottomNav
   },
+  computed: mapState({
+    theme: state => state.theme.isDarkThemeEnabled
+  }),
   data() {
     return {
       show: false,
@@ -64,25 +68,34 @@ export default {
         this.shareText = state.share.text;
         this.sheet = true;
       }
+      if (mutation.type === 'theme/setDarkTheme') {
+        this.$vuetify.theme.dark =
+          localStorage.getItem('isDarkThemeEnabled') === 'true';
+      }
+      if (mutation.type === 'theme/setLightTheme') {
+        this.$vuetify.theme.dark =
+          localStorage.getItem('isDarkThemeEnabled') === 'true';
+      }
     });
   },
   mounted() {
-    if (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
-      this.$vuetify.theme.dark = true;
-    } else {
-      this.$vuetify.theme.dark = false;
-    }
-
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (!localStorage.getItem('isDarkThemeEnabled')) {
+      if (
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      ) {
+        localStorage.setItem('isDarkThemeEnabled', true);
         this.$vuetify.theme.dark = true;
+        this.$store.commit('theme/setDarkTheme');
       } else {
+        localStorage.setItem('isDarkThemeEnabled', false);
         this.$vuetify.theme.dark = false;
+        this.$store.commit('theme/setLightTheme');
       }
-    });
+    } else {
+      this.$vuetify.theme.dark =
+        localStorage.getItem('isDarkThemeEnabled') === 'true';
+    }
   },
   methods: {
     async share(type) {
