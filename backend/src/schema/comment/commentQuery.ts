@@ -1,4 +1,4 @@
-import { queryField, stringArg } from "nexus";
+import { queryField, stringArg, intArg } from "nexus";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { CommentModel } from "../../models/Comment";
@@ -45,6 +45,35 @@ export const getCommentCount = queryField("getCommentCount", {
       let comments = await CommentModel.find({ post: postId! });
 
       return comments.length;
+    } catch (err) {
+      return err;
+    }
+  },
+});
+
+export const getCommentsForThePost = queryField("getCommentsForThePost", {
+  type: "Comments",
+  args: {
+    skip: intArg({ default: 0 }),
+    limit: intArg({ default: 50, description: "Cannot be less than 50" }),
+    postId: stringArg({
+      required: true,
+    }),
+  },
+  async resolve(_, { skip, limit, postId }, ctx: UserContext): Promise<any> {
+    try {
+      if (!ctx.user) {
+        throw new AuthenticationError(
+          "Cannot check comments without logging in"
+        );
+      }
+
+      const comments = await CommentModel.find({ post: postId! })
+        .skip(skip!)
+        .limit(limit!)
+        .exec();
+
+      return { comments };
     } catch (err) {
       return err;
     }

@@ -37,3 +37,10 @@ export const Comment = objectType({
     t.id("post", { nullable: false });
   },
 });
+
+export const Comments = objectType({
+  name: "Comments",
+  definition(t) {
+    t.list.field("comments", { type: "Comment" });
+  },
+});
