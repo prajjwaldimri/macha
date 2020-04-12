@@ -180,6 +180,7 @@ export interface NexusGenFieldTypes {
     updateComment: NexusGenRootTypes['Comment']; // Comment!
     updateImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     updateTextPost: NexusGenRootTypes['TextPost']; // TextPost!
+    updateUser: NexusGenRootTypes['User']; // User!
     updateVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
   }
   Query: { // field return type
@@ -319,6 +320,10 @@ export interface NexusGenArgTypes {
     updateTextPost: { // args
       content: string; // String!
       uri: string; // String!
+    }
+    updateUser: { // args
+      age: number; // Int!
+      name: string; // String!
     }
     updateVideoPost: { // args
       caption?: string | null; // String

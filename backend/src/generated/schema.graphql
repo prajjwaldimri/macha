@@ -93,6 +93,7 @@ type Mutation {
   updateComment(commentId: String!, text: String!): Comment!
   updateImagePost(caption: String, location: String, uri: String!): ImagePost!
   updateTextPost(content: String!, uri: String!): TextPost!
+  updateUser(age: Int! = 13, name: String!): User!
   updateVideoPost(caption: String, location: String, uri: String!): VideoPost!
 }
 

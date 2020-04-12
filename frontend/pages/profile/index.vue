@@ -18,7 +18,7 @@
           v-tab(key="settings") Settings
 
           v-tab-item(key="profile")
-            h1 Profile
+            EditProfile(@detailsChanged="refresh('network-only')")
           v-tab-item(key="friends")
             Friends
           v-tab-item(key="photos")
@@ -84,12 +84,14 @@ import qrcode from 'qrcode';
 import Friends from './friends.vue';
 import Photos from './photos.vue';
 import Settings from './settings.vue';
+import EditProfile from './editProfile.vue';
 
 export default {
   components: {
     Friends,
     Photos,
-    Settings
+    Settings,
+    EditProfile
   },
   data() {
     return {
@@ -204,10 +206,6 @@ export default {
   justify-content: center;
   align-items: center;
   letter-spacing: 0.1rem;
-}
-
-.profile {
-  height: 100vh;
 }
 
 .qr-code {

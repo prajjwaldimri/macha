@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import {
   UserInputError,
   GraphQLUpload,
-  AuthenticationError
+  AuthenticationError,
 } from "apollo-server";
 import { stringArg, mutationField, intArg, asNexusMethod, arg } from "nexus";
 import matches from "validator/lib/matches";
@@ -18,7 +18,7 @@ export const loginUser = mutationField("login", {
   type: "String",
   args: {
     username: stringArg({ required: true }),
-    password: stringArg({ required: true })
+    password: stringArg({ required: true }),
   },
   async resolve(_, { username, password }): Promise<any> {
     try {
@@ -36,12 +36,12 @@ export const loginUser = mutationField("login", {
         throw new UserInputError("Username/Password is invalid!");
       }
       return jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-        expiresIn: "15d"
+        expiresIn: "15d",
       });
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const signUpUser = mutationField("signup", {
@@ -51,7 +51,7 @@ export const signUpUser = mutationField("signup", {
     password: stringArg({ required: true }),
     name: stringArg({ required: true }),
     email: stringArg(),
-    age: intArg({ default: 13 })
+    age: intArg({ default: 13 }),
   },
   async resolve(_, { username, password, email, name, age }): Promise<any> {
     try {
@@ -68,16 +68,37 @@ export const signUpUser = mutationField("signup", {
         password: await bcrypt.hash(password, 10),
         email,
         name,
-        age
+        age,
       });
 
       return jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET!, {
-        expiresIn: "15d"
+        expiresIn: "15d",
       });
     } catch (err) {
       return err;
     }
-  }
+  },
+});
+
+export const updateUser = mutationField("updateUser", {
+  type: "User",
+  args: {
+    name: stringArg({ required: true }),
+    age: intArg({ default: 13, required: true }),
+  },
+  async resolve(_, { name, age }, ctx: UserContext): Promise<any> {
+    try {
+      if (age < 13 || age > 99) {
+        throw new UserInputError("Age can only be between 13 and 99");
+      }
+      return await UserModel.findByIdAndUpdate(ctx.user?._id, {
+        name,
+        age,
+      });
+    } catch (err) {
+      return err;
+    }
+  },
 });
 
 // https://github.com/graphql-nexus/schema/issues/128
@@ -86,7 +107,7 @@ export const Upload = asNexusMethod(GraphQLUpload!, "upload");
 export const changeProfilePicture = mutationField("changeProfilePicture", {
   type: "Boolean",
   args: {
-    file: arg({ type: "Upload" })
+    file: arg({ type: "Upload" }),
   },
   async resolve(_, { file }, ctx: UserContext): Promise<any> {
     try {
@@ -110,5 +131,5 @@ export const changeProfilePicture = mutationField("changeProfilePicture", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
