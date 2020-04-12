@@ -22,7 +22,7 @@
           v-btn(fab color="primary" x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
             v-avatar(v-if="user" size="32")
               img(:src="user.profileImage")
-          newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()")
+          newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()" :newPostStatus.sync="newPostButtonStatus")
 </template>
 
 <script>
@@ -52,7 +52,8 @@ export default {
       captionErrors: '',
       imageData: '',
       user: {},
-      isLoading: false
+      isLoading: false,
+      newPostButtonStatus: false
     };
   },
   async mounted() {
@@ -101,6 +102,7 @@ export default {
         });
       } finally {
         this.isLoading = false;
+        this.newPostButtonStatus = false;
       }
     },
     async createImagePost() {
@@ -119,6 +121,7 @@ export default {
             this.$notifier.showSuccessMessage({
               content: 'Post uploaded successfully'
             });
+            this.caption = '';
             this.$emit('refreshFeed');
           });
       } catch (e) {
@@ -129,6 +132,7 @@ export default {
         this.newImageDialogVisible = false;
         this.newImageDialogLoading = false;
         this.isLoading = false;
+        this.newPostButtonStatus = false;
       }
     }
   }

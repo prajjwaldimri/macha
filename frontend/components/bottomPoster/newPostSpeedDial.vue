@@ -19,6 +19,18 @@ export default {
     return {
       newPost: false
     };
+  },
+  props: {
+    newPostStatus: Boolean
+  },
+  watch: {
+    newPostStatus(val) {
+      console.log('Yo');
+      this.newPost = val;
+    },
+    newPost(val) {
+      this.$emit('update:newPostStatus', val);
+    }
   }
 };
 </script>
