@@ -124,6 +124,12 @@ type Query {
     limit: Int = 25
     skip: Int = 0
   ): Feed!
+  getFeedOfOneUser(
+    """Cannot be less than 25"""
+    limit: Int = 25
+    skip: Int = 0
+    username: String!
+  ): Feed!
   getImagePost(
     """Can be postId or uri"""
     identifier: String!

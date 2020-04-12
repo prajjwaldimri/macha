@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container(fluid)
     v-card(:loading="isTextPostLoading" flat).mx-3
-      v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
+      v-list-item(v-if="textPost.authorDetails" :to="'/user/' + textPost.authorDetails.username" nuxt)
         v-list-item-avatar()
           v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
         v-list-item-content

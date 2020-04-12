@@ -187,6 +187,7 @@ export interface NexusGenFieldTypes {
     getCommentCount: number; // Int!
     getCommentsForThePost: NexusGenRootTypes['Comments']; // Comments!
     getFeed: NexusGenRootTypes['Feed']; // Feed!
+    getFeedOfOneUser: NexusGenRootTypes['Feed']; // Feed!
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     getImagePostsOfUser: NexusGenRootTypes['ImagePostList']; // ImagePostList!
     getLike: NexusGenRootTypes['Like']; // Like!
@@ -340,6 +341,11 @@ export interface NexusGenArgTypes {
     getFeed: { // args
       limit?: number | null; // Int
       skip?: number | null; // Int
+    }
+    getFeedOfOneUser: { // args
+      limit?: number | null; // Int
+      skip?: number | null; // Int
+      username: string; // String!
     }
     getImagePost: { // args
       identifier: string; // String!

@@ -1,0 +1,6 @@
+query getFeedOfOneUser($username: String!, $skip: Int, $limit: Int) {
+  getFeedOfOneUser(username: $username, skip: $skip, limit: $limit) {
+    posts
+    postsType
+  }
+}
