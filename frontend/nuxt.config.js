@@ -87,6 +87,18 @@ export default {
   },
 
   /*
+  ** PWA Settings
+ */
+  pwa: {
+    manifest: {
+      "short_name": "macha",
+      "name": "macha.in",
+      "description": "Your personal social network",
+      "display": "standalone"
+    }
+  }
+
+  /*
    ** Build configuration
    */
   build: {
