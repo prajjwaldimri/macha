@@ -1,4 +1,4 @@
-import { queryField, intArg, stringArg } from "nexus";
+import { queryField, intArg, stringArg } from "@nexus/schema";
 import {
   AuthenticationError,
   UserInputError,

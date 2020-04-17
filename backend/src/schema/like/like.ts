@@ -1,4 +1,4 @@
-import { objectType, enumType, unionType } from "nexus";
+import { objectType, enumType, unionType } from "@nexus/schema";
 import { UserModel } from "../../models/User";
 
 export const LikableTypeEnum = enumType({
@@ -7,8 +7,8 @@ export const LikableTypeEnum = enumType({
     ImagePost: "ImagePost",
     VideoPost: "VideoPost",
     TextPost: "TextPost",
-    Comment: "Comment"
-  }
+    Comment: "Comment",
+  },
 });
 
 export const LikableType = unionType({
@@ -17,7 +17,7 @@ export const LikableType = unionType({
   definition(t) {
     t.members("ImagePost", "VideoPost", "TextPost", "Comment");
     t.resolveType(() => null);
-  }
+  },
 });
 
 export const Like = objectType({
@@ -29,16 +29,16 @@ export const Like = objectType({
       type: "User",
       async resolve(root): Promise<any> {
         return await UserModel.findById(root.author).select("-password -age");
-      }
+      },
     });
     t.field("likableType", { type: "LikableTypeEnum", nullable: false });
     t.id("likable", { nullable: false });
-  }
+  },
 });
 
 export const Likers = objectType({
   name: "Likers",
   definition(t) {
     t.list.field("likes", { type: "Like" });
-  }
+  },
 });

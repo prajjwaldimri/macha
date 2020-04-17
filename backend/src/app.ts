@@ -10,7 +10,7 @@ if (!process.env.MONGODB) {
 const debug = require("debug")("dev");
 
 import { ApolloServer, ApolloError } from "apollo-server";
-import { makeSchema } from "nexus";
+import { makeSchema } from "@nexus/schema";
 import mongoose from "mongoose";
 import path from "path";
 import * as jwt from "jsonwebtoken";
@@ -22,8 +22,8 @@ const schema = makeSchema({
   types: allTypes,
   outputs: {
     schema: path.join(__dirname, "./generated/schema.graphql"),
-    typegen: path.join(__dirname, "./generated/my-generated-types.d.ts")
-  }
+    typegen: path.join(__dirname, "./generated/my-generated-types.d.ts"),
+  },
 });
 
 const server = new ApolloServer({
@@ -42,7 +42,7 @@ const server = new ApolloServer({
     } catch (err) {
       return {};
     }
-  }
+  },
 });
 
 mongoose
@@ -50,13 +50,13 @@ mongoose
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     server.listen().then(async ({ url }) => {
       debug(`🚀 Server ready at ${url}`);
     });
   })
-  .catch(err => {
+  .catch((err) => {
     debug(err);
   });

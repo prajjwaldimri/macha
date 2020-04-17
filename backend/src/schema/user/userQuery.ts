@@ -1,4 +1,4 @@
-import { stringArg, queryField } from "nexus";
+import { stringArg, queryField } from "@nexus/schema";
 import { UserModel } from "../../models/User";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
@@ -10,13 +10,13 @@ export const me = queryField("me", {
       throw new AuthenticationError("Not logged in");
     }
     return UserModel.findOne({ _id: ctx.user?._id }).select("-password");
-  }
+  },
 });
 
 export const isUsernameAvailable = queryField("isUsernameAvailable", {
   type: "Boolean",
   args: {
-    username: stringArg({ required: true })
+    username: stringArg({ required: true }),
   },
   async resolve(_, { username }, ctx): Promise<any> {
     try {
@@ -33,5 +33,5 @@ export const isUsernameAvailable = queryField("isUsernameAvailable", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

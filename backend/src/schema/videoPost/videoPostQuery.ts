@@ -1,4 +1,4 @@
-import { queryField, stringArg } from "nexus";
+import { queryField, stringArg } from "@nexus/schema";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { VideoPostModel } from "../../models/VideoPost";
@@ -9,8 +9,8 @@ export const getVideoPost = queryField("getVideoPost", {
   args: {
     identifier: stringArg({
       description: "Can be postId or uri",
-      required: true
-    })
+      required: true,
+    }),
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -34,5 +34,5 @@ export const getVideoPost = queryField("getVideoPost", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

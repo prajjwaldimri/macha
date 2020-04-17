@@ -1,4 +1,4 @@
-import { objectType } from "nexus";
+import { objectType } from "@nexus/schema";
 import { UserModel } from "../../models/User";
 import { LikeModel } from "../../models/Like";
 import { CommentModel } from "../../models/Comment";

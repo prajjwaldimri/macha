@@ -1,13 +1,13 @@
 import {
   createTestClient,
-  ApolloServerTestClient
+  ApolloServerTestClient,
 } from "apollo-server-testing";
 import { ApolloServer, gql } from "apollo-server-micro";
 
 import test from "ava";
 
 import * as allTypes from "../../schema";
-import { makeSchema } from "nexus";
+import { makeSchema } from "@nexus/schema";
 
 const schema = makeSchema({ types: allTypes });
 
@@ -29,14 +29,14 @@ const CREATEUSER = gql`
   }
 `;
 
-test.serial("creates user", async t => {
+test.serial("creates user", async (t) => {
   const result = await mutate({
     mutation: CREATEUSER,
     variables: {
       username: "test@#!use*(",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
 
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
@@ -48,9 +48,9 @@ test.serial("creates user", async t => {
       schema,
       context: () => {
         return {
-          user: user
+          user: user,
         };
-      }
+      },
     })
   );
 
@@ -58,14 +58,14 @@ test.serial("creates user", async t => {
   t.assert(user);
 });
 
-test.serial("doesn't create user (short username)", async t => {
+test.serial("doesn't create user (short username)", async (t) => {
   const result = await mutate({
     mutation: CREATEUSER,
     variables: {
       username: "te",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
 
   const user = await UserModel.findOne({ username: "te" });
@@ -74,14 +74,14 @@ test.serial("doesn't create user (short username)", async t => {
   t.assert(!user);
 });
 
-test.serial("doesn't create user (duplicate username)", async t => {
+test.serial("doesn't create user (duplicate username)", async (t) => {
   const result = await mutate({
     mutation: CREATEUSER,
     variables: {
       username: "test@#!use*(",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
   const user = await UserModel.findOne({ username: "te" });
 
@@ -89,13 +89,13 @@ test.serial("doesn't create user (duplicate username)", async t => {
   t.assert(!user);
 });
 
-test.serial("doesn't create user (insufficient attributes)", async t => {
+test.serial("doesn't create user (insufficient attributes)", async (t) => {
   const result = await mutate({
     mutation: CREATEUSER,
     variables: {
       username: "test@#!use*(",
-      password: ".sdasdad*&^^%$Jmandb   sdas"
-    }
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+    },
   });
   const user = await UserModel.findOne({ username: "te" });
 
@@ -113,37 +113,37 @@ const LOGIN = gql`
   }
 `;
 
-test.serial("login successful", async t => {
+test.serial("login successful", async (t) => {
   const result = await mutate({
     mutation: LOGIN,
     variables: {
       username: "test@#!use*(",
-      password: ".sdasdad*&^^%$Jmandb   sdas"
-    }
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+    },
   });
 
   t.assert(result.data!.login);
 });
 
-test.serial("doesn't login(username is invalid)", async t => {
+test.serial("doesn't login(username is invalid)", async (t) => {
   const result = await mutate({
     mutation: LOGIN,
     variables: {
       username: "test@#!use(",
-      password: ".sdasdad*&^^%$Jmandb   sdas"
-    }
+      password: ".sdasdad*&^^%$Jmandb   sdas",
+    },
   });
 
   t.assert(result.errors);
 });
 
-test.serial("doesn't login(password is invalid)", async t => {
+test.serial("doesn't login(password is invalid)", async (t) => {
   const result = await mutate({
     mutation: LOGIN,
     variables: {
       username: "test@#!use*(",
-      password: ".sdasdad*&^^%$Jmandb"
-    }
+      password: ".sdasdad*&^^%$Jmandb",
+    },
   });
 
   t.assert(result.errors);
@@ -162,18 +162,18 @@ const ME = gql`
   }
 `;
 
-test.serial("It should return the user", async t => {
+test.serial("It should return the user", async (t) => {
   const result = await authorizedApolloClient.query({
-    query: ME
+    query: ME,
   });
 
   t.assert(result.data!.me.username);
   t.assert(result.data!.me.name);
 });
 
-test.serial("It should not return the user (Not logged in)", async t => {
+test.serial("It should not return the user (Not logged in)", async (t) => {
   const result = await query({
-    query: ME
+    query: ME,
   });
 
   t.assert(!result.data);

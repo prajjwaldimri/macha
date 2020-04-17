@@ -1,13 +1,13 @@
 import {
   createTestClient,
-  ApolloServerTestClient
+  ApolloServerTestClient,
 } from "apollo-server-testing";
 import { ApolloServer, gql } from "apollo-server-micro";
 
 import test from "ava";
 
 import * as allTypes from "../../schema";
-import { makeSchema } from "nexus";
+import { makeSchema } from "@nexus/schema";
 
 const schema = makeSchema({ types: allTypes });
 
@@ -38,8 +38,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
 
   await mutate({
@@ -47,8 +47,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(--2",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User 2"
-    }
+      name: "Test User 2",
+    },
   });
 
   await mutate({
@@ -56,8 +56,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(--3",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User 3"
-    }
+      name: "Test User 3",
+    },
   });
 
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
@@ -75,7 +75,7 @@ test.before(async () => {
   postId = await TextPostModel.create({
     author: user!._id,
     uri: "novel-uri",
-    content: "Hello"
+    content: "Hello",
   });
 
   authorizedApolloClient = createTestClient(
@@ -83,9 +83,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user
+          user: user,
         };
-      }
+      },
     })
   );
 
@@ -94,9 +94,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user2
+          user: user2,
         };
-      }
+      },
     })
   );
 
@@ -105,9 +105,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user3
+          user: user3,
         };
-      }
+      },
     })
   );
 });
@@ -130,13 +130,13 @@ const CREATECOMMENT = gql`
 let createdComment: DocumentType<Comment> | null;
 let createdComment2: DocumentType<Comment> | null;
 
-test.serial("should create a comment", async t => {
+test.serial("should create a comment", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: postId._id.toString(),
-      text: "Hello"
-    }
+      text: "Hello",
+    },
   });
 
   t.assert(result.data);
@@ -144,13 +144,13 @@ test.serial("should create a comment", async t => {
   t.assert(!result.errors);
 });
 
-test.serial("should create another comment", async t => {
+test.serial("should create another comment", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: postId._id.toString(),
-      text: "Hello World"
-    }
+      text: "Hello World",
+    },
   });
 
   t.assert(result.data);
@@ -158,39 +158,39 @@ test.serial("should create another comment", async t => {
   t.assert(!result.errors);
 });
 
-test.serial("should not create a comment (Wrong post Id)", async t => {
+test.serial("should not create a comment (Wrong post Id)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt",
-      text: "Yo"
-    }
+      text: "Yo",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not create a comment (Not logged in)", async t => {
+test.serial("should not create a comment (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: postId._id.toString(),
-      text: "asdsa"
-    }
+      text: "asdsa",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not create a comment (Empty text)", async t => {
+test.serial("should not create a comment (Empty text)", async (t) => {
   const result = await mutate({
     mutation: CREATECOMMENT,
     variables: {
       postId: postId._id.toString(),
-      text: "                     "
-    }
+      text: "                     ",
+    },
   });
 
   t.assert(!result.data);
@@ -213,13 +213,13 @@ const UPDATECOMMENT = gql`
   }
 `;
 
-test.serial("should update comment", async t => {
+test.serial("should update comment", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
-      text: "Hello"
-    }
+      text: "Hello",
+    },
   });
 
   t.assert(result.data);
@@ -227,52 +227,52 @@ test.serial("should update comment", async t => {
   t.assert(result.data!.updateComment.text === "Hello");
 });
 
-test.serial("should not update comment (Wrong comment Id)", async t => {
+test.serial("should not update comment (Wrong comment Id)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: "ASKJLDHAKJSDHAJKSU^&*%^&^%$%^&",
-      text: "Hello"
-    }
+      text: "Hello",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not update comment (Not logged in)", async t => {
+test.serial("should not update comment (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
-      text: "Hello"
-    }
+      text: "Hello",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not update comment (Wrong logged in user)", async t => {
+test.serial("should not update comment (Wrong logged in user)", async (t) => {
   const result = await authorizedApolloClient3.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
-      text: "Hello"
-    }
+      text: "Hello",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not update comment (Empty text)", async t => {
+test.serial("should not update comment (Empty text)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: UPDATECOMMENT,
     variables: {
       commentId: createdComment!._id.toString(),
-      text: "                      "
-    }
+      text: "                      ",
+    },
   });
 
   t.assert(!result.data);
@@ -291,12 +291,12 @@ const DELETECOMMENT = gql`
   }
 `;
 
-test.serial("should not delete the comment (Wrong comment Id)", async t => {
+test.serial("should not delete the comment (Wrong comment Id)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: DELETECOMMENT,
     variables: {
-      commentId: "ASKJLDHAKJSDHAJKSU^&*%^&^%$%^&"
-    }
+      commentId: "ASKJLDHAKJSDHAJKSU^&*%^&^%$%^&",
+    },
   });
 
   const comment = await CommentModel.findById(createdComment!._id.toString());
@@ -306,12 +306,12 @@ test.serial("should not delete the comment (Wrong comment Id)", async t => {
   t.assert(result.errors);
 });
 
-test.serial("shoud not delete the comment (Not logged in)", async t => {
+test.serial("shoud not delete the comment (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: DELETECOMMENT,
     variables: {
-      commentId: createdComment!._id.toString()
-    }
+      commentId: createdComment!._id.toString(),
+    },
   });
 
   const comment = await CommentModel.findById(createdComment!._id.toString());
@@ -321,27 +321,30 @@ test.serial("shoud not delete the comment (Not logged in)", async t => {
   t.assert(result.errors);
 });
 
-test.serial("should not delete the comment (Wrong logged in user)", async t => {
-  const result = await authorizedApolloClient3.mutate({
-    mutation: DELETECOMMENT,
-    variables: {
-      commentId: createdComment!._id.toString()
-    }
-  });
+test.serial(
+  "should not delete the comment (Wrong logged in user)",
+  async (t) => {
+    const result = await authorizedApolloClient3.mutate({
+      mutation: DELETECOMMENT,
+      variables: {
+        commentId: createdComment!._id.toString(),
+      },
+    });
 
-  const comment = await CommentModel.findById(createdComment!._id.toString());
+    const comment = await CommentModel.findById(createdComment!._id.toString());
 
-  t.assert(comment);
-  t.assert(!result.data);
-  t.assert(result.errors);
-});
+    t.assert(comment);
+    t.assert(!result.data);
+    t.assert(result.errors);
+  }
+);
 
-test.serial("should delete the comment (author of the comment)", async t => {
+test.serial("should delete the comment (author of the comment)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: DELETECOMMENT,
     variables: {
-      commentId: createdComment!._id.toString()
-    }
+      commentId: createdComment!._id.toString(),
+    },
   });
 
   const comment = await CommentModel.findById(createdComment!._id.toString());
@@ -351,12 +354,12 @@ test.serial("should delete the comment (author of the comment)", async t => {
   t.assert(!result.errors);
 });
 
-test.serial("should delete the comment (owner of the post)", async t => {
+test.serial("should delete the comment (owner of the post)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: DELETECOMMENT,
     variables: {
-      commentId: createdComment2!._id.toString()
-    }
+      commentId: createdComment2!._id.toString(),
+    },
   });
 
   const comment = await CommentModel.findById(createdComment2!._id.toString());

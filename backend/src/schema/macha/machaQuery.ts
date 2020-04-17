@@ -1,4 +1,4 @@
-import { queryField } from "nexus";
+import { queryField } from "@nexus/schema";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { UserModel } from "../../models/User";
@@ -23,5 +23,5 @@ export const getMachas = queryField("getMachas", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

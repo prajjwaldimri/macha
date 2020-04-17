@@ -1,13 +1,13 @@
 import {
   createTestClient,
-  ApolloServerTestClient
+  ApolloServerTestClient,
 } from "apollo-server-testing";
 import { ApolloServer, gql } from "apollo-server-micro";
 
 import test from "ava";
 
 import * as allTypes from "../../schema";
-import { makeSchema } from "nexus";
+import { makeSchema } from "@nexus/schema";
 
 const schema = makeSchema({ types: allTypes });
 
@@ -33,8 +33,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
 
   await mutate({
@@ -42,8 +42,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(--2",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User 2"
-    }
+      name: "Test User 2",
+    },
   });
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
     "-password"
@@ -58,7 +58,7 @@ test.before(async () => {
     uri: "novel-uri",
     image: "base/64 encoded image value",
     caption: "Hello world",
-    location: "15.401100, 74.011803"
+    location: "15.401100, 74.011803",
   });
 
   authorizedApolloClient = createTestClient(
@@ -66,9 +66,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user
+          user: user,
         };
-      }
+      },
     })
   );
 
@@ -77,9 +77,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user2
+          user: user2,
         };
-      }
+      },
     })
   );
 });
@@ -107,15 +107,15 @@ const CREATEIMAGEPOST = gql`
   }
 `;
 
-test.serial("should create image post", async t => {
+test.serial("should create image post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       image: "base/64 encoded image value",
       caption: "Living life",
-      location: "15.401100, 74.011803"
-    }
+      location: "15.401100, 74.011803",
+    },
   });
 
   const post = await ImagePostModel.findOne({ uri: "test-uri" });
@@ -129,60 +129,60 @@ test.serial("should create image post", async t => {
   t.assert(post!.location === "15.401100, 74.011803");
 });
 
-test.serial("should not create image post (same-uri)", async t => {
+test.serial("should not create image post (same-uri)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       image: "base/64 encoded image value",
       caption: "Living life",
-      location: "15.401100, 74.011803"
-    }
+      location: "15.401100, 74.011803",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test.serial("should not create image post (no image)", async t => {
+test.serial("should not create image post (no image)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       image: "",
       caption: "Living life",
-      location: "15.401100, 74.011803"
-    }
+      location: "15.401100, 74.011803",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test.serial("should not create image post (wrong location)", async t => {
+test.serial("should not create image post (wrong location)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       image: "base/64 encoded image value",
       caption: "Living life",
-      location: "1523948328947, 1293812937"
-    }
+      location: "1523948328947, 1293812937",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test("shouldn't create image post (not logged in)", async t => {
+test("shouldn't create image post (not logged in)", async (t) => {
   const result = await mutate({
     mutation: CREATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       image: "base/64 encoded image value",
       caption: "Living life",
-      location: "15.401100, 74.011803"
-    }
+      location: "15.401100, 74.011803",
+    },
   });
 
   t.assert(result.errors);
@@ -202,14 +202,14 @@ const UPDATEIMAGEPOST = gql`
   }
 `;
 
-test.serial("should update image post", async t => {
+test.serial("should update image post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UPDATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       caption: "Living life large",
-      location: "15.401100, 94.011803"
-    }
+      location: "15.401100, 94.011803",
+    },
   });
 
   const post = await ImagePostModel.findOne({ uri: "test-uri" });
@@ -223,28 +223,31 @@ test.serial("should update image post", async t => {
   t.assert(post!.location === "15.401100, 94.011803");
 });
 
-test.serial("should not update image post (wrong-logged-in-user)", async t => {
-  const result = await authorizedApolloClient2.mutate({
-    mutation: UPDATEIMAGEPOST,
-    variables: {
-      uri: "test-uri",
-      caption: "Living life large",
-      location: "15.401100, 94.011803"
-    }
-  });
+test.serial(
+  "should not update image post (wrong-logged-in-user)",
+  async (t) => {
+    const result = await authorizedApolloClient2.mutate({
+      mutation: UPDATEIMAGEPOST,
+      variables: {
+        uri: "test-uri",
+        caption: "Living life large",
+        location: "15.401100, 94.011803",
+      },
+    });
 
-  t.assert(result.errors);
-  t.assert(!result.data);
-});
+    t.assert(result.errors);
+    t.assert(!result.data);
+  }
+);
 
-test.serial("shouldn't update image post (not logged in)", async t => {
+test.serial("shouldn't update image post (not logged in)", async (t) => {
   const result = await mutate({
     mutation: UPDATEIMAGEPOST,
     variables: {
       uri: "test-uri",
       caption: "Living life large",
-      location: "15.401100, 94.011803"
-    }
+      location: "15.401100, 94.011803",
+    },
   });
 
   t.assert(result.errors);
@@ -263,12 +266,12 @@ const DELETEIMAGEPOST = gql`
   }
 `;
 
-test.serial("should not delete the post (not loged in)", async t => {
+test.serial("should not delete the post (not loged in)", async (t) => {
   const result = await mutate({
     mutation: DELETEIMAGEPOST,
     variables: {
-      uri: "novel-uri"
-    }
+      uri: "novel-uri",
+    },
   });
 
   const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
@@ -278,12 +281,12 @@ test.serial("should not delete the post (not loged in)", async t => {
   t.assert(imagePost);
 });
 
-test.serial("should not delete the post (wrong-logged-in-user)", async t => {
+test.serial("should not delete the post (wrong-logged-in-user)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: DELETEIMAGEPOST,
     variables: {
-      uri: "novel-uri"
-    }
+      uri: "novel-uri",
+    },
   });
 
   const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });
@@ -293,12 +296,12 @@ test.serial("should not delete the post (wrong-logged-in-user)", async t => {
   t.assert(imagePost);
 });
 
-test.serial("should delete the post", async t => {
+test.serial("should delete the post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: DELETEIMAGEPOST,
     variables: {
-      uri: "novel-uri"
-    }
+      uri: "novel-uri",
+    },
   });
 
   const imagePost = await ImagePostModel.findOne({ uri: "novel-uri" });

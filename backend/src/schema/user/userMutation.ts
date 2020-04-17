@@ -6,7 +6,13 @@ import {
   GraphQLUpload,
   AuthenticationError,
 } from "apollo-server";
-import { stringArg, mutationField, intArg, asNexusMethod, arg } from "nexus";
+import {
+  stringArg,
+  mutationField,
+  intArg,
+  asNexusMethod,
+  arg,
+} from "@nexus/schema";
 import matches from "validator/lib/matches";
 
 import { uploadSingleImage } from "../../cloudinary/imageUpload";

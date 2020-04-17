@@ -1,4 +1,4 @@
-import { queryField, stringArg } from "nexus";
+import { queryField, stringArg } from "@nexus/schema";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { LikeModel } from "../../models/Like";

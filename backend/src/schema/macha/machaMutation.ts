@@ -1,5 +1,5 @@
 import { UserInputError, AuthenticationError } from "apollo-server";
-import { stringArg, mutationField } from "nexus";
+import { stringArg, mutationField } from "@nexus/schema";
 
 import { UserModel } from "../../models/User";
 import { UserContext } from "../types";
@@ -8,7 +8,7 @@ import nanoid from "nanoid";
 export const addMacha = mutationField("addMacha", {
   type: "Boolean",
   args: {
-    uniqueMachaId: stringArg({ required: true })
+    uniqueMachaId: stringArg({ required: true }),
   },
   async resolve(_, { uniqueMachaId }, ctx: UserContext): Promise<any> {
     try {
@@ -32,17 +32,17 @@ export const addMacha = mutationField("addMacha", {
       }
 
       await UserModel.findByIdAndUpdate(loggedInUser?._id, {
-        $push: { machas: userToBeAdded._id }
+        $push: { machas: userToBeAdded._id },
       });
       await UserModel.findByIdAndUpdate(userToBeAdded._id, {
-        $push: { machas: loggedInUser?._id }
+        $push: { machas: loggedInUser?._id },
       });
 
       return true;
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const resetUniqueMachaId = mutationField("resetUniqueMachaId", {
@@ -57,7 +57,7 @@ export const resetUniqueMachaId = mutationField("resetUniqueMachaId", {
 
       let newUniqueMachaId = nanoid();
       const user = await UserModel.findOne({
-        uniqueMachaId: newUniqueMachaId
+        uniqueMachaId: newUniqueMachaId,
       });
 
       //If any duplicate id gets created then this will create a new value
@@ -66,20 +66,20 @@ export const resetUniqueMachaId = mutationField("resetUniqueMachaId", {
       }
 
       await UserModel.findByIdAndUpdate(ctx.user._id, {
-        $set: { uniqueMachaId: newUniqueMachaId }
+        $set: { uniqueMachaId: newUniqueMachaId },
       });
 
       return newUniqueMachaId;
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const removeMacha = mutationField("removeMacha", {
   type: "Boolean",
   args: {
-    uniqueMachaId: stringArg({ required: true })
+    uniqueMachaId: stringArg({ required: true }),
   },
   async resolve(_, { uniqueMachaId }, ctx: UserContext): Promise<any> {
     try {
@@ -103,15 +103,15 @@ export const removeMacha = mutationField("removeMacha", {
       }
 
       await UserModel.findByIdAndUpdate(loggedInUser?._id, {
-        $pull: { machas: userToBeRemoved._id }
+        $pull: { machas: userToBeRemoved._id },
       });
       await UserModel.findByIdAndUpdate(userToBeRemoved?._id, {
-        $pull: { machas: loggedInUser?._id }
+        $pull: { machas: loggedInUser?._id },
       });
 
       return true;
     } catch (err) {
       return err;
     }
-  }
+  },
 });

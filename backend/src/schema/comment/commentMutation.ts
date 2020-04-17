@@ -1,9 +1,9 @@
-import { mutationField, stringArg } from "nexus";
+import { mutationField, stringArg } from "@nexus/schema";
 import { UserContext } from "../types";
 import {
   AuthenticationError,
   UserInputError,
-  ForbiddenError
+  ForbiddenError,
 } from "apollo-server";
 import { TextPostModel, TextPost } from "../../models/TextPost";
 import { ImagePostModel, ImagePost } from "../../models/ImagePost";
@@ -16,7 +16,7 @@ export const createComment = mutationField("createComment", {
   type: "Comment",
   args: {
     postId: stringArg({ required: true }),
-    text: stringArg({ required: true })
+    text: stringArg({ required: true }),
   },
   async resolve(_, { postId, text }, ctx: UserContext): Promise<any> {
     try {
@@ -41,34 +41,34 @@ export const createComment = mutationField("createComment", {
           author: ctx.user._id,
           postType: "TextPost",
           post: postId,
-          text
+          text,
         });
       } else if (imagePost) {
         return await CommentModel.create({
           author: ctx.user._id,
           postType: "ImagePost",
           post: postId,
-          text
+          text,
         });
       } else if (videoPost) {
         return await CommentModel.create({
           author: ctx.user._id,
           postType: "VideoPost",
           post: postId,
-          text
+          text,
         });
       }
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const updateComment = mutationField("updateComment", {
   type: "Comment",
   args: {
     commentId: stringArg({ required: true }),
-    text: stringArg({ required: true })
+    text: stringArg({ required: true }),
   },
   async resolve(_, { commentId, text }, ctx: UserContext): Promise<any> {
     try {
@@ -100,13 +100,13 @@ export const updateComment = mutationField("updateComment", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const deleteComment = mutationField("deleteComment", {
   type: "Comment",
   args: {
-    commentId: stringArg({ required: true })
+    commentId: stringArg({ required: true }),
   },
   async resolve(_, { commentId }, ctx: UserContext): Promise<any> {
     try {
@@ -152,5 +152,5 @@ export const deleteComment = mutationField("deleteComment", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

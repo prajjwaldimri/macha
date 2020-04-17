@@ -1,4 +1,4 @@
-import { objectType, enumType, unionType } from "nexus";
+import { objectType, enumType, unionType } from "@nexus/schema";
 import { UserModel } from "../../models/User";
 
 export const PostTypeEnum = enumType({

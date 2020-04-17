@@ -1,13 +1,13 @@
 import {
   createTestClient,
-  ApolloServerTestClient
+  ApolloServerTestClient,
 } from "apollo-server-testing";
 import { ApolloServer, gql } from "apollo-server-micro";
 
 import test from "ava";
 
 import * as allTypes from "../../schema";
-import { makeSchema } from "nexus";
+import { makeSchema } from "@nexus/schema";
 
 const schema = makeSchema({ types: allTypes });
 
@@ -33,8 +33,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
 
   await mutate({
@@ -42,8 +42,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(--2",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User 2"
-    }
+      name: "Test User 2",
+    },
   });
 
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
@@ -57,7 +57,7 @@ test.before(async () => {
   await TextPostModel.create({
     author: user!._id,
     uri: "novel-uri",
-    content: "Hello"
+    content: "Hello",
   });
 
   authorizedApolloClient = createTestClient(
@@ -65,9 +65,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user
+          user: user,
         };
-      }
+      },
     })
   );
 
@@ -76,9 +76,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user2
+          user: user2,
         };
-      }
+      },
     })
   );
 });
@@ -94,13 +94,13 @@ const CREATETEXTPOST = gql`
   }
 `;
 
-test.serial("should create text post", async t => {
+test.serial("should create text post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: "Test Content"
-    }
+      content: "Test Content",
+    },
   });
 
   const post = await TextPostModel.findOne({ uri: "test-uri" });
@@ -112,39 +112,39 @@ test.serial("should create text post", async t => {
   t.assert(post!.content === "Test Content");
 });
 
-test.serial("should not create text post (same-uri)", async t => {
+test.serial("should not create text post (same-uri)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: "Test Content"
-    }
+      content: "Test Content",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test.serial("should not create text post (no content)", async t => {
+test.serial("should not create text post (no content)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: CREATETEXTPOST,
     variables: {
       uri: "test-uri-123",
-      content: ""
-    }
+      content: "",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test("shouldn't create text post (not logged in)", async t => {
+test("shouldn't create text post (not logged in)", async (t) => {
   const result = await mutate({
     mutation: CREATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: "Test Content"
-    }
+      content: "Test Content",
+    },
   });
 
   t.assert(result.errors);
@@ -163,13 +163,13 @@ const UPDATETEXTPOST = gql`
   }
 `;
 
-test.serial("should update text post", async t => {
+test.serial("should update text post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UPDATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: "Test Content 23"
-    }
+      content: "Test Content 23",
+    },
   });
 
   const post = await TextPostModel.findOne({ uri: "test-uri" });
@@ -181,39 +181,39 @@ test.serial("should update text post", async t => {
   t.assert(post!.content === "Test Content 23");
 });
 
-test.serial("should not update text post (wrong-logged-in-user)", async t => {
+test.serial("should not update text post (wrong-logged-in-user)", async (t) => {
   const result = await authorizedApolloClient2.mutate({
     mutation: UPDATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: "Test Content"
-    }
+      content: "Test Content",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test.serial("should not update text post (no content)", async t => {
+test.serial("should not update text post (no content)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UPDATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: ""
-    }
+      content: "",
+    },
   });
 
   t.assert(result.errors);
   t.assert(!result.data);
 });
 
-test("shouldn't update text post (not logged in)", async t => {
+test("shouldn't update text post (not logged in)", async (t) => {
   const result = await mutate({
     mutation: UPDATETEXTPOST,
     variables: {
       uri: "test-uri",
-      content: "Test Content"
-    }
+      content: "Test Content",
+    },
   });
 
   t.assert(result.errors);
@@ -232,12 +232,12 @@ const DELETETEXTPOST = gql`
   }
 `;
 
-test.serial("it should not delete the post (not logged in)", async t => {
+test.serial("it should not delete the post (not logged in)", async (t) => {
   const result = await mutate({
     mutation: DELETETEXTPOST,
     variables: {
-      uri: "novel-uri"
-    }
+      uri: "novel-uri",
+    },
   });
 
   const textPost = await TextPostModel.findOne({ uri: "novel-uri" });
@@ -247,27 +247,30 @@ test.serial("it should not delete the post (not logged in)", async t => {
   t.assert(textPost);
 });
 
-test.serial("it should not delete the post (wrong logged in user)", async t => {
-  const result = await authorizedApolloClient2.mutate({
-    mutation: DELETETEXTPOST,
-    variables: {
-      uri: "novel-uri"
-    }
-  });
+test.serial(
+  "it should not delete the post (wrong logged in user)",
+  async (t) => {
+    const result = await authorizedApolloClient2.mutate({
+      mutation: DELETETEXTPOST,
+      variables: {
+        uri: "novel-uri",
+      },
+    });
 
-  const textPost = await TextPostModel.findOne({ uri: "novel-uri" });
+    const textPost = await TextPostModel.findOne({ uri: "novel-uri" });
 
-  t.assert(!result.data);
-  t.assert(result.errors);
-  t.assert(textPost);
-});
+    t.assert(!result.data);
+    t.assert(result.errors);
+    t.assert(textPost);
+  }
+);
 
-test.serial("it should delete the post", async t => {
+test.serial("it should delete the post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: DELETETEXTPOST,
     variables: {
-      uri: "novel-uri"
-    }
+      uri: "novel-uri",
+    },
   });
 
   const textPost = await TextPostModel.findOne({ uri: "novel-uri" });

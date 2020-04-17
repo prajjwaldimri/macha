@@ -1,4 +1,4 @@
-import { queryField, stringArg, intArg } from "nexus";
+import { queryField, stringArg, intArg } from "@nexus/schema";
 import { UserContext } from "../types";
 import { AuthenticationError, UserInputError } from "apollo-server";
 import { ImagePostModel } from "../../models/ImagePost";
@@ -9,8 +9,8 @@ export const getImagePost = queryField("getImagePost", {
   args: {
     identifier: stringArg({
       description: "Can be postId or uri",
-      required: true
-    })
+      required: true,
+    }),
   },
   async resolve(_, { identifier }, ctx: UserContext): Promise<any> {
     try {
@@ -34,14 +34,14 @@ export const getImagePost = queryField("getImagePost", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const getImagePostsOfUser = queryField("getImagePostsOfUser", {
   type: "ImagePostList",
   args: {
     count: intArg({ default: 9 }),
-    skip: intArg({ default: 0 })
+    skip: intArg({ default: 0 }),
   },
   async resolve(_, { count, skip }, ctx: UserContext): Promise<any> {
     try {
@@ -56,5 +56,5 @@ export const getImagePostsOfUser = queryField("getImagePostsOfUser", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

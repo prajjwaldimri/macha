@@ -1,13 +1,13 @@
 import {
   createTestClient,
-  ApolloServerTestClient
+  ApolloServerTestClient,
 } from "apollo-server-testing";
 import { ApolloServer, gql } from "apollo-server-micro";
 
 import test from "ava";
 
 import * as allTypes from "../../schema";
-import { makeSchema } from "nexus";
+import { makeSchema } from "@nexus/schema";
 
 const schema = makeSchema({ types: allTypes });
 
@@ -41,8 +41,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User"
-    }
+      name: "Test User",
+    },
   });
 
   await mutate({
@@ -50,8 +50,8 @@ test.before(async () => {
     variables: {
       username: "test@#!use*(--2",
       password: ".sdasdad*&^^%$Jmandb   sdas",
-      name: "Test User 2"
-    }
+      name: "Test User 2",
+    },
   });
 
   const user = await UserModel.findOne({ username: "test@#!use*(" }).select(
@@ -65,26 +65,26 @@ test.before(async () => {
   post = await TextPostModel.create({
     author: user!._id,
     uri: "novel-uri",
-    content: "Hello"
+    content: "Hello",
   });
 
   comment = await CommentModel.create({
     author: user!._id,
     text: "Nice status!!",
     postType: "TextPost",
-    post: post!._id
+    post: post!._id,
   });
 
   like1 = await LikeModel.create({
     author: user!._id,
     likableType: "TextPost",
-    likable: post!._id
+    likable: post!._id,
   });
 
   like2 = await LikeModel.create({
     author: user!._id,
     likableType: "Comment",
-    likable: comment!._id
+    likable: comment!._id,
   });
 
   authorizedApolloClient = createTestClient(
@@ -92,9 +92,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user
+          user: user,
         };
-      }
+      },
     })
   );
 
@@ -103,9 +103,9 @@ test.before(async () => {
       schema,
       context: () => {
         return {
-          user: user2
+          user: user2,
         };
-      }
+      },
     })
   );
 });
@@ -124,36 +124,36 @@ const LIKEPOST = gql`
   }
 `;
 
-test.serial("should like the post ", async t => {
+test.serial("should like the post ", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: LIKEPOST,
     variables: {
-      postId: post._id.toString()
-    }
+      postId: post._id.toString(),
+    },
   });
 
   t.assert(result.data);
   t.assert(!result.errors);
 });
 
-test.serial("should not like the post (Wrong post Id)", async t => {
+test.serial("should not like the post (Wrong post Id)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: LIKEPOST,
     variables: {
-      postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt"
-    }
+      postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not like the post (Not logged in)", async t => {
+test.serial("should not like the post (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: LIKEPOST,
     variables: {
-      postId: post._id.toString()
-    }
+      postId: post._id.toString(),
+    },
   });
 
   t.assert(!result.data);
@@ -176,36 +176,36 @@ const LIKECOMMENT = gql`
   }
 `;
 
-test.serial("should like the comment", async t => {
+test.serial("should like the comment", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: LIKECOMMENT,
     variables: {
-      commentId: comment._id.toString()
-    }
+      commentId: comment._id.toString(),
+    },
   });
 
   t.assert(!result.errors);
   t.assert(result.data);
 });
 
-test.serial("should not like the comment (wrong post id)", async t => {
+test.serial("should not like the comment (wrong post id)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: LIKECOMMENT,
     variables: {
-      commentId: "JFH4YYEhgadsfwe92467jjbmkjwut729uesncs"
-    }
+      commentId: "JFH4YYEhgadsfwe92467jjbmkjwut729uesncs",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not like the comment (Not logged in)", async t => {
+test.serial("should not like the comment (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: LIKECOMMENT,
     variables: {
-      commentId: comment._id.toString()
-    }
+      commentId: comment._id.toString(),
+    },
   });
 
   t.assert(!result.data);
@@ -224,36 +224,36 @@ const UNLIKEPOST = gql`
   }
 `;
 
-test.serial("should unlike the post", async t => {
+test.serial("should unlike the post", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UNLIKEPOST,
     variables: {
-      postId: post._id.toString()
-    }
+      postId: post._id.toString(),
+    },
   });
 
   t.assert(result.data);
   t.assert(!result.errors);
 });
 
-test.serial("should not unlike the post (Wrong post Id)", async t => {
+test.serial("should not unlike the post (Wrong post Id)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UNLIKEPOST,
     variables: {
-      postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt"
-    }
+      postId: "&%%^A$SD&*^AS%Hgjahdghjasgdhjastyjt",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not unlike the post (Not logged in)", async t => {
+test.serial("should not unlike the post (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: UNLIKEPOST,
     variables: {
-      postId: post._id.toString()
-    }
+      postId: post._id.toString(),
+    },
   });
 
   t.assert(!result.data);
@@ -272,12 +272,12 @@ const UNLIKECOMMENT = gql`
   }
 `;
 
-test.serial("should unlike the comment", async t => {
+test.serial("should unlike the comment", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UNLIKECOMMENT,
     variables: {
-      commentId: comment._id.toString()
-    }
+      commentId: comment._id.toString(),
+    },
   });
   const like = await LikeModel.findById(like2._id);
   t.assert(result.data);
@@ -285,24 +285,24 @@ test.serial("should unlike the comment", async t => {
   t.assert(!like);
 });
 
-test.serial("should not unlike the comment (Wrong comment Id)", async t => {
+test.serial("should not unlike the comment (Wrong comment Id)", async (t) => {
   const result = await authorizedApolloClient.mutate({
     mutation: UNLIKECOMMENT,
     variables: {
-      commentId: "hcgsjcsjkjiw67tqyw17@$$mshabhxx"
-    }
+      commentId: "hcgsjcsjkjiw67tqyw17@$$mshabhxx",
+    },
   });
 
   t.assert(!result.data);
   t.assert(result.errors);
 });
 
-test.serial("should not unlike the comment (Not logged in)", async t => {
+test.serial("should not unlike the comment (Not logged in)", async (t) => {
   const result = await mutate({
     mutation: UNLIKECOMMENT,
     variables: {
-      commentId: comment._id.toString()
-    }
+      commentId: comment._id.toString(),
+    },
   });
 
   t.assert(!result.data);

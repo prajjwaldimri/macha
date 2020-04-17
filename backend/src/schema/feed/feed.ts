@@ -1,4 +1,4 @@
-import { objectType, enumType, unionType } from "nexus";
+import { objectType, enumType, unionType } from "@nexus/schema";
 
 export const Feed = objectType({
   name: "Feed",

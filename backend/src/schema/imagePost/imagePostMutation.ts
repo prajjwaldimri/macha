@@ -1,9 +1,9 @@
 import {
   UserInputError,
   AuthenticationError,
-  ForbiddenError
+  ForbiddenError,
 } from "apollo-server";
-import { stringArg, mutationField, intArg } from "nexus";
+import { stringArg, mutationField, intArg } from "@nexus/schema";
 
 import { uploadSingleImageBase64Encoded } from "../../cloudinary/imageUpload";
 import { ImagePostModel } from "../../models/ImagePost";
@@ -16,7 +16,7 @@ export const createImagePost = mutationField("createImagePost", {
     uri: stringArg({ required: true }),
     location: stringArg(),
     caption: stringArg(),
-    image: stringArg({ required: true })
+    image: stringArg({ required: true }),
   },
   async resolve(
     _,
@@ -43,19 +43,19 @@ export const createImagePost = mutationField("createImagePost", {
         uri,
         image,
         location,
-        caption
+        caption,
       });
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const createImagePostBase64 = mutationField("createImagePostBase64", {
   type: "ImagePost",
   args: {
     file: stringArg({ required: true }),
-    caption: stringArg()
+    caption: stringArg(),
   },
   async resolve(_, { file, caption }, ctx: UserContext): Promise<any> {
     try {
@@ -69,13 +69,13 @@ export const createImagePostBase64 = mutationField("createImagePostBase64", {
       return await ImagePostModel.create({
         author: ctx.user._id,
         image: result.url,
-        caption
+        caption,
       });
     } catch (err) {
       console.log(err);
       return err;
     }
-  }
+  },
 });
 
 export const updateImagePost = mutationField("updateImagePost", {
@@ -83,7 +83,7 @@ export const updateImagePost = mutationField("updateImagePost", {
   args: {
     uri: stringArg({ required: true }),
     location: stringArg(),
-    caption: stringArg()
+    caption: stringArg(),
   },
   async resolve(_, { uri, location, caption }, ctx: UserContext): Promise<any> {
     try {
@@ -109,20 +109,20 @@ export const updateImagePost = mutationField("updateImagePost", {
         { uri },
         {
           location,
-          caption
+          caption,
         },
         { new: true }
       );
     } catch (err) {
       return err;
     }
-  }
+  },
 });
 
 export const deleteImagePost = mutationField("deleteImagePost", {
   type: "ImagePost",
   args: {
-    uri: stringArg({ required: true })
+    uri: stringArg({ required: true }),
   },
   async resolve(_, { uri }, ctx: UserContext): Promise<any> {
     try {
@@ -148,5 +148,5 @@ export const deleteImagePost = mutationField("deleteImagePost", {
     } catch (err) {
       return err;
     }
-  }
+  },
 });

@@ -1,4 +1,4 @@
-import { objectType } from "nexus";
+import { objectType } from "@nexus/schema";
 import { UserModel } from "../../models/User";
 
 export const VideoPost = objectType({
@@ -10,11 +10,11 @@ export const VideoPost = objectType({
       type: "User",
       async resolve(root): Promise<any> {
         return await UserModel.findById(root.author).select("-password -age");
-      }
+      },
     });
     t.string("uri", { nullable: false });
     t.string("video", { nullable: false });
     t.string("location", { nullable: true });
     t.string("caption", { nullable: true });
-  }
+  },
 });

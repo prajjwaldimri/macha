@@ -1,4 +1,4 @@
-import { objectType } from "nexus";
+import { objectType } from "@nexus/schema";
 
 export const User = objectType({
   name: "User",
@@ -8,10 +8,10 @@ export const User = objectType({
     t.string("email");
     t.string("name", { nullable: false });
     t.string("age", {
-      nullable: true
+      nullable: true,
     });
     t.string("profileImage", { nullable: true });
     t.string("uniqueMachaId", { nullable: false });
     t.id("authToken");
-  }
+  },
 });

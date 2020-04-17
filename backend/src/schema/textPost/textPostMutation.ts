@@ -3,7 +3,7 @@ import {
   AuthenticationError,
   ForbiddenError,
 } from "apollo-server";
-import { stringArg, mutationField, intArg } from "nexus";
+import { stringArg, mutationField, intArg } from "@nexus/schema";
 import { TextPostModel } from "../../models/TextPost";
 import isLength from "validator/lib/isLength";
 import { UserContext } from "../types";
