@@ -65,10 +65,18 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: '#00c07f'
+          primary: '#00c07f',
+          success: '#2FC64D',
+          info: '#1E7CFF',
+          warning: '#FFF316',
+          error: '#FF4F4C'
         },
         dark: {
-          primary: '#00c07f'
+          primary: '#00c07f',
+          success: '#2FC64D',
+          info: '#1E7CFF',
+          warning: '#FFF316',
+          error: '#FF4F4C'
         }
       }
     }
@@ -87,16 +95,16 @@ export default {
   },
 
   /*
-  ** PWA Settings
- */
+   ** PWA Settings
+   */
   pwa: {
     manifest: {
-      "short_name": "macha",
-      "name": "macha.in",
-      "description": "Your personal social network",
-      "display": "standalone"
+      short_name: 'macha',
+      name: 'macha.in',
+      description: 'Your personal social network',
+      display: 'standalone'
     }
-  }
+  },
 
   /*
    ** Build configuration
