@@ -67,7 +67,7 @@ export default {
           });
       } catch (e) {
         this.$notifier.showErrorMessage({
-          content: 'Error loading your image'
+          content: 'Error loading your textpost'
         });
       } finally {
         this.isTextPostLoading = false;

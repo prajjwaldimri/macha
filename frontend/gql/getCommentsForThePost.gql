@@ -3,6 +3,9 @@ query getCommentsForThePost($skip: Int, $limit: Int, $postId: String!) {
     comments{
       text
       id
+      isCurrentUserAuthor
+      hasCurrentUserLikedComment
+      likeCount
       authorDetails {
         name
         username
