@@ -1,0 +1,14 @@
+query getCommentsForThePost($skip: Int, $limit: Int, $postId: String!) {
+  getCommentsForThePost(skip: $skip, limit: $limit, postId: $postId) {
+    comments{
+      text
+      id
+      authorDetails {
+        name
+        username
+        profileImage
+        id
+      }
+    }
+  }
+}

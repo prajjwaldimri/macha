@@ -23,7 +23,7 @@
         v-spacer
         v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-
+      comment(:postId = "$route.params.id" )
 </template>
 
 <style lang="scss">
@@ -35,8 +35,12 @@ import likePost from '../../gql/likePost';
 import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteTextPost from '../../gql/deleteTextPost';
+import comment from '../../components/comment';
 
 export default {
+  components: {
+    comment
+  },
   async mounted() {
     await this.refresh();
   },

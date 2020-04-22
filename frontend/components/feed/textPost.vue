@@ -15,7 +15,7 @@
         v-btn(icon @click="toggleLikeTextPost" color="pink" :disabled="isTextPostLoading" :loading="isLikeLoading" v-else)
           v-icon mdi-heart-outline
           span.pl-1 {{textPost.likeCount}}
-        v-btn(icon v-if="textPost" :disabled="isTextPostLoading" :to="'/text/'+ textPost.uri" nuxt).pl-4
+        v-btn(icon v-if="textPost" :disabled="isTextPostLoading" :to="'/text/'+ textPost.id" nuxt).pl-4
           v-icon mdi-comment
           span.pl-1 {{textPost.commentCount}}
         v-btn(icon :disabled="isTextPostLoading" @click="share")

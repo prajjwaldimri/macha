@@ -28,6 +28,7 @@
           v-icon mdi-delete
 
       v-card-subtitle.pt-0 {{imagePost.caption}}
+      comment(:postId = "$route.params.id" )
 </template>
 
 <style lang="scss">
@@ -39,8 +40,12 @@ import likePost from '../../gql/likePost';
 import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteImagePost from '../../gql/deleteImagePost';
+import comment from '../../components/comment';
 
 export default {
+  components: {
+    comment
+  },
   async mounted() {
     await this.refresh();
   },

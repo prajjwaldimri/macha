@@ -12,6 +12,7 @@
 import bottomPoster from '../components/bottomPoster/bottomPoster';
 import ImagePost from '../components/feed/imagePost';
 import TextPost from '../components/feed/textPost';
+import comment from '../components/comment';
 
 import getFeed from '../gql/getFeed';
 
@@ -19,7 +20,8 @@ export default {
   components: {
     bottomPoster,
     ImagePost,
-    TextPost
+    TextPost,
+    comment
   },
   data() {
     return {
