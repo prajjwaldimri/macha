@@ -55,7 +55,7 @@ export const getCommentsForThePost = queryField("getCommentsForThePost", {
   type: "Comments",
   args: {
     skip: intArg({ default: 0 }),
-    limit: intArg({ default: 50, description: "Cannot be less than 50" }),
+    limit: intArg({ default: 15, description: "Cannot be less than 15" }),
     postId: stringArg({
       required: true,
     }),
@@ -68,7 +68,7 @@ export const getCommentsForThePost = queryField("getCommentsForThePost", {
         );
       }
 
-      const comments = await CommentModel.find({ post: postId! })
+      const comments = await CommentModel.find({ post: postId!.toString() })
         .skip(skip!)
         .limit(limit!)
         .exec();

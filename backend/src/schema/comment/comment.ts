@@ -1,5 +1,6 @@
 import { objectType, enumType, unionType } from "@nexus/schema";
 import { UserModel } from "../../models/User";
+import { LikeModel } from "../../models/Like";
 
 export const PostTypeEnum = enumType({
   name: "PostTypeEnum",
@@ -31,7 +32,41 @@ export const Comment = objectType({
       },
       nullable: false,
     });
-
+    t.field("isCurrentUserAuthor", {
+      type: "Boolean",
+      async resolve(root, args, ctx, info): Promise<any> {
+        return root.author.toString() === ctx.user._id.toString();
+      },
+    });
+    t.field("hasCurrentUserLikedComment", {
+      type: "Boolean",
+      async resolve(root, args, ctx, info): Promise<any> {
+        try {
+          let likes = await LikeModel.find({ likable: root.id! }).select(
+            "author"
+          );
+          let flattenedLikes = likes.flatMap((el) => el.author.toString());
+          return flattenedLikes.indexOf(ctx.user._id.toString()) >= 0;
+        } catch (err) {
+          return err;
+        }
+      },
+    });
+    t.field("likeCount", {
+      type: "Int",
+      async resolve(root, args, ctx, info): Promise<any> {
+        try {
+          let likes = await LikeModel.find({
+            likable: root.id!,
+          })
+            .countDocuments({})
+            .exec();
+          return likes;
+        } catch (err) {
+          return err;
+        }
+      },
+    });
     t.string("text", { nullable: false });
     t.field("postType", { type: "PostTypeEnum", nullable: false });
     t.id("post", { nullable: false });
