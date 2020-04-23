@@ -1,0 +1,5 @@
+mutation unlikeComment($commentId: String!) {
+  unlikeComment(commentId: $commentId) {
+    id
+  }
+}
