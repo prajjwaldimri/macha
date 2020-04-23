@@ -62,17 +62,17 @@ export default {
     treeShake: true,
     defaultAssets: false,
     theme: {
-      dark: false,
+      dark: true,
       themes: {
         light: {
-          primary: '#00c07f',
+          primary: '#5996ff',
           success: '#2FC64D',
           info: '#1E7CFF',
           warning: '#FFF316',
           error: '#FF4F4C'
         },
         dark: {
-          primary: '#00c07f',
+          primary: '#6970f1',
           success: '#2FC64D',
           info: '#1E7CFF',
           warning: '#FFF316',
