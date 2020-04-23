@@ -6,10 +6,6 @@
       v-badge(icon="mdi-alpha" color="transparent" offset-x="3" offset-y="13" tile bottom)
         span macha.in
     v-spacer
-    v-btn(icon tile)
-      v-icon mdi-bell-outline
-    v-btn(icon tile)
-      v-icon mdi-comment-quote-outline
     v-btn(icon @click="goForward" tile)
       v-icon mdi-arrow-right
 </template>
