@@ -1,6 +1,6 @@
 <template lang="pug">
-  div
-    v-container(fluid style="padding-bottom:50px").pt-0
+  .feed
+    .feed-container(style="padding-bottom:50px").pt-0.px-0.mx-0
       v-row(v-for="(post, index) in posts" :key="post")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")

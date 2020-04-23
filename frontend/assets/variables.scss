@@ -11,4 +11,11 @@
 $body-font-family: 'Manrope', sans-serif !default;
 $heading-font-family: 'Manrope', sans-serif !default;
 
+// Dark theme settings
+$material-dark: (
+  'background': #000000,
+  'surface': #000000,
+  'bottom-navigation': #151515
+);
+
 @import '~vuetify/src/styles/styles.sass';
