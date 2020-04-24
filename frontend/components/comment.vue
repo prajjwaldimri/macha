@@ -1,29 +1,29 @@
 <template lang="pug">
-  div
+  .comment
     v-card(v-for='comment in comments' :key='comment.id' :loading="isCommentsLoading" flat )
-     
-      v-list-item( dense )
-        v-list-item-avatar(v-if ="comment.authorDetails.profileImage" size)
+      v-list-item(dense)
+        v-list-item-avatar(v-if ="comment.authorDetails.profileImage" size="24").mr-2
           v-img(:src="comment.authorDetails.profileImage" aspect-ratio="1")
         v-list-item-content
-          v-list-item-title() {{comment.authorDetails.name}} 
-      v-card-subtitle.pt-0 {{comment.text}}
-        v-card-actions
-          v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment(comment)" color="pink" left :disabled="isCommentsLoading" :loading="isLikeLoading")
-            v-icon(small) mdi-heart
-            span.pl-0  {{comment.likeCount}}
-          v-btn(icon @click="toggleLikeComment(comment)" color="pink" :disabled="isCommentsLoading" :loading="isLikeLoading" v-else)
-            v-icon(small) mdi-heart-outline
-            span.pl-0  {{comment.likeCount}}
-          v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment(comment.id)" color="error" :disabled="isCommentsLoading")
-            v-icon(small) mdi-delete
-    #newComment 
-      v-text-field( placeholder="Add a comment" outlined rounded solo dense v-model="caption" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading" :error-messages="captionErrors")
-        v-btn(text fab x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
-          v-list-item-avatar(v-if="user" size)
+          v-list-item-title() {{comment.authorDetails.name}}
+      v-card-subtitle.py-0 {{comment.text}}
+      v-card-actions.py-0.pl-3
+        v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment(comment)" color="pink" left :disabled="isCommentsLoading" :loading="isLikeLoading")
+          v-icon(small) mdi-heart
+          span.pl-0  {{comment.likeCount}}
+        v-btn(icon @click="toggleLikeComment(comment)" color="pink" :disabled="isCommentsLoading" :loading="isLikeLoading" v-else)
+          v-icon(small) mdi-heart-outline
+          span.pl-0  {{comment.likeCount}}
+        v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment(comment.id)" color="error" :disabled="isCommentsLoading")
+          v-icon(small) mdi-delete
+      v-divider.mx-4
+    #newComment
+      v-text-field( placeholder="Add a comment" outlined rounded solo dense v-model="caption" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading" :error-messages="captionErrors" height="48")
+        v-btn(icon x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
+          v-list-item-avatar(v-if="user" size="32")
             v-img(:src="user.profileImage" aspect-ratio="1")
-        v-btn(icon slot="append" @click="createComment")
-          v-icon mdi-send
+        v-btn(icon x-small slot="append" @click="createComment")
+          v-icon(size="24") mdi-send
 </template>
 
 
