@@ -84,7 +84,7 @@ export default {
     };
   },
   methods: {
-    async refresh() {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
         this.isCommentsLoading = true;
         await this.$apollo
@@ -95,7 +95,7 @@ export default {
               limit: this.limit,
               postId: this.postId
             },
-            fetchPolicy: 'network-only'
+            fetchPolicy
           })
           .then(({ data }) => {
             this.comments = data.getCommentsForThePost.comments;
@@ -118,7 +118,7 @@ export default {
           }
         });
 
-        this.refresh();
+        this.refresh('network-only');
         this.$emit('postDeleted');
       } catch (e) {
         this.$notifier.showErrorMessage({
@@ -182,7 +182,7 @@ export default {
               content: 'Comment posted successfully'
             });
             this.caption = '';
-            this.refresh();
+            this.refresh('network-only');
           });
       } catch (e) {
         this.$notifier.showErrorMessage({
