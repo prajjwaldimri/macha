@@ -1,6 +1,6 @@
 <template lang="pug">
   .imagePostSingle(style="margin-bottom: 56px")
-    v-card(:loading="isImageLoading" flat).mx-3
+    v-card(:loading="isImageLoading" flat outlined tile)
       v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
           v-img(:src="imagePost.authorDetails.profileImage" aspect-ratio="1")
