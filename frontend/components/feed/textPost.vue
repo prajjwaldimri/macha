@@ -7,8 +7,8 @@
         v-list-item-content
           v-list-item-title() {{textPost.authorDetails.name}}
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
-      v-card-subtitle.pt-0 {{textPost.content}}
-      v-card-actions
+      v-card-subtitle.pt-0.pb-2 {{textPost.content}}
+      v-card-actions.pt-0
         v-btn(v-if="textPost.hasCurrentUserLikedTextPost" icon @click="toggleLikeTextPost" color="pink" left :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
           span.pl-1 {{textPost.likeCount}}
