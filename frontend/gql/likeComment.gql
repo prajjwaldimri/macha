@@ -1,0 +1,5 @@
+mutation likeComment($commentId: String!) {
+  likeComment(commentId: $commentId) {
+    id
+  }
+}

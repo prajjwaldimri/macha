@@ -5,9 +5,12 @@
 type Comment implements Node {
   author: ID!
   authorDetails: User!
+  hasCurrentUserLikedComment: Boolean!
 
   """Unique identifier for the resource"""
   id: ID!
+  isCurrentUserAuthor: Boolean!
+  likeCount: Int!
   post: ID!
   postType: PostTypeEnum!
   text: String!
@@ -115,8 +118,8 @@ type Query {
   getComment(commentId: String): Comment!
   getCommentCount(postId: String): Int!
   getCommentsForThePost(
-    """Cannot be less than 50"""
-    limit: Int = 50
+    """Cannot be less than 15"""
+    limit: Int = 15
     postId: String!
     skip: Int = 0
   ): Comments!

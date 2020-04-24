@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  .textPostSingle(style="margin-bottom: 56px")
     v-card(:loading="isTextPostLoading" flat outlined tile)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
@@ -7,8 +7,8 @@
         v-list-item-content
           v-list-item-title() {{textPost.authorDetails.name}}
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
-      v-card-subtitle.pt-0 {{textPost.content}}
-      v-card-actions
+      v-card-subtitle.pt-0.pb-2 {{textPost.content}}
+      v-card-actions.pt-0.pl-4
         v-btn(v-if="textPost.hasCurrentUserLikedTextPost" icon @click="toggleLikeTextPost" color="pink" left :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
           span.pl-1 {{textPost.likeCount}}
@@ -23,7 +23,7 @@
         v-spacer
         v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-
+      comment(:postId = "$route.params.id" )
 </template>
 
 <style lang="scss">
@@ -35,8 +35,12 @@ import likePost from '../../gql/likePost';
 import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteTextPost from '../../gql/deleteTextPost';
+import comment from '../../components/comment';
 
 export default {
+  components: {
+    comment
+  },
   async mounted() {
     await this.refresh();
   },
@@ -63,7 +67,7 @@ export default {
           });
       } catch (e) {
         this.$notifier.showErrorMessage({
-          content: 'Error loading your image'
+          content: 'Error loading your textpost'
         });
       } finally {
         this.isTextPostLoading = false;
