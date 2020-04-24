@@ -20,10 +20,10 @@
       v-divider.mx-4
     #newComment
       v-text-field( placeholder="Add a comment" outlined rounded solo dense v-model="caption" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading" :error-messages="captionErrors" height="48")
-        v-btn(icon x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
+        v-btn(icon x-small slot="prepend-inner"  nuxt to="/profile" :loading="isLoading")
           v-list-item-avatar(v-if="user" size="32")
             v-img(:src="user.profileImage" aspect-ratio="1")
-        v-btn(icon x-small slot="append" @click="createComment")
+        v-btn(icon color="primary" x-small slot="append" @click="createComment")
           v-icon(size="24") mdi-send
 </template>
 
@@ -200,11 +200,15 @@ export default {
 <style lang="scss">
 #newComment {
   display: flex;
-  width: 98vw;
+  width: 95vw;
   position: fixed;
   bottom: 27px;
   margin: auto;
   left: 0;
   right: 0;
+}
+
+#newComment .v-input__slot {
+  padding-right: 10px;
 }
 </style>
