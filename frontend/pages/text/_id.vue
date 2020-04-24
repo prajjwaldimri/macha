@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  .textPostSingle(style="margin-bottom: 56px")
     v-card(:loading="isTextPostLoading" flat outlined tile)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()

@@ -7,15 +7,16 @@
         v-list-item-content
           v-list-item-title() {{comment.authorDetails.name}}
       v-card-subtitle.py-0 {{comment.text}}
-      v-card-actions.py-0.pl-3
+      v-card-actions.py-0.pl-3.mr-3
+        v-spacer
+        v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment(comment.id)" color="error" :disabled="isCommentsLoading")
+          v-icon(small) mdi-delete
         v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment(comment)" color="pink" left :disabled="isCommentsLoading" :loading="isLikeLoading")
           v-icon(small) mdi-heart
           span.pl-0  {{comment.likeCount}}
         v-btn(icon @click="toggleLikeComment(comment)" color="pink" :disabled="isCommentsLoading" :loading="isLikeLoading" v-else)
           v-icon(small) mdi-heart-outline
           span.pl-0  {{comment.likeCount}}
-        v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment(comment.id)" color="error" :disabled="isCommentsLoading")
-          v-icon(small) mdi-delete
       v-divider.mx-4
     #newComment
       v-text-field( placeholder="Add a comment" outlined rounded solo dense v-model="caption" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading" :error-messages="captionErrors" height="48")

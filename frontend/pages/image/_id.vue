@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid)
+  .imagePostSingle(style="margin-bottom: 56px")
     v-card(:loading="isImageLoading" flat).mx-3
       v-list-item(v-if="imagePost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
@@ -11,7 +11,7 @@
         template(v-slot:placeholder)
           v-row(align="center" justify="center").fill-height.ma-0
             v-progress-circular(indeterminate color="primary")
-      v-card-actions
+      v-card-actions.pt-0.pl-4
         v-btn(icon v-if="imagePost.hasCurrentUserLikedImage" @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart
           span.pl-1 {{imagePost.likeCount}}
