@@ -118,7 +118,6 @@ export default {
             commentId: commentId
           }
         });
-
         this.refresh('network-only');
         this.$emit('postDeleted');
       } catch (e) {

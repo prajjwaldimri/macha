@@ -1,0 +1,7 @@
+mutation updateTextPost($uri: String!, $content: String!) {
+  updateTextPost(uri: $uri, content: $content) {
+    content
+    id
+    uri
+  }
+}
