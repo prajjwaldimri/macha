@@ -25,6 +25,17 @@ type Feed {
   postsType: [String!]!
 }
 
+type Feedback implements Node {
+  author: ID!
+  authorDetails: User!
+
+  """Unique identifier for the resource"""
+  id: ID!
+  log: String!
+  message: String!
+  uri: String!
+}
+
 type ImagePost implements Node {
   author: ID!
   authorDetails: User!
@@ -77,7 +88,7 @@ type Mutation {
   addMacha(uniqueMachaId: String!): Boolean!
   changeProfilePicture(file: Upload): Boolean!
   createComment(postId: String!, text: String!): Comment!
-  createImagePost(caption: String, image: String!, location: String, uri: String!): ImagePost!
+  createImagePost(caption: String, image: String!, location: String): ImagePost!
   createImagePostBase64(caption: String, file: String!): ImagePost!
   createTextPost(content: String!): TextPost!
   createVideoPost(caption: String, location: String, video: String!): VideoPost!
