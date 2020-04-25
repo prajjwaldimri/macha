@@ -102,8 +102,8 @@ export const updateImagePost = mutationField("updateImagePost", {
       return await ImagePostModel.findOneAndUpdate(
         { uri },
         {
-          location,
-          caption,
+          location: location || undefined,
+          caption: caption || undefined,
         },
         { new: true }
       );
