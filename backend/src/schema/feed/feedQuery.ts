@@ -13,10 +13,16 @@ import { ImagePostModel } from "../../models/ImagePost";
 export const getFeed = queryField("getFeed", {
   type: "Feed",
   args: {
-    skip: intArg({ default: 0 }),
-    limit: intArg({ default: 25, description: "Cannot be less than 25" }),
+    textPostSkip: intArg({ default: 0 }),
+    imagePostSkip: intArg({ default: 0 }),
+    videoPostSkip: intArg({ default: 0 }),
+    limit: intArg({ default: 10 }),
   },
-  async resolve(_, { skip, limit }, ctx: UserContext): Promise<any> {
+  async resolve(
+    _,
+    { textPostSkip, imagePostSkip, videoPostSkip, limit },
+    ctx: UserContext
+  ): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError("Cannot check feed without logging in");
@@ -41,25 +47,28 @@ export const getFeed = queryField("getFeed", {
         const textPosts = await TextPostModel.find({
           author: macha,
         })
-          .skip(skip!)
+          .skip(textPostSkip!)
           .limit(limit!)
           .select("_id, updatedAt")
+          .sort("-updatedAt")
           .exec();
         for (const textPost of textPosts) {
           postsType.push("TextPost");
         }
         const imagePosts = await ImagePostModel.find({ author: macha })
-          .skip(skip!)
+          .skip(imagePostSkip!)
           .limit(limit!)
           .select("_id, updatedAt")
+          .sort("-updatedAt")
           .exec();
         for (const imagePost of imagePosts) {
           postsType.push("ImagePost");
         }
         const videoPosts = await VideoPostModel.find({ author: macha })
-          .skip(skip!)
+          .skip(videoPostSkip!)
           .limit(limit!)
           .select("_id, updatedAt")
+          .sort("-updatedAt")
           .exec();
         for (const videoPost of videoPosts) {
           postsType.push("VideoPost");
@@ -119,14 +128,17 @@ export const getFeed = queryField("getFeed", {
 export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
   type: "Feed",
   args: {
-    skip: intArg({ default: 0 }),
-    limit: intArg({
-      default: 25,
-      description: "Cannot be less than 25",
-    }),
+    textPostSkip: intArg({ default: 0 }),
+    imagePostSkip: intArg({ default: 0 }),
+    videoPostSkip: intArg({ default: 0 }),
+    limit: intArg({ default: 10 }),
     username: stringArg({ required: true }),
   },
-  async resolve(_, { skip, limit, username }, ctx: UserContext): Promise<any> {
+  async resolve(
+    _,
+    { textPostSkip, imagePostSkip, videoPostSkip, limit, username },
+    ctx: UserContext
+  ): Promise<any> {
     try {
       if (!ctx.user) {
         throw new AuthenticationError("Cannot check feed without logging in");
@@ -154,27 +166,30 @@ export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
       const textPosts = await TextPostModel.find({
         author: user._id,
       })
-        .skip(skip!)
+        .skip(textPostSkip!)
         .limit(limit!)
         .select("_id, updatedAt")
+        .sort("-updatedAt")
         .exec();
       for (const textPost of textPosts) {
         posts.push(textPost);
         postsType.push("TextPost");
       }
       const imagePosts = await ImagePostModel.find({ author: user._id })
-        .skip(skip!)
+        .skip(imagePostSkip!)
         .limit(limit!)
         .select("_id, updatedAt")
+        .sort("-updatedAt")
         .exec();
       for (const imagePost of imagePosts) {
         posts.push(imagePost);
         postsType.push("ImagePost");
       }
       const videoPosts = await VideoPostModel.find({ author: user._id })
-        .skip(skip!)
+        .skip(videoPostSkip!)
         .limit(limit!)
         .select("_id, updatedAt")
+        .sort("-updatedAt")
         .exec();
       for (const videoPost of videoPosts) {
         posts.push(videoPost);

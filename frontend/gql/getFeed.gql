@@ -1,5 +1,15 @@
-query getFeed($skip: Int, $limit: Int) {
-  getFeed(skip: $skip, limit: $limit) {
+query getFeed(
+  $textPostSkip: Int
+  $imagePostSkip: Int
+  $videoPostSkip: Int
+  $limit: Int
+) {
+  getFeed(
+    textPostSkip: $textPostSkip
+    imagePostSkip: $imagePostSkip
+    videoPostSkip: $videoPostSkip
+    limit: $limit
+  ) {
     posts
     postsType
   }
