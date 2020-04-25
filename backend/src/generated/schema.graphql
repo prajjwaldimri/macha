@@ -123,17 +123,8 @@ type Query {
     postId: String!
     skip: Int = 0
   ): Comments!
-  getFeed(
-    """Cannot be less than 25"""
-    limit: Int = 25
-    skip: Int = 0
-  ): Feed!
-  getFeedOfOneUser(
-    """Cannot be less than 25"""
-    limit: Int = 25
-    skip: Int = 0
-    username: String!
-  ): Feed!
+  getFeed(imagePostSkip: Int = 0, limit: Int = 10, textPostSkip: Int = 0, videoPostSkip: Int = 0): Feed!
+  getFeedOfOneUser(imagePostSkip: Int = 0, limit: Int = 10, textPostSkip: Int = 0, username: String!, videoPostSkip: Int = 0): Feed!
   getImagePost(
     """Can be postId or uri"""
     identifier: String!

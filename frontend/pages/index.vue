@@ -26,23 +26,27 @@ export default {
       posts: [],
       postsType: [],
       isIntersecting: false,
-      skip: 0,
+      textPostSkip: 0,
+      imagePostSkip: 0,
+      videoPostSkip: 0,
       limit: 10,
-      isPostsEndingReached: false
+      isPostsEndingReached: false,
+      isFirstRender: true
     };
   },
   async mounted() {
     await this.refresh();
   },
   methods: {
-    async refresh(fetchPolicy = 'cache-first', skipValue = this.skip) {
+    async refresh(fetchPolicy = 'cache-first', skipValue = 0) {
       try {
-        this.skip = skipValue;
+        this.textPostSkip = skipValue;
+        this.imagePostSkip = skipValue;
+        this.videoPostSkip = skipValue;
         await this.$apollo
           .query({
             query: getFeed,
             variables: {
-              skip: this.skip,
               limit: this.limit
             },
             fetchPolicy
@@ -68,19 +72,36 @@ export default {
   },
   watch: {
     async isIntersecting(val) {
+      if (this.isFirstRender) {
+        this.isFirstRender = false;
+        return;
+      }
       if (val) {
-        this.skip += this.limit;
+        // We will calculate how many textPosts, imagePosts or videoPosts should the backend skip based on how many we already have here
+
+        this.textPostSkip = this.postsType.filter(
+          value => value === 'TextPost'
+        ).length;
+        this.imagePostSkip = this.postsType.filter(
+          value => value === 'ImagePost'
+        ).length;
+        this.videoPostSkip = this.postsType.filter(
+          value => value === 'VideoPost'
+        ).length;
         try {
           await this.$apollo
             .query({
               query: getFeed,
               variables: {
-                skip: this.skip,
+                textPostSkip: this.textPostSkip,
+                imagePostSkip: this.imagePostSkip,
+                videoPostSkip: this.videoPostSkip,
                 limit: this.limit
               },
               fetchPolicy: 'network-only'
             })
             .then(({ data }) => {
+              console.log(data);
               if (data.getFeed.posts.length <= 0) {
                 this.isPostsEndingReached = true;
               } else {
