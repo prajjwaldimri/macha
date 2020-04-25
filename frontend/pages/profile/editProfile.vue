@@ -57,25 +57,30 @@ export default {
     }
   },
   async mounted() {
-    try {
-      this.isLoading = true;
-      await this.$apollo
-        .query({
-          query: profile
-        })
-        .then(({ data }) => {
-          this.age = data.me.age;
-          this.name = data.me.name;
-        });
-    } catch (e) {
-      this.$notifier.showErrorMessage({
-        content: 'Unable to get profile details. Please refresh'
-      });
-    } finally {
-      this.isLoading = false;
-    }
+    await this.refresh();
   },
   methods: {
+    async refresh(fetchPolicy = 'cache-first') {
+      try {
+        this.isLoading = true;
+        await this.$apollo
+          .query({
+            query: profile,
+            fetchPolicy
+          })
+          .then(({ data }) => {
+            this.age = data.me.age;
+            this.name = data.me.name;
+          });
+      } catch (e) {
+        console.log(e);
+        this.$notifier.showErrorMessage({
+          content: 'Unable to get profile details. Please refresh'
+        });
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async updateProfile() {
       try {
         this.$v.$touch();
@@ -95,6 +100,7 @@ export default {
             this.age = data.updateUser.age;
             this.name = data.updateUser.name;
           });
+        this.refresh('network-only');
         this.$emit('detailsChanged');
       } catch (e) {
         console.log(e);
