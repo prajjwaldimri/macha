@@ -1,8 +1,11 @@
 <template lang="pug">
-  v-container(fluid)
-    v-row(v-for="text in texts" :key="text.content" class="d-flex child-flex" )
-      v-card-subtitle(flat tile @click="$router.push('/text/' + text.uri)").d-flex {{text.content}}
-      v-divider
+  
+  v-list(two-line)
+    template( v-for="(text,index) in texts" class="d-flex child-flex")
+      v-list-item(:key="text.uri" )
+        v-list-item-content
+          v-list-item-subtitle(flat tile @click="$router.push('/text/' + text.uri)").d-flex {{text.content}}
+      v-divider(v-if="index != texts.length - 1" :key="text.uri") 
 </template>
 
 <script>
