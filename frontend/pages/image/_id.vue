@@ -35,7 +35,7 @@
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
         v-btn(icon color="primary" x-small :loading="isImagePostLoading"  slot="append" @click="updateImagePost" )
           v-icon(size="24") mdi-send
-      comment(:postId = "$route.params.id" )
+      comment(:postId = "$route.params.id" @commentCreated="imagePost.commentCount += 1" @commentDeleted="imagePost.commentCount -= 1")
 </template>
 
 <style lang="scss">

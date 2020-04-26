@@ -119,6 +119,7 @@ export default {
           }
         });
         this.refresh('network-only');
+        this.$emit('commentDeleted');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your comment'
@@ -181,6 +182,7 @@ export default {
               content: 'Comment posted successfully'
             });
             this.caption = '';
+            this.$emit('commentCreated');
             this.refresh('network-only');
           });
       } catch (e) {

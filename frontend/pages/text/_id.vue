@@ -30,7 +30,7 @@
           v-icon mdi-pencil
         v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-      comment(:postId = "$route.params.id" )
+      comment(:postId = "$route.params.id" @commentCreated="textPost.commentCount += 1" @commentDeleted="textPost.commentCount -= 1")
 </template>
 
 <style lang="scss">
