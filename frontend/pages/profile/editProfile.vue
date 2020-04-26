@@ -1,5 +1,5 @@
 <template lang="pug">
-  .editProfile.mt-2
+  .editProfile
     v-banner
       v-avatar(slot="icon" size="40" color="primary")
         v-icon mdi-information-variant
@@ -10,7 +10,7 @@
 
         v-text-field(label="Age" clearable required v-model="age" @input="$v.age.$touch()" @blur="$v.age.$touch()" :error-messages="ageErrors" outlined :loading="isLoading")
 
-        v-btn.mt-5(color="primary" block @click="updateProfile" :loading="isLoading") Update Profile
+        v-btn.mt-1(color="primary" block @click="updateProfile" :loading="isLoading") Update Profile
 
 </template>
 
