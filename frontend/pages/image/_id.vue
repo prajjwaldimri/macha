@@ -24,10 +24,17 @@
         v-btn(icon :disabled="isImageLoading" @click="share")
           v-icon mdi-share
         v-spacer
+        v-btn(icon v-if="editMode" :disabled="isImagePostLoading" @click="cancelEdit")
+          v-icon mdi-close-circle
+        v-btn(icon v-if="imagePost.isCurrentUserAuthor && !editMode" :disabled="isImagePostLoading" @click="editMode= true")
+          v-icon mdi-pencil
         v-btn(icon v-if="imagePost.isCurrentUserAuthor" @click="deleteImagePost" color="error" :disabled="isImageLoading")
           v-icon mdi-delete
 
-      v-card-subtitle.pt-0 {{imagePost.caption}}
+      v-card-subtitle(v-if="!editMode").pt-0 {{imagePost.caption}}
+      v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
+        v-btn(icon color="primary" x-small :loading="isImagePostLoading"  slot="append" @click="updateImagePost" )
+          v-icon(size="24") mdi-send
       comment(:postId = "$route.params.id" )
 </template>
 
@@ -41,10 +48,18 @@ import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteImagePost from '../../gql/deleteImagePost';
 import comment from '../../components/comment';
+import updateImagePost from '../../gql/updateImagePost';
+
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   components: {
     comment
+  },
+  mixins: [validationMixin],
+  validations: {
+    newContent: { required: true }
   },
   async mounted() {
     await this.refresh();
@@ -53,11 +68,14 @@ export default {
     return {
       imagePost: {},
       isImageLoading: false,
-      isLikeLoading: false
+      isLikeLoading: false,
+      editMode: false,
+      newContentErrors: '',
+      newContent: ''
     };
   },
   methods: {
-    async refresh() {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
         this.isImageLoading = true;
         await this.$apollo
@@ -65,10 +83,12 @@ export default {
             query: getImagePost,
             variables: {
               identifier: this.$route.params.id
-            }
+            },
+            fetchPolicy
           })
           .then(({ data }) => {
             this.imagePost = data.getImagePost;
+            this.newContent = data.getImagePost.caption;
             const firstSlash =
               this.imagePost.image.indexOf('upload') + 'upload'.length + 1;
             const lastSlash = this.imagePost.image.lastIndexOf('/');
@@ -164,6 +184,32 @@ export default {
           url: `https://macha.in/image/${this.imagePost.uri}`
         });
       }
+    },
+    async updateImagePost() {
+      try {
+        this.isImagePostLoading = true;
+        await this.$apollo.mutate({
+          mutation: updateImagePost,
+          variables: {
+            uri: this.imagePost.uri,
+            caption: this.newContent
+          }
+        });
+        this.refresh('network-only');
+      } catch (e) {
+        this.$notifier.showErrorMessage({
+          content: 'Error updating your image'
+        });
+      } finally {
+        this.isImagePostLoading = false;
+        this.editMode = false;
+      }
+    },
+    async cancelEdit() {
+      try {
+        this.editMode = false;
+        this.newContent = this.imagePost.caption;
+      } catch (e) {}
     }
   }
 };
