@@ -27,14 +27,14 @@
         v-spacer
         v-btn(icon v-if="editMode" :disabled="isImagePostLoading" @click="cancelEdit")
           v-icon mdi-close-circle
-        v-btn(icon v-if="imagePost.isCurrentUserAuthor && !editMode" :disabled="isImagePostLoading" @click="editMode= true")
+        v-btn(icon v-if="imagePost.isCurrentUserAuthor && !editMode" :disabled="isImageLoading" @click="editMode= true")
           v-icon mdi-pencil
         v-btn(icon v-if="imagePost.isCurrentUserAuthor" @click="deleteImagePost" color="error" :disabled="isImageLoading")
           v-icon mdi-delete
 
       v-card-subtitle(v-if="!editMode").pt-0 {{imagePost.caption}}
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
-        v-btn(icon color="primary" x-small :loading="isImagePostLoading"  slot="append" @click="updateImagePost" )
+        v-btn(icon color="primary" x-small :loading="isImageLoading"  slot="append" @click="updateImagePost" )
           v-icon(size="24") mdi-send
 </template>
 

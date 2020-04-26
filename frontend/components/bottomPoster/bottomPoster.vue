@@ -1,12 +1,35 @@
 <template lang="pug">
-  div
+  .bottomPoster
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
-      v-card(height="120%")
+      v-card(max-height="500%")
+        v-toolbar(top)
+          v-btn(icon @click="newImageDialogVisible=false")
+            v-icon mdi-close
+          v-toolbar-title Posting Image
+          v-spacer
+          v-btn(outlined @click="createImagePost" :loading="newImageDialogLoading")
+            | Post
+            v-icon(small).pl-2 mdi-send
         v-form(key="imagePostForm").pt-2
+          v-container(fluid).px-4
+            v-file-input(accept="image/*" placeholder="First pick an image by clicking here" prepend-icon="mdi-camera" label="Image" outlined ref="imageInput" @change="setImage" show-size :clearable="false" :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
           v-container.image-input-container.pa-0
-            v-image-input(v-model="imageData" :imageQuality="0.99" clearable fullHeight fullWidth :imageHeight="550" :imageWidth="300" imageMinScaling="contain" :debounce="250" overlayPadding="0")
+            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100")
+            v-container(fluid)
+              v-row.px-3.justify-center
+                v-btn(icon tile @click.prevent="zoom(0.2)")
+                  v-icon mdi-magnify-plus-outline
+                v-divider(vertical)
+                v-btn(icon tile @click.prevent="zoom(-0.2)")
+                  v-icon mdi-magnify-minus-outline
+                v-divider(vertical)
+                v-btn(icon tile @click.prevent="rotate(-90)")
+                  v-icon mdi-rotate-left
+                v-divider(vertical)
+                v-btn(icon tile @click.prevent="rotate(90)")
+                  v-icon mdi-rotate-right
           v-container(fluid).py-2
-            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small)
+            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
         v-toolbar(color="primary" bottom)
           v-btn(icon @click="newImageDialogVisible=false")
             v-icon mdi-close
@@ -17,7 +40,6 @@
             v-icon(small).pl-2 mdi-send
 
     #newPostText.mb-3
-      //- v-card(style="width:100%")
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
         v-btn(icon x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
           v-list-item-avatar(v-if="user" size="32")
@@ -36,13 +58,17 @@ import createTextPostMutation from '../../gql/createTextPost';
 import createImagePostMutation from '../../gql/createImagePost';
 import profileQuery from '../../gql/profile';
 
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
+
 export default {
   mixins: [validationMixin],
   validations: {
     caption: { minLength: minLength(3) }
   },
   components: {
-    newPostSpeedDial
+    newPostSpeedDial,
+    VueCropper
   },
   data() {
     return {
@@ -68,9 +94,7 @@ export default {
           query: profileQuery
         })
         .then(({ data }) => data.me);
-      // if (!this.user.profileImage) {
-      //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-      // }
+
     } catch (e) {
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');
@@ -114,7 +138,7 @@ export default {
           .mutate({
             mutation: createImagePostMutation,
             variables: {
-              file: this.imageData,
+              file: this.$refs.cropper.getCroppedCanvas().toDataURL(),
               caption: this.caption
             }
           })
@@ -135,7 +159,37 @@ export default {
         this.isLoading = false;
         this.newPostButtonStatus = false;
       }
-    }
+    },
+    setImage(file){
+      if(!file){
+        return;
+      }
+      if(file.type.indexOf('image/') === -1){
+        this.$notifier.showErrorMessage({
+          content: "Please select a correct image file"
+        });
+      }
+
+      if(typeof FileReader === 'function'){
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          this.imgData = event.target.result;
+          this.$refs.cropper.replace(event.target.result);
+        }
+
+        reader.readAsDataURL(file);
+      } else{
+        this.$notifier.showErrorMessage({
+          content: "Sorry. Your browser doesn't support file uploading"
+        });
+      }
+    },
+    rotate(deg) {
+      this.$refs.cropper.rotate(deg);
+    },
+    zoom(percent) {
+      this.$refs.cropper.relativeZoom(percent);
+    },
   }
 };
 </script>
@@ -165,7 +219,7 @@ export default {
 }
 
 .image-input-container {
-  height: 95vh;
+  // height: 55vh;
   width: 100vw;
 }
 #newPostText .v-input__slot {
