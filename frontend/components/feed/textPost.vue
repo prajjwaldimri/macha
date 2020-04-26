@@ -170,7 +170,7 @@ export default {
             content: this.newContent
           }
         });
-        this.refresh('network-only');
+        this.$emit('postUpdated');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error updating your text'

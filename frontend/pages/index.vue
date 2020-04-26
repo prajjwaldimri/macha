@@ -2,8 +2,8 @@
   .feed
     .feed-container(style="padding-bottom:50px").pt-0.px-0.mx-0
       v-row(v-for="(post, index) in posts" :key="post")
-        ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
-        TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")
+        ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
+        TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
     bottomPoster(@refreshFeed="refresh('network-only')")
 </template>
@@ -65,6 +65,9 @@ export default {
       const index = this.posts.indexOf(postId);
       this.$delete(this.posts, index);
       this.$delete(this.postsType, index);
+    },
+    async updatePost() {
+      this.refresh('network-only');
     }
   },
   watch: {
