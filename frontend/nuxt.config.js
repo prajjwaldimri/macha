@@ -14,17 +14,17 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: process.env.npm_package_description || '',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
         href:
-          'https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css'
-      }
-    ]
+          'https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css',
+      },
+    ],
   },
   /*
    ** Customize the progress-bar color
@@ -38,12 +38,12 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    { src: '~/plugins/notifier' },
+    { src: '@/plugins/qrCodeReader', mode: 'client' },
+    { src: '~/plugins/sharer.js' },
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
-    { src: '~/plugins/vuetifyImageInput', mode: 'client', ssr: false },
-    { src: '~/plugins/notifier.js' },
-    { src: '~/plugins/sharer.js' },
-    { src: '@/plugins/qrCodeReader.js', mode: 'client' }
+    // { src: '~/plugins/vue-cropper', ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -69,29 +69,29 @@ export default {
           success: '#2FC64D',
           info: '#1E7CFF',
           warning: '#FFF316',
-          error: '#FF4F4C'
+          error: '#FF4F4C',
         },
         dark: {
           primary: '#6970f1',
           success: '#2FC64D',
           info: '#1E7CFF',
           warning: '#FFF316',
-          error: '#FF4F4C'
-        }
-      }
-    }
+          error: '#FF4F4C',
+        },
+      },
+    },
   },
 
   apollo: {
     cookieAttributes: {
-      expires: 15
+      expires: 15,
     },
     clientConfigs: {
       default: {
         // required
-        httpEndpoint: 'http://localhost:4000'
-      }
-    }
+        httpEndpoint: 'http://localhost:4000',
+      },
+    },
   },
 
   /*
@@ -102,8 +102,8 @@ export default {
       short_name: 'macha',
       name: 'macha.in',
       description: 'Your personal social network',
-      display: 'standalone'
-    }
+      display: 'standalone',
+    },
   },
 
   /*
@@ -113,6 +113,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
-  }
+    extend(config, ctx) {},
+  },
 };
