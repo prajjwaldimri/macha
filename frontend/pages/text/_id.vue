@@ -3,11 +3,15 @@
     v-card(:loading="isTextPostLoading" flat outlined tile)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
-          v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
+          v-img(v-if="textPost.authorDetails.profileImage" :src="textPost.authorDetails.profileImage" aspect-ratio="1")
+          v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{textPost.authorDetails.name}}
           v-list-item-subtitle() @{{textPost.authorDetails.username}}
-      v-card-subtitle.pt-0.pb-2 {{textPost.content}}
+      v-card-subtitle(v-if="!editMode").pt-0.pb-2 {{textPost.content}}
+      v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
+        v-btn(icon color="primary" x-small :loading="isTextPostLoading"  slot="append" @click="updateTextPost" )
+          v-icon(size="24") mdi-send
       v-card-actions.pt-0.pl-4
         v-btn(v-if="textPost.hasCurrentUserLikedTextPost" icon @click="toggleLikeTextPost" color="pink" left :disabled="isTextPostLoading" :loading="isLikeLoading")
           v-icon mdi-heart
@@ -21,9 +25,13 @@
         v-btn(icon :disabled="isTextPostLoading" @click="share")
           v-icon mdi-share
         v-spacer
+        v-btn(icon v-if="editMode" :disabled="isTextPostLoading" @click="cancelEdit")
+          v-icon mdi-close-circle
+        v-btn(icon v-if="textPost.isCurrentUserAuthor && !editMode" :disabled="isTextPostLoading" @click="editMode= true")
+          v-icon mdi-pencil
         v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-      comment(:postId = "$route.params.id" )
+      comment(:postId = "$route.params.id" @commentCreated="textPost.commentCount += 1" @commentDeleted="textPost.commentCount -= 1")
 </template>
 
 <style lang="scss">
@@ -35,11 +43,19 @@ import likePost from '../../gql/likePost';
 import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteTextPost from '../../gql/deleteTextPost';
+import updateTextPost from '../../gql/updateTextPost';
 import comment from '../../components/comment';
+
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   components: {
     comment
+  },
+  mixins: [validationMixin],
+  validations: {
+    newContent: { required: true }
   },
   async mounted() {
     await this.refresh();
@@ -48,11 +64,14 @@ export default {
     return {
       textPost: {},
       isTextPostLoading: false,
-      isLikeLoading: false
+      isLikeLoading: false,
+      editMode: false,
+      newContentErrors: '',
+      newContent: ''
     };
   },
   methods: {
-    async refresh() {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
         this.isTextPostLoading = true;
         await this.$apollo
@@ -60,10 +79,12 @@ export default {
             query: getTextPost,
             variables: {
               identifier: this.$route.params.id
-            }
+            },
+            fetchPolicy
           })
           .then(({ data }) => {
             this.textPost = data.getTextPost;
+            this.newContent = data.getTextPost.content;
           });
       } catch (e) {
         this.$notifier.showErrorMessage({
@@ -140,6 +161,32 @@ export default {
           url: `https://macha.in/text/${this.textPost.uri}`
         });
       }
+    },
+    async updateTextPost() {
+      try {
+        this.isTextPostLoading = true;
+        await this.$apollo.mutate({
+          mutation: updateTextPost,
+          variables: {
+            uri: this.textPost.uri,
+            content: this.newContent
+          }
+        });
+        this.refresh('network-only');
+      } catch (e) {
+        this.$notifier.showErrorMessage({
+          content: 'Error updating your text'
+        });
+      } finally {
+        this.isTextPostLoading = false;
+        this.editMode = false;
+      }
+    },
+    async cancelEdit() {
+      try {
+        this.editMode = false;
+        this.newContent = this.textPost.content;
+      } catch (e) {}
     }
   }
 };

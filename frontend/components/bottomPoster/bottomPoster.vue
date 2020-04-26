@@ -17,12 +17,13 @@
             v-icon(small).pl-2 mdi-send
 
     #newPostText.mb-3
-      v-card(style="width:100%")
-        v-text-field(outlined label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
-          v-btn(fab color="primary" x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
-            v-avatar(v-if="user" size="32")
-              img(:src="user.profileImage")
-          newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()" :newPostStatus.sync="newPostButtonStatus")
+      //- v-card(style="width:100%")
+      v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
+        v-btn(icon x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
+          v-list-item-avatar(v-if="user" size="32")
+            v-img(v-if="user.profileImage" :src="user.profileImage" aspect-ratio="1")
+            v-icon(v-else large color="orange" right) mdi-halloween
+        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()" :newPostStatus.sync="newPostButtonStatus")
 </template>
 
 <script>
@@ -67,9 +68,9 @@ export default {
           query: profileQuery
         })
         .then(({ data }) => data.me);
-      if (!this.user.profileImage) {
-        this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-      }
+      // if (!this.user.profileImage) {
+      //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+      // }
     } catch (e) {
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');
@@ -166,5 +167,8 @@ export default {
 .image-input-container {
   height: 95vh;
   width: 100vw;
+}
+#newPostText .v-input__slot {
+  padding-right: 10px;
 }
 </style>

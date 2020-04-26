@@ -361,13 +361,17 @@ export interface NexusGenArgTypes {
       skip?: number | null; // Int
     }
     getFeed: { // args
+      finalImagePostId?: string | null; // String
+      finalTextPostId?: string | null; // String
+      finalVideoPostId?: string | null; // String
       limit?: number | null; // Int
-      skip?: number | null; // Int
     }
     getFeedOfOneUser: { // args
+      imagePostSkip?: number | null; // Int
       limit?: number | null; // Int
-      skip?: number | null; // Int
+      textPostSkip?: number | null; // Int
       username: string; // String!
+      videoPostSkip?: number | null; // Int
     }
     getImagePost: { // args
       identifier: string; // String!

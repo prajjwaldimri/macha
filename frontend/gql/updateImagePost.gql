@@ -1,0 +1,7 @@
+mutation updateImagePost($uri: String!, $caption  : String) {
+  updateImagePost(uri: $uri, caption: $caption) {
+    caption
+    uri
+    id
+  }
+}

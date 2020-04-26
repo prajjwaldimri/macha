@@ -1,0 +1,8 @@
+query getTextPostsOfUser($count: Int, $skip: Int) {
+  getTextPostsOfUser(count: $count, skip: $skip) {
+    textPosts {
+      uri
+      content
+    }
+  }
+}

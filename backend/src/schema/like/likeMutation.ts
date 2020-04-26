@@ -4,7 +4,7 @@ import { AuthenticationError, UserInputError } from "apollo-server";
 import { TextPostModel } from "../../models/TextPost";
 import { ImagePostModel } from "../../models/ImagePost";
 import { VideoPostModel } from "../../models/VideoPost";
-import { LikeModel } from "../../models/Like";
+import { LikeModel, LikableType } from "../../models/Like";
 import { CommentModel } from "../../models/Comment";
 
 export const likePost = mutationField("likePost", {
@@ -120,19 +120,19 @@ export const unlikePost = mutationField("unlikePost", {
       if (textPost) {
         return await LikeModel.findOneAndDelete({
           author: ctx.user!._id,
-          likableType: "TextPost",
+          likableType: LikableType.TextPost,
           likable: textPost._id,
         });
       } else if (imagePost) {
         return await LikeModel.findOneAndDelete({
           author: ctx.user!._id,
-          likableType: "ImagePost",
+          likableType: LikableType.ImagePost,
           likable: imagePost._id,
         });
       } else if (videoPost) {
         return await LikeModel.findOneAndDelete({
           author: ctx.user!._id,
-          likableType: "VideoPost",
+          likableType: LikableType.VideoPost,
           likable: videoPost._id,
         });
       }
@@ -161,7 +161,7 @@ export const unlikeComment = mutationField("unlikeComment", {
 
       return await LikeModel.findOneAndDelete({
         author: ctx.user!._id,
-        likableType: "Comment",
+        likableType: LikableType.Comment,
         likable: comment._id,
       });
     } catch (err) {

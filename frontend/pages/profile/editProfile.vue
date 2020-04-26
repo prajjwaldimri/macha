@@ -1,5 +1,5 @@
 <template lang="pug">
-  .editProfile.mt-2
+  .editProfile
     v-banner
       v-avatar(slot="icon" size="40" color="primary")
         v-icon mdi-information-variant
@@ -10,7 +10,7 @@
 
         v-text-field(label="Age" clearable required v-model="age" @input="$v.age.$touch()" @blur="$v.age.$touch()" :error-messages="ageErrors" outlined :loading="isLoading")
 
-        v-btn.mt-5(color="primary" block @click="updateProfile" :loading="isLoading") Update Profile
+        v-btn.mt-1(color="primary" block @click="updateProfile" :loading="isLoading") Update Profile
 
 </template>
 
@@ -57,25 +57,30 @@ export default {
     }
   },
   async mounted() {
-    try {
-      this.isLoading = true;
-      await this.$apollo
-        .query({
-          query: profile
-        })
-        .then(({ data }) => {
-          this.age = data.me.age;
-          this.name = data.me.name;
-        });
-    } catch (e) {
-      this.$notifier.showErrorMessage({
-        content: 'Unable to get profile details. Please refresh'
-      });
-    } finally {
-      this.isLoading = false;
-    }
+    await this.refresh();
   },
   methods: {
+    async refresh(fetchPolicy = 'cache-first') {
+      try {
+        this.isLoading = true;
+        await this.$apollo
+          .query({
+            query: profile,
+            fetchPolicy
+          })
+          .then(({ data }) => {
+            this.age = data.me.age;
+            this.name = data.me.name;
+          });
+      } catch (e) {
+        console.log(e);
+        this.$notifier.showErrorMessage({
+          content: 'Unable to get profile details. Please refresh'
+        });
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async updateProfile() {
       try {
         this.$v.$touch();
@@ -95,6 +100,7 @@ export default {
             this.age = data.updateUser.age;
             this.name = data.updateUser.name;
           });
+        this.refresh('network-only');
         this.$emit('detailsChanged');
       } catch (e) {
         console.log(e);

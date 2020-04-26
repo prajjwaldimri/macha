@@ -3,9 +3,10 @@
     v-toolbar(prominent flat height="120")
       input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="changeProfilePicture")
       .top-profile
-        v-avatar(color="primary" size="80" @click="$refs.profilePicture.click()")
+        v-avatar( size="80" @click="$refs.profilePicture.click()")
           v-progress-circular(v-if="isProfileImageLoading" indeterminate)
-          v-img(v-else :src="user.profileImage")
+          v-img(v-else-if="user.profileImage" :src="user.profileImage")
+          v-icon(v-else size="80" color="orange" ) mdi-halloween
         .column.ml-4
           span.title {{user.name}}
           span.subtitle @{{user.username}}
@@ -14,6 +15,7 @@
         v-tabs(v-model="tab" grow show-arrows)
           v-tab(key="profile") Profile
           v-tab(key="friends") Friends
+          v-tab(key="texts") Texts
           v-tab(key="photos") Photos
           v-tab(key="settings") Settings
 
@@ -21,6 +23,8 @@
             EditProfile(@detailsChanged="refresh('network-only')")
           v-tab-item(key="friends")
             Friends
+          v-tab-item(key="texts")
+            Texts
           v-tab-item(key="photos")
             Photos
           v-tab-item(key="settings")
@@ -83,12 +87,14 @@ import qrcode from 'qrcode';
 
 import Friends from './friends.vue';
 import Photos from './photos.vue';
+import Texts from './texts.vue';
 import Settings from './settings.vue';
 import EditProfile from './editProfile.vue';
 
 export default {
   components: {
     Friends,
+    Texts,
     Photos,
     Settings,
     EditProfile
@@ -135,9 +141,9 @@ export default {
             fetchPolicy
           })
           .then(({ data }) => data.me);
-        if (!this.user.profileImage) {
-          this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-        }
+        // if (!this.user.profileImage) {
+        //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+        // }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
         await this.$apolloHelpers.onLogout();

@@ -2,10 +2,10 @@
   .feed
     .feed-container(style="padding-bottom:50px").pt-0.px-0.mx-0
       v-row(v-for="(post, index) in posts" :key="post")
-        ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
-        TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")
+        ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
+        TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
-    bottomPoster(@refreshFeed="refresh('network-only', 0)")
+    bottomPoster(@refreshFeed="refresh('network-only')")
 </template>
 
 <script>
@@ -26,23 +26,24 @@ export default {
       posts: [],
       postsType: [],
       isIntersecting: false,
-      skip: 0,
+      finalTextPostId: '',
+      finalImagePostId: '',
+      finalVideoPostId: '',
       limit: 10,
-      isPostsEndingReached: false
+      isPostsEndingReached: false,
+      isFirstRender: true
     };
   },
   async mounted() {
     await this.refresh();
   },
   methods: {
-    async refresh(fetchPolicy = 'cache-first', skipValue = this.skip) {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
-        this.skip = skipValue;
         await this.$apollo
           .query({
             query: getFeed,
             variables: {
-              skip: this.skip,
               limit: this.limit
             },
             fetchPolicy
@@ -64,18 +65,37 @@ export default {
       const index = this.posts.indexOf(postId);
       this.$delete(this.posts, index);
       this.$delete(this.postsType, index);
+    },
+    async updatePost() {
+      this.refresh('network-only');
     }
   },
   watch: {
     async isIntersecting(val) {
+      if (this.isFirstRender) {
+        this.isFirstRender = false;
+        return;
+      }
       if (val) {
-        this.skip += this.limit;
+        // Get the id of the last posts in each category
+        this.finalTextPostId = this.posts[
+          this.postsType.lastIndexOf('TextPost')
+        ];
+        this.finalImagePostId = this.posts[
+          this.postsType.lastIndexOf('ImagePost')
+        ];
+        this.finalVideoPostId = this.posts[
+          this.postsType.lastIndexOf('VideoPost')
+        ];
+
         try {
           await this.$apollo
             .query({
               query: getFeed,
               variables: {
-                skip: this.skip,
+                finalTextPostId: this.finalTextPostId,
+                finalImagePostId: this.finalImagePostId,
+                finalVideoPostId: this.finalVideoPostId,
                 limit: this.limit
               },
               fetchPolicy: 'network-only'
