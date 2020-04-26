@@ -119,7 +119,6 @@ export default {
           }
         });
         this.refresh('network-only');
-        this.$emit('postDeleted');
       } catch (e) {
         this.$notifier.showErrorMessage({
           content: 'Error deleting your comment'
