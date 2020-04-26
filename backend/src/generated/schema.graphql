@@ -123,7 +123,17 @@ type Query {
     postId: String!
     skip: Int = 0
   ): Comments!
-  getFeed(imagePostSkip: Int = 0, limit: Int = 10, textPostSkip: Int = 0, videoPostSkip: Int = 0): Feed!
+  getFeed(
+    """Id of the last image post"""
+    finalImagePostId: String = ""
+
+    """Id of the last text post"""
+    finalTextPostId: String = ""
+
+    """Id of the last video post"""
+    finalVideoPostId: String = ""
+    limit: Int = 10
+  ): Feed!
   getFeedOfOneUser(imagePostSkip: Int = 0, limit: Int = 10, textPostSkip: Int = 0, username: String!, videoPostSkip: Int = 0): Feed!
   getImagePost(
     """Can be postId or uri"""

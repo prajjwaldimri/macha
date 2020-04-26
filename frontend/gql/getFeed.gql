@@ -1,13 +1,13 @@
 query getFeed(
-  $textPostSkip: Int
-  $imagePostSkip: Int
-  $videoPostSkip: Int
-  $limit: Int
+  $finalTextPostId: String
+  $finalImagePostId: String
+  $finalVideoPostId: String
+  $limit: Int!
 ) {
   getFeed(
-    textPostSkip: $textPostSkip
-    imagePostSkip: $imagePostSkip
-    videoPostSkip: $videoPostSkip
+    finalTextPostId: $finalTextPostId
+    finalImagePostId: $finalImagePostId
+    finalVideoPostId: $finalVideoPostId
     limit: $limit
   ) {
     posts

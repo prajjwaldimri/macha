@@ -347,10 +347,10 @@ export interface NexusGenArgTypes {
       skip?: number | null; // Int
     }
     getFeed: { // args
-      imagePostSkip?: number | null; // Int
+      finalImagePostId?: string | null; // String
+      finalTextPostId?: string | null; // String
+      finalVideoPostId?: string | null; // String
       limit?: number | null; // Int
-      textPostSkip?: number | null; // Int
-      videoPostSkip?: number | null; // Int
     }
     getFeedOfOneUser: { // args
       imagePostSkip?: number | null; // Int

@@ -5,7 +5,7 @@
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
-    bottomPoster(@refreshFeed="refresh('network-only', 0)")
+    bottomPoster(@refreshFeed="refresh('network-only')")
 </template>
 
 <script>
@@ -26,9 +26,9 @@ export default {
       posts: [],
       postsType: [],
       isIntersecting: false,
-      textPostSkip: 0,
-      imagePostSkip: 0,
-      videoPostSkip: 0,
+      finalTextPostId: '',
+      finalImagePostId: '',
+      finalVideoPostId: '',
       limit: 10,
       isPostsEndingReached: false,
       isFirstRender: true
@@ -38,11 +38,8 @@ export default {
     await this.refresh();
   },
   methods: {
-    async refresh(fetchPolicy = 'cache-first', skipValue = 0) {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
-        this.textPostSkip = skipValue;
-        this.imagePostSkip = skipValue;
-        this.videoPostSkip = skipValue;
         await this.$apollo
           .query({
             query: getFeed,
@@ -77,31 +74,30 @@ export default {
         return;
       }
       if (val) {
-        // We will calculate how many textPosts, imagePosts or videoPosts should the backend skip based on how many we already have here
+        // Get the id of the last posts in each category
+        this.finalTextPostId = this.posts[
+          this.postsType.lastIndexOf('TextPost')
+        ];
+        this.finalImagePostId = this.posts[
+          this.postsType.lastIndexOf('ImagePost')
+        ];
+        this.finalVideoPostId = this.posts[
+          this.postsType.lastIndexOf('VideoPost')
+        ];
 
-        this.textPostSkip = this.postsType.filter(
-          value => value === 'TextPost'
-        ).length;
-        this.imagePostSkip = this.postsType.filter(
-          value => value === 'ImagePost'
-        ).length;
-        this.videoPostSkip = this.postsType.filter(
-          value => value === 'VideoPost'
-        ).length;
         try {
           await this.$apollo
             .query({
               query: getFeed,
               variables: {
-                textPostSkip: this.textPostSkip,
-                imagePostSkip: this.imagePostSkip,
-                videoPostSkip: this.videoPostSkip,
+                finalTextPostId: this.finalTextPostId,
+                finalImagePostId: this.finalImagePostId,
+                finalVideoPostId: this.finalVideoPostId,
                 limit: this.limit
               },
               fetchPolicy: 'network-only'
             })
             .then(({ data }) => {
-              console.log(data);
               if (data.getFeed.posts.length <= 0) {
                 this.isPostsEndingReached = true;
               } else {

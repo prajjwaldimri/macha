@@ -1,4 +1,4 @@
-import { queryField, intArg, stringArg } from "@nexus/schema";
+import { queryField, intArg, stringArg, arg } from "@nexus/schema";
 import {
   AuthenticationError,
   UserInputError,
@@ -6,21 +6,32 @@ import {
 } from "apollo-server";
 import { UserModel } from "../../models/User";
 import { UserContext } from "../types";
-import { TextPostModel } from "../../models/TextPost";
-import { VideoPostModel } from "../../models/VideoPost";
-import { ImagePostModel } from "../../models/ImagePost";
+import { TextPostModel, TextPost } from "../../models/TextPost";
+import { VideoPostModel, VideoPost } from "../../models/VideoPost";
+import { ImagePostModel, ImagePost } from "../../models/ImagePost";
+import isMongoId from "validator/lib/isMongoId";
+import { DocumentType } from "@typegoose/typegoose";
 
 export const getFeed = queryField("getFeed", {
   type: "Feed",
   args: {
-    textPostSkip: intArg({ default: 0 }),
-    imagePostSkip: intArg({ default: 0 }),
-    videoPostSkip: intArg({ default: 0 }),
+    finalTextPostId: stringArg({
+      default: "",
+      description: "Id of the last text post",
+    }),
+    finalImagePostId: stringArg({
+      default: "",
+      description: "Id of the last image post",
+    }),
+    finalVideoPostId: stringArg({
+      default: "",
+      description: "Id of the last video post",
+    }),
     limit: intArg({ default: 10 }),
   },
   async resolve(
     _,
-    { textPostSkip, imagePostSkip, videoPostSkip, limit },
+    { finalTextPostId, finalImagePostId, finalVideoPostId, limit },
     ctx: UserContext
   ): Promise<any> {
     try {
@@ -41,13 +52,45 @@ export const getFeed = queryField("getFeed", {
         return { posts: null };
       }
 
+      // Convert all skips to dates
+      let textPostSkip: DocumentType<TextPost> | any | null = null,
+        imagePostSkip: DocumentType<ImagePost> | any | null = null,
+        videoPostSkip: DocumentType<VideoPost> | any | null = null;
+
+      if (isMongoId(finalTextPostId!)) {
+        textPostSkip = await TextPostModel.findById(finalTextPostId).select(
+          "updatedAt"
+        );
+      }
+      if (!textPostSkip) {
+        textPostSkip = { updatedAt: new Date() };
+      }
+
+      if (isMongoId(finalImagePostId!)) {
+        imagePostSkip = await ImagePostModel.findById(finalImagePostId).select(
+          "updatedAt"
+        );
+      }
+      if (!imagePostSkip) {
+        imagePostSkip = { updatedAt: new Date() };
+      }
+
+      if (isMongoId(finalVideoPostId!)) {
+        videoPostSkip = await VideoPostModel.findById(finalVideoPostId).select(
+          "updatedAt"
+        );
+      }
+      if (!videoPostSkip) {
+        videoPostSkip = { updatedAt: new Date() };
+      }
+
       let posts: Array<any> = [];
       let postsType: Array<any> = [];
       for (const macha of machas) {
         const textPosts = await TextPostModel.find({
           author: macha,
+          updatedAt: { $lt: textPostSkip!.updatedAt },
         })
-          .skip(textPostSkip!)
           .limit(limit!)
           .select("_id, updatedAt")
           .sort("-updatedAt")
@@ -55,8 +98,11 @@ export const getFeed = queryField("getFeed", {
         for (const textPost of textPosts) {
           postsType.push("TextPost");
         }
-        const imagePosts = await ImagePostModel.find({ author: macha })
-          .skip(imagePostSkip!)
+
+        const imagePosts = await ImagePostModel.find({
+          author: macha,
+          updatedAt: { $lt: imagePostSkip!.updatedAt },
+        })
           .limit(limit!)
           .select("_id, updatedAt")
           .sort("-updatedAt")
@@ -64,8 +110,11 @@ export const getFeed = queryField("getFeed", {
         for (const imagePost of imagePosts) {
           postsType.push("ImagePost");
         }
-        const videoPosts = await VideoPostModel.find({ author: macha })
-          .skip(videoPostSkip!)
+
+        const videoPosts = await VideoPostModel.find({
+          author: macha,
+          updatedAt: { $lt: videoPostSkip!.updatedAt },
+        })
           .limit(limit!)
           .select("_id, updatedAt")
           .sort("-updatedAt")
@@ -73,6 +122,7 @@ export const getFeed = queryField("getFeed", {
         for (const videoPost of videoPosts) {
           postsType.push("VideoPost");
         }
+
         posts.push(...textPosts, ...imagePosts, ...videoPosts);
       }
 
@@ -108,8 +158,8 @@ export const getFeed = queryField("getFeed", {
 
       // Only keep the top #(limit) posts
       if (sortedPosts.length > limit!) {
-        sortedPosts = sortedPosts.slice(0, limit! - 1);
-        postsType = postsType.slice(0, limit! - 1);
+        sortedPosts = sortedPosts.slice(0, limit!);
+        postsType = postsType.slice(0, limit!);
       }
 
       // Only return the _ids and type of the post
