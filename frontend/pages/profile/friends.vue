@@ -4,7 +4,7 @@ v-list(flat two-line)
     v-list-item-avatar
       v-avatar
         v-img(:src="macha.profileImage" aspect-ration="1" v-if="macha.profileImage")
-        v-icon(v-else large) mdi-halloween
+        v-icon(v-else large color="orange" left) mdi-halloween
 
     v-list-item-content
       v-list-item-title(v-text="macha.name")
