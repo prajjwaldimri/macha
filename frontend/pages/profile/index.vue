@@ -1,9 +1,16 @@
 <template lang="pug">
   .profile
+    v-dialog(v-model="changeProfilePictureDialog")
+      v-card(max-height="500%" :loading="isProfileImageLoading")
+        v-container.px-0
+          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100")
+          v-row.justify-center.pt-2
+            v-btn(@click="changeProfilePicture" color="primary" :loading="isProfileImageLoading") Change Profile Picture
+
     v-toolbar(prominent flat height="120")
-      input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="changeProfilePicture")
+      input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="setNewProfilePicture")
       .top-profile
-        v-avatar( size="80" @click="$refs.profilePicture.click()")
+        v-avatar(size="80" @click="$refs.profilePicture.click()")
           v-progress-circular(v-if="isProfileImageLoading" indeterminate)
           v-img(v-else-if="user.profileImage" :src="user.profileImage")
           v-icon(v-else size="80" color="orange" ) mdi-halloween
@@ -91,13 +98,17 @@ import Texts from './texts.vue';
 import Settings from './settings.vue';
 import EditProfile from './editProfile.vue';
 
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
+
 export default {
   components: {
     Friends,
     Texts,
     Photos,
     Settings,
-    EditProfile
+    EditProfile,
+    VueCropper
   },
   data() {
     return {
@@ -111,7 +122,8 @@ export default {
       scanVisibility: false,
       camera: 'off',
       profileImage: '',
-      isProfileImageLoading: false
+      isProfileImageLoading: false,
+      changeProfilePictureDialog: false
     };
   },
   async mounted() {
@@ -141,9 +153,6 @@ export default {
             fetchPolicy
           })
           .then(({ data }) => data.me);
-        // if (!this.user.profileImage) {
-        //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-        // }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
         await this.$apolloHelpers.onLogout();
@@ -179,26 +188,55 @@ export default {
     onQRDecode(decodedString) {
       this.$router.push(`/addMacha/${decodedString}`);
     },
-    async changeProfilePicture({ target: { files = [] } }) {
-      try {
-        this.isProfileImageLoading = true;
-        if (!files.length) {
-          return;
-        }
-        await this.$apollo.mutate({
-          mutation: changeProfilePictureMutation,
-          variables: {
-            file: files[0]
-          }
-        });
-        await this.refresh('network-only');
-      } catch (e) {
-        this.$notifier.showErrorMessage({
-          content: 'Unable to upload your picture'
-        });
-      } finally {
-        this.isProfileImageLoading = false;
+    setNewProfilePicture({ target: { files = [] } }) {
+      this.isProfileImageLoading = true;
+      if (!files.length) {
+        return;
       }
+      const file = files[0];
+      if (file.type.indexOf('image/') === -1) {
+        this.$notifier.showErrorMessage({
+          content: 'Please select a correct image file'
+        });
+        return;
+      }
+
+      this.changeProfilePictureDialog = true;
+      if (typeof FileReader === 'function') {
+        const reader = new FileReader();
+        reader.onload = event => {
+          this.profileImage = event.target.result;
+          this.$refs.profileCropper.replace(event.target.result);
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        this.$notifier.showErrorMessage({
+          content: "Sorry. Your browser doesn't support file uploading"
+        });
+      }
+      this.isProfileImageLoading = false;
+    },
+    async changeProfilePicture() {
+      this.$refs.profileCropper.getCroppedCanvas().toBlob(async blob => {
+        try {
+          this.isProfileImageLoading = true;
+          await this.$apollo.mutate({
+            mutation: changeProfilePictureMutation,
+            variables: {
+              file: blob
+            }
+          });
+          await this.refresh('network-only');
+        } catch (e) {
+          this.$notifier.showErrorMessage({
+            content: 'Unable to upload your picture'
+          });
+        } finally {
+          this.isProfileImageLoading = false;
+          this.changeProfilePictureDialog = false;
+        }
+      });
     }
   }
 };

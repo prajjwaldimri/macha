@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      newImageDialogVisible: true,
+      newImageDialogVisible: false,
       newImageDialogLoading: false,
       newVideoDialogVisible: false,
       caption: '',
