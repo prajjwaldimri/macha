@@ -1,8 +1,8 @@
 <template lang="pug">
-  v-container(fluid)
-    template( v-if='error.statusCode === 404' )
-      v-img(src="require(~assets/404image.jpg)" aspect-ratio="1")
-        | {{ pageNotFound }}
+  .errorPage
+    .notFound( v-if='error.statusCode === 404' )
+      //-v-img(:src="require()" aspect-ratio="1")
+      | {{ pageNotFound }}
     h1(v-else='')
       | {{ otherError }}
     NuxtLink(to='/')
@@ -37,5 +37,10 @@ export default {
 <style scoped>
 h1 {
   font-size: 20px;
+}
+.notFound {
+  background-image: url('~assets/404image.jpg');
+  height: 95vh;
+  background-size: cover;
 }
 </style>
