@@ -3,7 +3,8 @@
     v-card(:loading="isTextPostLoading" flat outlined tile)
       v-list-item(v-if="textPost.authorDetails" href="/profile" nuxt)
         v-list-item-avatar()
-          v-img(:src="textPost.authorDetails.profileImage" aspect-ratio="1")
+          v-img(v-if="textPost.authorDetails.profileImage" :src="textPost.authorDetails.profileImage" aspect-ratio="1")
+          v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{textPost.authorDetails.name}}
           v-list-item-subtitle() @{{textPost.authorDetails.username}}

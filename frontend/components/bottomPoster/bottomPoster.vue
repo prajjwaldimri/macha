@@ -21,7 +21,8 @@
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
         v-btn(icon x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
           v-list-item-avatar(v-if="user" size="32")
-            v-img(:src="user.profileImage" aspect-ratio="1")
+            v-img(v-if="user.profileImage" :src="user.profileImage" aspect-ratio="1")
+            v-icon(v-else large color="orange" right) mdi-halloween
         newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()" :newPostStatus.sync="newPostButtonStatus")
 </template>
 
@@ -67,9 +68,9 @@ export default {
           query: profileQuery
         })
         .then(({ data }) => data.me);
-      if (!this.user.profileImage) {
-        this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-      }
+      // if (!this.user.profileImage) {
+      //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+      // }
     } catch (e) {
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');

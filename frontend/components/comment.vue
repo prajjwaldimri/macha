@@ -2,8 +2,9 @@
   .comment
     v-card(v-for='comment in comments' :key='comment.id' :loading="isCommentsLoading" flat )
       v-list-item(dense)
-        v-list-item-avatar(v-if ="comment.authorDetails.profileImage" size="24").mr-2
-          v-img(:src="comment.authorDetails.profileImage" aspect-ratio="1")
+        v-list-item-avatar(size="24").mr-2
+          v-img(v-if="comment.authorDetails.profileImage" :src="comment.authorDetails.profileImage" aspect-ratio="1")
+          v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{comment.authorDetails.name}}
       v-card-subtitle.py-0 {{comment.text}}
@@ -22,7 +23,8 @@
       v-text-field( placeholder="Add a comment" outlined rounded solo dense v-model="caption" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading" :error-messages="captionErrors" height="48")
         v-btn(icon x-small slot="prepend-inner"  nuxt to="/profile" :loading="isLoading")
           v-list-item-avatar(v-if="user" size="32")
-            v-img(:src="user.profileImage" aspect-ratio="1")
+            v-img(v-if="user.profileImage" :src="user.profileImage" aspect-ratio="1")
+            v-icon(v-else large color="orange" right) mdi-halloween
         v-btn(icon color="primary" x-small slot="append" @click="createComment")
           v-icon(size="24") mdi-send
 </template>
@@ -59,9 +61,9 @@ export default {
           query: profileQuery
         })
         .then(({ data }) => data.me);
-      if (!this.user.profileImage) {
-        this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-      }
+      // if (!this.user.profileImage) {
+      //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+      // }
     } catch (e) {
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');

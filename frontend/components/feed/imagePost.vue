@@ -3,7 +3,8 @@
     v-card(:loading="isImageLoading" flat).mx-3
       v-list-item(v-if="imagePost.authorDetails" :to="'/user/' + imagePost.authorDetails.username" nuxt)
         v-list-item-avatar()
-          v-img(:src="imagePost.authorDetails.profileImage" aspect-ratio="1")
+          v-img(v-if="imagePost.authorDetails.profileImage" :src="imagePost.authorDetails.profileImage" aspect-ratio="1")
+          v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{imagePost.authorDetails.name}}
           v-list-item-subtitle() @{{imagePost.authorDetails.username}}

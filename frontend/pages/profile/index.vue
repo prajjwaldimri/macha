@@ -3,9 +3,10 @@
     v-toolbar(prominent flat height="120")
       input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="changeProfilePicture")
       .top-profile
-        v-avatar(color="primary" size="80" @click="$refs.profilePicture.click()")
+        v-avatar( size="80" @click="$refs.profilePicture.click()")
           v-progress-circular(v-if="isProfileImageLoading" indeterminate)
-          v-img(v-else :src="user.profileImage")
+          v-img(v-else-if="user.profileImage" :src="user.profileImage")
+          v-icon(v-else size="80" color="orange" ) mdi-halloween
         .column.ml-4
           span.title {{user.name}}
           span.subtitle @{{user.username}}
@@ -140,9 +141,9 @@ export default {
             fetchPolicy
           })
           .then(({ data }) => data.me);
-        if (!this.user.profileImage) {
-          this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
-        }
+        // if (!this.user.profileImage) {
+        //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
+        // }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
         await this.$apolloHelpers.onLogout();
