@@ -2,9 +2,12 @@
 ### Do not make changes to this file directly
 
 
-type Comment implements Node {
+type Comment implements Node & Timestamp {
   author: ID!
   authorDetails: User!
+
+  """Date will be in ISO Format"""
+  createdAt: String!
   hasCurrentUserLikedComment: Boolean!
 
   """Unique identifier for the resource"""
@@ -14,6 +17,9 @@ type Comment implements Node {
   post: ID!
   postType: PostTypeEnum!
   text: String!
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
 }
 
 type Comments {
@@ -25,22 +31,31 @@ type Feed {
   postsType: [String!]!
 }
 
-type Feedback implements Node {
+type Feedback implements Node & Timestamp {
   author: ID!
   authorDetails: User!
+
+  """Date will be in ISO Format"""
+  createdAt: String!
 
   """Unique identifier for the resource"""
   id: ID!
   log: String!
   message: String!
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
   uri: String!
 }
 
-type ImagePost implements Node {
+type ImagePost implements Node & Timestamp {
   author: ID!
   authorDetails: User!
   caption: String
   commentCount: Int!
+
+  """Date will be in ISO Format"""
+  createdAt: String!
   hasCurrentUserLikedImage: Boolean!
 
   """Unique identifier for the resource"""
@@ -49,6 +64,9 @@ type ImagePost implements Node {
   isCurrentUserAuthor: Boolean!
   likeCount: Int!
   location: String
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
   uri: String!
 }
 
@@ -178,22 +196,36 @@ type Query {
   me: User!
 }
 
-type TextPost implements Node {
+type TextPost implements Node & Timestamp {
   author: ID!
   authorDetails: User!
   commentCount: Int!
   content: String!
+
+  """Date will be in ISO Format"""
+  createdAt: String!
   hasCurrentUserLikedTextPost: Boolean!
 
   """Unique identifier for the resource"""
   id: ID!
   isCurrentUserAuthor: Boolean!
   likeCount: Int!
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
   uri: String!
 }
 
 type TextPostList {
   textPosts: [TextPost!]!
+}
+
+interface Timestamp {
+  """Date will be in ISO Format"""
+  createdAt: String!
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -212,14 +244,20 @@ type User implements Node {
   username: String!
 }
 
-type VideoPost implements Node {
+type VideoPost implements Node & Timestamp {
   author: ID!
   authorDetails: User!
   caption: String
 
+  """Date will be in ISO Format"""
+  createdAt: String!
+
   """Unique identifier for the resource"""
   id: ID!
   location: String
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
   uri: String!
   video: String!
 }
