@@ -5,6 +5,7 @@ export const VideoPost = objectType({
   name: "VideoPost",
   definition(t) {
     t.implements("Node");
+    t.implements("Timestamp");
     t.id("author", { nullable: false });
     t.field("authorDetails", {
       type: "User",

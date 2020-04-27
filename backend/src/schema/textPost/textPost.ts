@@ -7,6 +7,7 @@ export const TextPost = objectType({
   name: "TextPost",
   definition(t) {
     t.implements("Node");
+    t.implements("Timestamp");
     t.id("author", { nullable: false });
     t.field("authorDetails", {
       type: "User",

@@ -14,5 +14,6 @@ query getImagePost($identifier: String!) {
     likeCount
     commentCount
     uri
+    updatedAt
   }
 }

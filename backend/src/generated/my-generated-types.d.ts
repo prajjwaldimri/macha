@@ -32,10 +32,12 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Comment: { // root type
     author: string; // ID!
+    createdAt: string; // String!
     id: string; // ID!
     post: string; // ID!
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
     text: string; // String!
+    updatedAt: string; // String!
   }
   Comments: { // root type
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
@@ -46,17 +48,21 @@ export interface NexusGenRootTypes {
   }
   Feedback: { // root type
     author: string; // ID!
+    createdAt: string; // String!
     id: string; // ID!
     log: string; // String!
     message: string; // String!
+    updatedAt: string; // String!
     uri: string; // String!
   }
   ImagePost: { // root type
     author: string; // ID!
     caption?: string | null; // String
+    createdAt: string; // String!
     id: string; // ID!
     image: string; // String!
     location?: string | null; // String
+    updatedAt: string; // String!
     uri: string; // String!
   }
   ImagePostList: { // root type
@@ -79,7 +85,9 @@ export interface NexusGenRootTypes {
   TextPost: { // root type
     author: string; // ID!
     content: string; // String!
+    createdAt: string; // String!
     id: string; // ID!
+    updatedAt: string; // String!
     uri: string; // String!
   }
   TextPostList: { // root type
@@ -98,12 +106,15 @@ export interface NexusGenRootTypes {
   VideoPost: { // root type
     author: string; // ID!
     caption?: string | null; // String
+    createdAt: string; // String!
     id: string; // ID!
     location?: string | null; // String
+    updatedAt: string; // String!
     uri: string; // String!
     video: string; // String!
   }
   Node: NexusGenRootTypes['Comment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Feedback'];
+  Timestamp: NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Feedback'];
   String: string;
   Int: number;
   Float: number;
@@ -123,6 +134,7 @@ export interface NexusGenFieldTypes {
   Comment: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
+    createdAt: string; // String!
     hasCurrentUserLikedComment: boolean; // Boolean!
     id: string; // ID!
     isCurrentUserAuthor: boolean; // Boolean!
@@ -130,6 +142,7 @@ export interface NexusGenFieldTypes {
     post: string; // ID!
     postType: NexusGenEnums['PostTypeEnum']; // PostTypeEnum!
     text: string; // String!
+    updatedAt: string; // String!
   }
   Comments: { // field return type
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
@@ -141,9 +154,11 @@ export interface NexusGenFieldTypes {
   Feedback: { // field return type
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
+    createdAt: string; // String!
     id: string; // ID!
     log: string; // String!
     message: string; // String!
+    updatedAt: string; // String!
     uri: string; // String!
   }
   ImagePost: { // field return type
@@ -151,12 +166,14 @@ export interface NexusGenFieldTypes {
     authorDetails: NexusGenRootTypes['User']; // User!
     caption: string | null; // String
     commentCount: number; // Int!
+    createdAt: string; // String!
     hasCurrentUserLikedImage: boolean; // Boolean!
     id: string; // ID!
     image: string; // String!
     isCurrentUserAuthor: boolean; // Boolean!
     likeCount: number; // Int!
     location: string | null; // String
+    updatedAt: string; // String!
     uri: string; // String!
   }
   ImagePostList: { // field return type
@@ -225,10 +242,12 @@ export interface NexusGenFieldTypes {
     authorDetails: NexusGenRootTypes['User']; // User!
     commentCount: number; // Int!
     content: string; // String!
+    createdAt: string; // String!
     hasCurrentUserLikedTextPost: boolean; // Boolean!
     id: string; // ID!
     isCurrentUserAuthor: boolean; // Boolean!
     likeCount: number; // Int!
+    updatedAt: string; // String!
     uri: string; // String!
   }
   TextPostList: { // field return type
@@ -248,13 +267,19 @@ export interface NexusGenFieldTypes {
     author: string; // ID!
     authorDetails: NexusGenRootTypes['User']; // User!
     caption: string | null; // String
+    createdAt: string; // String!
     id: string; // ID!
     location: string | null; // String
+    updatedAt: string; // String!
     uri: string; // String!
     video: string; // String!
   }
   Node: { // field return type
     id: string; // ID!
+  }
+  Timestamp: { // field return type
+    createdAt: string; // String!
+    updatedAt: string; // String!
   }
 }
 
@@ -412,6 +437,7 @@ export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
   Node: "Comment" | "User" | "ImagePost" | "Like" | "TextPost" | "VideoPost" | "Feedback"
+  Timestamp: "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "Feedback"
 }
 
 export interface NexusGenInheritedFields {}
@@ -422,7 +448,7 @@ export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = "LikableTypeEnum" | "PostTypeEnum";
 
-export type NexusGenInterfaceNames = "Node";
+export type NexusGenInterfaceNames = "Node" | "Timestamp";
 
 export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String" | "Upload";
 

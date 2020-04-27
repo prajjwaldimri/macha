@@ -18,6 +18,7 @@
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.0-rc19",
     "@nuxtjs/pwa": "^3.0.0-0",
+    "dayjs": "^1.8.25",
     "graphql-tag": "^2.10.3",
     "nuxt": "^2.12.2",
     "qrcode": "^1.4.4",

@@ -2,12 +2,15 @@
   v-container(fluid)
     v-card(:loading="isTextPostLoading" flat).mx-3
       v-list-item(v-if="textPost.authorDetails" :to="'/user/' + textPost.authorDetails.username" nuxt)
-        v-list-item-avatar()
+        v-list-item-avatar
           v-img(v-if="textPost.authorDetails.profileImage" :src="textPost.authorDetails.profileImage" aspect-ratio="1")
           v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
-          v-list-item-title() {{textPost.authorDetails.name}}
-          v-list-item-subtitle() @{{textPost.authorDetails.username}}
+          v-list-item-title {{textPost.authorDetails.name}}
+          v-list-item-subtitle.d-flex.align-basline
+            span.body-2 @{{textPost.authorDetails.username}}
+            v-icon(x-small color="grey").ml-2 mdi-clock
+            span.caption.ml-1 {{updatedAt}}
       v-card-subtitle(v-if="!editMode").pt-0.pb-2 {{textPost.content}}
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
         v-btn(icon color="primary" x-small :loading="isTextPostLoading"  slot="append" @click="updateTextPost" )
@@ -34,9 +37,6 @@
 
 </template>
 
-<style lang="scss">
-</style>
-
 <script>
 import getTextPost from '../../gql/getTextPost';
 import likePost from '../../gql/likePost';
@@ -48,6 +48,10 @@ import updateTextPost from '../../gql/updateTextPost';
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+
 export default {
   props: {
     postId: String
@@ -55,6 +59,11 @@ export default {
   mixins: [validationMixin],
   validations: {
     newContent: { required: true }
+  },
+  computed: {
+    updatedAt() {
+      return dayjs(parseInt(this.textPost.updatedAt)).fromNow();
+    }
   },
   async mounted() {
     await this.refresh();

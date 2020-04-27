@@ -13,5 +13,6 @@ query getTextPost($identifier: String!) {
     likeCount
     commentCount
     uri
+    updatedAt
   }
 }

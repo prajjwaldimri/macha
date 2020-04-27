@@ -7,6 +7,7 @@ export const ImagePost = objectType({
   name: "ImagePost",
   definition(t) {
     t.implements("Node");
+    t.implements("Timestamp");
     t.id("author", { nullable: false });
     t.field("authorDetails", {
       type: "User",

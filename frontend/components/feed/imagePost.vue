@@ -7,7 +7,10 @@
           v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{imagePost.authorDetails.name}}
-          v-list-item-subtitle() @{{imagePost.authorDetails.username}}
+          v-list-item-subtitle.d-flex.align-baseline
+            span.body-2 @{{imagePost.authorDetails.username}}
+            v-icon(x-small color="grey").ml-2 mdi-clock
+            span.caption.ml-1 {{updatedAt}}
       v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage")
         template(v-slot:placeholder)
           v-row(align="center" justify="center").fill-height.ma-0
@@ -52,6 +55,10 @@ import updateImagePost from '../../gql/updateImagePost';
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+
 export default {
   props: {
     postId: String
@@ -59,6 +66,11 @@ export default {
   mixins: [validationMixin],
   validations: {
     newContent: { required: true }
+  },
+  computed: {
+    updatedAt() {
+      return dayjs(parseInt(this.imagePost.updatedAt)).fromNow();
+    }
   },
   async mounted() {
     await this.refresh();
