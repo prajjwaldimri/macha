@@ -9,6 +9,7 @@ import { uploadSingleImageBase64Encoded } from "../../cloudinary/imageUpload";
 import { ImagePostModel } from "../../models/ImagePost";
 import isLatLong from "validator/lib/isLatLong";
 import { UserContext } from "../types";
+import { deleteSingleImage } from "../../cloudinary/imageDelete";
 
 export const createImagePost = mutationField("createImagePost", {
   type: "ImagePost",
@@ -138,6 +139,7 @@ export const deleteImagePost = mutationField("deleteImagePost", {
         );
       }
 
+      await deleteSingleImage(imagePost.image);
       return await imagePost.remove();
     } catch (err) {
       return err;

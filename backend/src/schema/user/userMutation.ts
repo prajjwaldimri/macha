@@ -19,6 +19,7 @@ import { uploadSingleImage } from "../../cloudinary/imageUpload";
 
 import { UserModel } from "../../models/User";
 import { UserContext } from "../types";
+import { deleteSingleImage } from "../../cloudinary/imageDelete";
 
 export const loginUser = mutationField("login", {
   type: "String",
@@ -128,6 +129,9 @@ export const changeProfilePicture = mutationField("changeProfilePicture", {
         const result: any = await uploadSingleImage(createReadStream());
 
         const user = await UserModel.findOne({ _id: ctx.user._id });
+        if (user!.profileImage) {
+          await deleteSingleImage(user!.profileImage);
+        }
         user!.profileImage = result.url;
         await user!.save();
 
