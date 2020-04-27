@@ -19,12 +19,24 @@ export default {
   },
   methods: {
     goBack() {
-      if (window.history.length > 0) {
+      if (window.history.length > 2) {
         this.$router.go(-1);
       }
     },
     goForward() {
       this.$router.go(1);
+    }
+  },
+  watch: {
+    $route: {
+      handler(to, from) {
+        if (window.history.length <= 2) {
+          this.isBackButtonDisabled = true;
+        } else {
+          this.isBackButtonDisabled = false;
+        }
+      },
+      immediate: true
     }
   }
 };
