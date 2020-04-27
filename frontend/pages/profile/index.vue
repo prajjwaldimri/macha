@@ -21,10 +21,10 @@
       template(v-slot:extension)
         v-tabs(v-model="tab" grow show-arrows)
           v-tab(key="profile") Profile
-          v-tab(key="friends") Friends
+          v-tab(key="friends") Machas
+          v-tab(key="settings") Settings
           v-tab(key="texts") Texts
           v-tab(key="photos") Photos
-          v-tab(key="settings") Settings
 
           v-tab-item(key="profile")
             EditProfile(@detailsChanged="refresh('network-only')")
