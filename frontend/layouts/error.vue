@@ -68,12 +68,22 @@ export default {
   text-decoration: none;
 }
 #notFound {
+  position: relative;
   background-image: url('~assets/art.jpg');
   height: 100vh;
   background-size: cover;
   background-position: center;
   opacity: 90%;
   font-family: 'Special Elite', cursive;
+}
+#notFound::before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .makeCenter {
   position: fixed;
