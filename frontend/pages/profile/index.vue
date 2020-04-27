@@ -3,7 +3,7 @@
     v-dialog(v-model="changeProfilePictureDialog")
       v-card(max-height="500%" :loading="isProfileImageLoading")
         v-container.px-0
-          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100")
+          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" :aspectRatio="1")
           v-row.justify-center.pt-2
             v-btn(@click="changeProfilePicture" color="primary" :loading="isProfileImageLoading") Change Profile Picture
 
