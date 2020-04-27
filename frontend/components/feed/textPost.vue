@@ -7,10 +7,10 @@
           v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title {{textPost.authorDetails.name}}
-          v-list-item-subtitle.d-flex.align-center
+          v-list-item-subtitle.d-flex.align-basline
             span.body-2 @{{textPost.authorDetails.username}}
-            v-icon(small color="grey").ml-2 mdi-clock
-            span.body-2.ml-1 {{updatedAt}}
+            v-icon(x-small color="grey").ml-2 mdi-clock
+            span.caption.ml-1 {{updatedAt}}
       v-card-subtitle(v-if="!editMode").pt-0.pb-2 {{textPost.content}}
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
         v-btn(icon color="primary" x-small :loading="isTextPostLoading"  slot="append" @click="updateTextPost" )

@@ -17,6 +17,13 @@ export default {
       isBackButtonDisabled: false
     };
   },
+  mounted() {
+    if (window && window.history.length <= 2) {
+      this.isBackButtonDisabled = true;
+    } else {
+      this.isBackButtonDisabled = false;
+    }
+  },
   methods: {
     goBack() {
       if (window.history.length > 2) {
@@ -30,13 +37,12 @@ export default {
   watch: {
     $route: {
       handler(to, from) {
-        if (window.history.length <= 2) {
+        if (window && window.history.length <= 2) {
           this.isBackButtonDisabled = true;
         } else {
           this.isBackButtonDisabled = false;
         }
-      },
-      immediate: true
+      }
     }
   }
 };

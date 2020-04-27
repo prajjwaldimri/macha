@@ -7,10 +7,10 @@
           v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{imagePost.authorDetails.name}}
-          v-list-item-subtitle.d-flex.align-center
+          v-list-item-subtitle.d-flex.align-baseline
             span.body-2 @{{imagePost.authorDetails.username}}
-            v-icon(small color="grey").ml-2 mdi-clock
-            span.body-2.ml-1 {{updatedAt}}
+            v-icon(x-small color="grey").ml-2 mdi-clock
+            span.caption.ml-1 {{updatedAt}}
       v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage")
         template(v-slot:placeholder)
           v-row(align="center" justify="center").fill-height.ma-0
