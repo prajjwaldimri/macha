@@ -160,7 +160,6 @@ export default {
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {
-        console.log(e);
         this.$notifier.showErrorMessage({
           content: 'Error chaging the status of like on the comment.'
         });

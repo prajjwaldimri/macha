@@ -67,7 +67,6 @@ export const createImagePostBase64 = mutationField("createImagePostBase64", {
         caption,
       });
     } catch (err) {
-      console.log(err);
       return err;
     }
   },

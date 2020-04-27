@@ -3,7 +3,6 @@ import path from "path";
 
 export const deleteSingleImage = async (uri: string) => {
   let public_id = await getPublicIdFromUri(uri);
-  console.log(public_id);
   await cloudinary.v2.uploader.destroy(public_id);
 };
 

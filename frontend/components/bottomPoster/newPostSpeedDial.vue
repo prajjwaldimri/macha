@@ -25,7 +25,6 @@ export default {
   },
   watch: {
     newPostStatus(val) {
-      console.log('Yo');
       this.newPost = val;
     },
     newPost(val) {
