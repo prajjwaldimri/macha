@@ -28,6 +28,8 @@ export * from "./feed/feed";
 export * from "./feed/feedQuery";
 
 export * from "./feedback/feedback";
+export * from "./feedback/feedbackMutation";
+export * from "./feedback/feedbackQuery";
 
 export * from "./macha/macha";
 export * from "./macha/machaMutation";
