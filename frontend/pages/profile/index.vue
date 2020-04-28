@@ -155,6 +155,7 @@ export default {
           .then(({ data }) => data.me);
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         await this.$apolloHelpers.onLogout();
         this.$router.replace('/login');
         this.$notifier.showErrorMessage({

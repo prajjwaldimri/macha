@@ -113,8 +113,8 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['Comment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Feedback'];
-  Timestamp: NexusGenRootTypes['Comment'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'] | NexusGenRootTypes['Feedback'];
+  Node: NexusGenRootTypes['Comment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['Feedback'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
+  Timestamp: NexusGenRootTypes['Comment'] | NexusGenRootTypes['Feedback'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
   String: string;
   Int: number;
   Float: number;
@@ -207,6 +207,7 @@ export interface NexusGenFieldTypes {
     likeComment: NexusGenRootTypes['Like']; // Like!
     likePost: NexusGenRootTypes['Like']; // Like!
     login: string; // String!
+    postFeedback: NexusGenRootTypes['Feedback']; // Feedback!
     removeMacha: boolean; // Boolean!
     resetUniqueMachaId: string; // String!
     signup: string; // String!
@@ -223,6 +224,7 @@ export interface NexusGenFieldTypes {
     getCommentCount: number; // Int!
     getCommentsForThePost: NexusGenRootTypes['Comments']; // Comments!
     getFeed: NexusGenRootTypes['Feed']; // Feed!
+    getFeedback: NexusGenRootTypes['Feedback']; // Feedback!
     getFeedOfOneUser: NexusGenRootTypes['Feed']; // Feed!
     getImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     getImagePostsOfUser: NexusGenRootTypes['ImagePostList']; // ImagePostList!
@@ -334,6 +336,10 @@ export interface NexusGenArgTypes {
       password: string; // String!
       username: string; // String!
     }
+    postFeedback: { // args
+      log: string; // String!
+      message: string; // String!
+    }
     removeMacha: { // args
       uniqueMachaId: string; // String!
     }
@@ -391,6 +397,9 @@ export interface NexusGenArgTypes {
       finalVideoPostId?: string | null; // String
       limit?: number | null; // Int
     }
+    getFeedback: { // args
+      identifier: string; // String!
+    }
     getFeedOfOneUser: { // args
       imagePostSkip?: number | null; // Int
       limit?: number | null; // Int
@@ -436,8 +445,8 @@ export interface NexusGenArgTypes {
 export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
-  Node: "Comment" | "User" | "ImagePost" | "Like" | "TextPost" | "VideoPost" | "Feedback"
-  Timestamp: "Comment" | "ImagePost" | "TextPost" | "VideoPost" | "Feedback"
+  Node: "Comment" | "User" | "Feedback" | "ImagePost" | "Like" | "TextPost" | "VideoPost"
+  Timestamp: "Comment" | "Feedback" | "ImagePost" | "TextPost" | "VideoPost"
 }
 
 export interface NexusGenInheritedFields {}

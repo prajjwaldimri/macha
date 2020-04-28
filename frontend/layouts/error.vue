@@ -1,46 +1,37 @@
 <template lang="pug">
   .errorPage
-    .notFound( v-if='error.statusCode === 404' )
-      //-v-img(:src="require()" aspect-ratio="1")
-      | {{ pageNotFound }}
-    h1(v-else='')
-      | {{ otherError }}
-    NuxtLink(to='/')
-      | Home page
+    div(v-if='error.statusCode === 404')
+      notFound
+    v-card(v-else).pb-3.pt-3
+      .otherError
+        span.title Oops, we've encountered an error.
+        v-btn(color="primary" block to="/feedback" nuxt).mt-3.mb-3 Give Feedback
+        v-btn(color="primary" block to="/" nuxt) Go Home
+
 </template>
 
 <script>
+import notFound from '../components/error/notFound';
+
 export default {
   layout: 'empty',
+  components: {
+    notFound
+  },
   props: {
     error: {
       type: Object,
       default: null
     }
-  },
-  data() {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    };
-  },
-  head() {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
-    return {
-      title
-    };
   }
 };
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-.notFound {
-  background-image: url('~assets/404image.jpg');
-  height: 95vh;
-  background-size: cover;
+<style lang="scss" scoped>
+.otherError {
+  width: 95vw;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 </style>

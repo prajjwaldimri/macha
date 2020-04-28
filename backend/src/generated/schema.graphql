@@ -117,6 +117,7 @@ type Mutation {
   likeComment(commentId: String!): Like!
   likePost(postId: String!): Like!
   login(password: String!, username: String!): String!
+  postFeedback(log: String!, message: String!): Feedback!
   removeMacha(uniqueMachaId: String!): Boolean!
   resetUniqueMachaId: String!
   signup(age: Int = 13, email: String, name: String!, password: String!, username: String!): String!
@@ -163,6 +164,10 @@ type Query {
     finalVideoPostId: String = ""
     limit: Int = 10
   ): Feed!
+  getFeedback(
+    """Can be postId or uri"""
+    identifier: String!
+  ): Feedback!
   getFeedOfOneUser(imagePostSkip: Int = 0, limit: Int = 10, textPostSkip: Int = 0, username: String!, videoPostSkip: Int = 0): Feed!
   getImagePost(
     """Can be postId or uri"""

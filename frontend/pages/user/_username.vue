@@ -50,8 +50,11 @@ export default {
             this.postsType = data.getFeedOfOneUser.postsType;
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
+        error();
         this.$notifier.showErrorMessage({
-          content: e
+          content:
+            'Unable to fetch the feed of the user. Please try again after some time.'
         });
       }
     },
@@ -83,8 +86,9 @@ export default {
               }
             });
         } catch (e) {
+          this.$store.dispatch('error/addError', e);
           this.$notifier.showErrorMessage({
-            content: e
+            content: 'Unable to fetch the feed of the user.'
           });
         }
       }
