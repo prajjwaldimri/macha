@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card
     .feedback.pb-5.pt-3
-      span.title Oops, we've encountered an error.
+      span.title Help us improve macha with your feedback.
       v-banner.subtitle-2
         v-avatar(slot="icon" size="20" color="primary" )
           v-icon mdi-information-variant
@@ -60,8 +60,8 @@ export default {
 
 <style lang="scss">
 .feedback span {
-  display: flex;
-  justify-content: center;
+  // display: flex;
+  // justify-content: center;
   line-height: 0;
 }
 .feedback {

@@ -9,7 +9,7 @@
     v-btn
       span Notifications
       v-icon mdi-bell
-    v-btn
+    v-btn(to="/feedback" nuxt)
       span Feedback
       v-icon mdi-comment-quote-outline
 </template>

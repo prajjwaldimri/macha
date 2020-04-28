@@ -2,18 +2,20 @@
   .errorPage
     div(v-if='error.statusCode === 404')
       notFound
-    h1(v-else)
-      feedback
+    v-card(v-else).pb-3.pt-3
+      .otherError
+        span.title Oops, we've encountered an error.
+        v-btn(color="primary" block to="/feedback" nuxt).mt-3.mb-3 Give Feedback
+        v-btn(color="primary" block to="/" nuxt) Go Home
+
 </template>
 
 <script>
 import notFound from '../components/error/notFound';
-import feedback from '../components/error/feedback';
 
 export default {
   layout: 'empty',
   components: {
-    feedback,
     notFound
   },
   props: {
@@ -21,18 +23,15 @@ export default {
       type: Object,
       default: null
     }
-  },
-  data() {
-    return {
-      otherError: 'An error occurred'
-    };
-  },
-  head() {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
-    return {
-      title
-    };
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.otherError {
+  width: 95vw;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+</style>
