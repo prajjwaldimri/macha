@@ -1,0 +1,7 @@
+mutation postFeedback($log: String!, $message: String!){
+  postFeedback(log: $log, message: $message){
+    log
+    message
+    id
+  }
+}

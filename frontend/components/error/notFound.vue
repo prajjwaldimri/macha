@@ -44,7 +44,6 @@
   height: 100vh;
   background-size: cover;
   background-position: center;
-  opacity: 90%;
   font-family: 'Special Elite', cursive;
 }
 #notFound::before {
