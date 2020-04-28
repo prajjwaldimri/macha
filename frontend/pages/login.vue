@@ -113,7 +113,7 @@ export default {
           content: 'Signed in successfully'
         });
       } catch (e) {
-        this.$store.dispatch('addError', e);
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });
@@ -160,7 +160,7 @@ export default {
 .login {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;

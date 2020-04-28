@@ -12,7 +12,7 @@
 export default {
   computed: {
     getSessionErrors() {
-      return this.$store.getters.getSessionErrors;
+      return this.$store.state.error.sessionErrors;
     }
   }
 };

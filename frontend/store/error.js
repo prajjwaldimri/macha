@@ -3,19 +3,15 @@ export const state = () => ({
 });
 
 export const mutations = {
-  add(payload) {
-    state.sessionErrors += payload + '\n';
+  add(state, payload) {
+    state.sessionErrors += `${new Date().toString()} - ${payload.toString()} \n`;
   }
 };
 
 export const actions = {
   addError({ commit }, sessionErrors) {
-    commit('addError', sessionErrors);
+    commit('add', sessionErrors);
   }
 };
 
-export const getters = {
-  getSessionErrors() {
-    return state.sessionErrors;
-  }
-};
+
