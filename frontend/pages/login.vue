@@ -113,6 +113,7 @@ export default {
           content: 'Signed in successfully'
         });
       } catch (e) {
+        this.$store.dispatch('addError', e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });

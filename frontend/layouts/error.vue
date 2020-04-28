@@ -2,18 +2,18 @@
   .errorPage
     div(v-if='error.statusCode === 404')
       notFound
-    h1(v-else='')
-      | {{ otherError }}
-      NuxtLink(to='/')
-        | Home page
+    h1(v-else)
+      feedback
 </template>
 
 <script>
 import notFound from '../components/error/notFound';
+import feedback from '../components/error/feedback';
 
 export default {
   layout: 'empty',
   components: {
+    feedback,
     notFound
   },
   props: {
