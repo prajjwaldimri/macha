@@ -96,6 +96,7 @@ export default {
             );
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error loading your image'
         });
@@ -126,6 +127,7 @@ export default {
             }
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error deleting your image'
         });
@@ -163,6 +165,7 @@ export default {
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error chaging the status of like on the image.'
         });
@@ -195,6 +198,7 @@ export default {
         });
         this.$emit('postUpdated');
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error updating your image'
         });

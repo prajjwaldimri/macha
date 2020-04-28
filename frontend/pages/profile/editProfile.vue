@@ -73,7 +73,7 @@ export default {
             this.name = data.me.name;
           });
       } catch (e) {
-        console.log(e);
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Unable to get profile details. Please refresh'
         });
@@ -103,7 +103,7 @@ export default {
         this.refresh('network-only');
         this.$emit('detailsChanged');
       } catch (e) {
-        console.log(e);
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Unable to get update profile details.'
         });

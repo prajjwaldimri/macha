@@ -22,6 +22,7 @@ export default {
           this.texts = data.getTextPostsOfUser.textPosts;
         });
     } catch (e) {
+      this.$store.dispatch('error/addError', e);
       this.$notifier.showErrorMessage({
         content: e
       });

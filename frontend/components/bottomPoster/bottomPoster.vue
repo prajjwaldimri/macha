@@ -72,6 +72,7 @@ export default {
       //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
       // }
     } catch (e) {
+      this.$store.dispatch('error/addError', e);
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');
       this.$notifier.showErrorMessage({
@@ -98,6 +99,7 @@ export default {
             this.$emit('refreshFeed');
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });
@@ -126,6 +128,7 @@ export default {
             this.$emit('refreshFeed');
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: e.graphQLErrors[0].message
         });

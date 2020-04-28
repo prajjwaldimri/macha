@@ -34,6 +34,7 @@ export default {
           this.images = images;
         });
     } catch (e) {
+      this.$store.dispatch('error/addError', e);
       this.$notifier.showErrorMessage({
         content: e
       });

@@ -65,6 +65,7 @@ export default {
       //   this.user.profileImage = `https://api.adorable.io/avatars/128/${this.user.username}.png`;
       // }
     } catch (e) {
+      this.$store.dispatch('error/addError', e);
       await this.$apolloHelpers.onLogout();
       this.$router.replace('/login');
       this.$notifier.showErrorMessage({
@@ -104,6 +105,7 @@ export default {
             this.comments = data.getCommentsForThePost.comments;
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error loading your comments'
         });
@@ -123,6 +125,7 @@ export default {
         this.refresh('network-only');
         this.$emit('commentDeleted');
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error deleting your comment'
         });
@@ -160,7 +163,7 @@ export default {
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {
-        console.log(e);
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error chaging the status of like on the comment.'
         });
@@ -188,6 +191,7 @@ export default {
             this.refresh('network-only');
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Comment cannot be empty'
         });

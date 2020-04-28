@@ -146,6 +146,7 @@ export default {
         // }
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         await this.$apolloHelpers.onLogout();
         this.$router.replace('/login');
         this.$notifier.showErrorMessage({
@@ -193,6 +194,7 @@ export default {
         });
         await this.refresh('network-only');
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Unable to upload your picture'
         });

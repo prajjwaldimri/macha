@@ -36,6 +36,7 @@ export default {
       });
       this.$router.push('/profile');
     } catch (e) {
+      this.$store.dispatch('error/addError', e);
       this.color = 'error';
       this.$notifier.showErrorMessage({
         content: 'Unable to add macha'

@@ -32,6 +32,7 @@ export default {
         })
         .then(({ data }) => data.getMachas.machas);
     } catch (e) {
+      this.$store.dispatch('error/addError', e);
       this.$notifier.showErrorMessage({
         content: 'Not able to get machas'
       });

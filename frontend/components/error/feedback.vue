@@ -46,7 +46,7 @@ export default {
             this.$router.push('/');
           });
       } catch (e) {
-        console.log(e);
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error posting your feedback.'
         });
