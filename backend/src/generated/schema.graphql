@@ -168,7 +168,18 @@ type Query {
     """Can be postId or uri"""
     identifier: String!
   ): Feedback!
-  getFeedOfOneUser(imagePostSkip: Int = 0, limit: Int = 10, textPostSkip: Int = 0, username: String!, videoPostSkip: Int = 0): Feed!
+  getFeedOfOneUser(
+    """Id of the last image post"""
+    finalImagePostId: String = ""
+
+    """Id of the last text post"""
+    finalTextPostId: String = ""
+
+    """Id of the video post"""
+    finalVideoPostId: String = ""
+    limit: Int = 10
+    username: String!
+  ): Feed!
   getImagePost(
     """Can be postId or uri"""
     identifier: String!
