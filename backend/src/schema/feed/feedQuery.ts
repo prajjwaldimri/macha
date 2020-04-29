@@ -178,15 +178,24 @@ export const getFeed = queryField("getFeed", {
 export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
   type: "Feed",
   args: {
-    textPostSkip: intArg({ default: 0 }),
-    imagePostSkip: intArg({ default: 0 }),
-    videoPostSkip: intArg({ default: 0 }),
-    limit: intArg({ default: 10 }),
     username: stringArg({ required: true }),
+    finalTextPostId: stringArg({
+      default: "",
+      description: "Id of the last text post",
+    }),
+    finalImagePostId: stringArg({
+      default: "",
+      description: "Id of the last image post",
+    }),
+    finalVideoPostId: stringArg({
+      default: "",
+      description: "Id of the video post",
+    }),
+    limit: intArg({ default: 10 }),
   },
   async resolve(
     _,
-    { textPostSkip, imagePostSkip, videoPostSkip, limit, username },
+    { username, finalTextPostId, finalImagePostId, finalVideoPostId, limit },
     ctx: UserContext
   ): Promise<any> {
     try {
@@ -204,10 +213,42 @@ export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
       }
 
       // Check if the current user is macha of the other user.
-      let machas = user.machas?.flatMap((macha) => (macha as any)._id);
+      let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
       machas?.push(ctx.user._id);
       if (machas!.indexOf(ctx.user._id) < 0) {
         throw new ForbiddenError("You are not allowed to access this resource");
+      }
+
+      // Convert all skips to dates
+      let textPostSkip: DocumentType<TextPost> | any | null = null,
+        imagePostSkip: DocumentType<ImagePost> | any | null = null,
+        videoPostSkip: DocumentType<VideoPost> | any | null = null;
+
+      if (isMongoId(finalTextPostId!)) {
+        textPostSkip = await TextPostModel.findById(finalTextPostId).select(
+          "updatedAt"
+        );
+      }
+      if (!textPostSkip) {
+        textPostSkip = { updatedAt: new Date() };
+      }
+
+      if (isMongoId(finalImagePostId!)) {
+        imagePostSkip = await ImagePostModel.findById(finalImagePostId).select(
+          "updatedAt"
+        );
+      }
+      if (!imagePostSkip) {
+        imagePostSkip = { updatedAt: new Date() };
+      }
+
+      if (isMongoId(finalVideoPostId!)) {
+        videoPostSkip = await VideoPostModel.findById(finalVideoPostId).select(
+          "updatedAt"
+        );
+      }
+      if (!videoPostSkip) {
+        videoPostSkip = { updatedAt: new Date() };
       }
 
       // Get all the posts from the user
@@ -215,36 +256,41 @@ export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
       let postsType: Array<any> = [];
       const textPosts = await TextPostModel.find({
         author: user._id,
+        updatedAt: { $lt: textPostSkip!.updatedAt },
       })
-        .skip(textPostSkip!)
         .limit(limit!)
         .select("_id, updatedAt")
         .sort("-updatedAt")
         .exec();
       for (const textPost of textPosts) {
-        posts.push(textPost);
         postsType.push("TextPost");
       }
-      const imagePosts = await ImagePostModel.find({ author: user._id })
-        .skip(imagePostSkip!)
+
+      const imagePosts = await ImagePostModel.find({
+        author: user._id,
+        updatedAt: { $lt: imagePostSkip!.updatedAt },
+      })
         .limit(limit!)
         .select("_id, updatedAt")
         .sort("-updatedAt")
         .exec();
       for (const imagePost of imagePosts) {
-        posts.push(imagePost);
         postsType.push("ImagePost");
       }
-      const videoPosts = await VideoPostModel.find({ author: user._id })
-        .skip(videoPostSkip!)
+
+      const videoPosts = await VideoPostModel.find({
+        author: user._id,
+        updatedAt: { $lt: videoPostSkip!.updatedAt },
+      })
         .limit(limit!)
         .select("_id, updatedAt")
         .sort("-updatedAt")
         .exec();
       for (const videoPost of videoPosts) {
-        posts.push(videoPost);
         postsType.push("VideoPost");
       }
+
+      posts.push(...textPosts, ...imagePosts, ...videoPosts);
 
       // Arrange them in chronological order in three steps
       //1. First merge posts and postsType arrays
@@ -278,8 +324,8 @@ export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
 
       // Only keep the top #(limit) posts
       if (sortedPosts.length > limit!) {
-        sortedPosts = sortedPosts.slice(0, limit! - 1);
-        postsType = postsType.slice(0, limit! - 1);
+        sortedPosts = sortedPosts.slice(0, limit!);
+        postsType = postsType.slice(0, limit!);
       }
 
       // Only return the _ids and type of the post

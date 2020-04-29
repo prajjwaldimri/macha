@@ -401,11 +401,11 @@ export interface NexusGenArgTypes {
       identifier: string; // String!
     }
     getFeedOfOneUser: { // args
-      imagePostSkip?: number | null; // Int
+      finalImagePostId?: string | null; // String
+      finalTextPostId?: string | null; // String
+      finalVideoPostId?: string | null; // String
       limit?: number | null; // Int
-      textPostSkip?: number | null; // Int
       username: string; // String!
-      videoPostSkip?: number | null; // Int
     }
     getImagePost: { // args
       identifier: string; // String!
