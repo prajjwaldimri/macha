@@ -23,23 +23,24 @@ export default {
       posts: [],
       postsType: [],
       isIntersecting: false,
-      skip: 0,
+      finalTextPostId: '',
+      finalImagePostId: '',
+      finalVideoPostId: '',
       limit: 10,
-      isPostsEndingReached: false
+      isPostsEndingReached: false,
+      isFirstRender: true
     };
   },
   async mounted() {
     await this.refresh();
   },
   methods: {
-    async refresh(fetchPolicy = 'cache-first', skipValue = this.skip) {
+    async refresh(fetchPolicy = 'cache-first') {
       try {
-        this.skip = skipValue;
         await this.$apollo
           .query({
             query: getFeedOfOneUser,
             variables: {
-              skip: this.skip,
               limit: this.limit,
               username: this.$route.params.username
             },
@@ -64,14 +65,29 @@ export default {
   },
   watch: {
     async isIntersecting(val) {
+      if (this.isFirstRender) {
+        this.isFirstRender = false;
+        return;
+      }
       if (val) {
-        this.skip += this.limit;
+        // Get the id of the last posts in each category
+        this.finalTextPostId = this.posts[
+          this.postsType.lastIndexOf('TextPost')
+        ];
+        this.finalImagePostId = this.posts[
+          this.postsType.lastIndexOf('ImagePost')
+        ];
+        this.finalVideoPostId = this.posts[
+          this.postsType.lastIndexOf('VideoPost')
+        ];
         try {
           await this.$apollo
             .query({
               query: getFeedOfOneUser,
               variables: {
-                skip: this.skip,
+                finalTextPostId: this.finalTextPostId,
+                finalImagePostId: this.finalImagePostId,
+                finalVideoPostId: this.finalVideoPostId,
                 limit: this.limit,
                 username: this.$route.params.username
               },
