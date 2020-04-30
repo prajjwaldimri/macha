@@ -51,5 +51,25 @@ TextPostModel.watch().on("change", async (data: any) => {
 
       await NotificationModel.create(notification);
     }
+  } else if (data.updateDescription) {
+    // Update operation
+    const post = await TextPostModel.findById(data.documentKey._id);
+    const user = await UserModel.findById(post!.author.toString()).populate({
+      path: "machas",
+      select: "_id",
+    });
+    let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
+    if (!machas) {
+      return;
+    }
+    for (let macha of machas) {
+      let notification = {
+        content: `${user!.name} updated their post`,
+        user: macha,
+        uri: `https://macha.in/text/${post!.uri}`,
+      };
+
+      await NotificationModel.create(notification);
+    }
   }
 });
