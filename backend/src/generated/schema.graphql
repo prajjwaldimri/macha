@@ -105,6 +105,7 @@ type Machas {
 type Mutation {
   addMacha(uniqueMachaId: String!): Boolean!
   changeProfilePicture(file: Upload): Boolean!
+  clearNotifications: Boolean!
   createComment(postId: String!, text: String!): Comment!
   createImagePost(caption: String, image: String!, location: String): ImagePost!
   createImagePostBase64(caption: String, file: String!): ImagePost!
@@ -133,6 +134,24 @@ type Mutation {
 interface Node {
   """Unique identifier for the resource"""
   id: ID!
+}
+
+type Notification implements Node & Timestamp {
+  content: String!
+
+  """Date will be in ISO Format"""
+  createdAt: String!
+
+  """Unique identifier for the resource"""
+  id: ID!
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
+  uri: String!
+}
+
+type Notifications {
+  notifications: [Notification!]!
 }
 
 """ImagePost / VideoPost / TextPost"""
@@ -195,6 +214,7 @@ type Query {
     identifier: String!
   ): Int!
   getMachas: Machas!
+  getNotifications: Notifications!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!

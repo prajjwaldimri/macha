@@ -1,0 +1,9 @@
+query {
+  getNotifications {
+    notifications {
+      id
+      content
+      uri
+    }
+  }
+}

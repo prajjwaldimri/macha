@@ -35,3 +35,7 @@ export * from "./feedback/feedbackQuery";
 export * from "./macha/macha";
 export * from "./macha/machaMutation";
 export * from "./macha/machaQuery";
+
+export * from "./notification/notification";
+export * from "./notification/notificationQuery";
+export * from "./notification/notificationMutation";

@@ -6,7 +6,7 @@
     v-btn(to="/profile" nuxt)
       span Profile
       v-icon mdi-account-cog
-    v-btn
+    v-btn(to="/notifications" nuxt)
       span Notifications
       v-icon mdi-bell
     v-btn(to="/feedback" nuxt)
