@@ -18,9 +18,10 @@
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.0-rc19",
     "@nuxtjs/pwa": "^3.0.0-0",
-    "dayjs": "^1.8.25",
+    "dayjs": "^1.8.26",
     "graphql-tag": "^2.10.3",
     "nuxt": "^2.12.2",
+    "pulltorefreshjs": "^0.1.20",
     "qrcode": "^1.4.4",
     "vue-cropperjs": "^4.1.0",
     "vue-qrcode-reader": "^2.1.1",
