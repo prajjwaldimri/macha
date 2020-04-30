@@ -31,7 +31,7 @@
           v-icon mdi-pencil
         v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-      comment(:postId = "$route.params.id" @commentCreated="textPost.commentCount += 1" @commentDeleted="textPost.commentCount -= 1")
+      comment(v-if="textPost.id" :postId = "textPost.id" @commentCreated="textPost.commentCount += 1" @commentDeleted="textPost.commentCount -= 1")
 </template>
 
 <style lang="scss">
@@ -78,7 +78,7 @@ export default {
           .query({
             query: getTextPost,
             variables: {
-              identifier: this.$route.params.id
+              identifier: this.$route.params.uri
             },
             fetchPolicy
           })

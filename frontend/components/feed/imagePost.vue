@@ -22,7 +22,7 @@
         v-btn(icon v-else @click="toggleLikeImagePost" color="pink" :disabled="isImageLoading" :loading="isLikeLoading")
           v-icon mdi-heart-outline
           span.pl-1 {{imagePost.likeCount}}
-        v-btn(icon v-if="imagePost" :disabled="isImageLoading" :to="'/image/' + imagePost.id" nuxt).pl-4
+        v-btn(icon v-if="imagePost" :disabled="isImageLoading" :to="'/image/' + imagePost.uri" nuxt).pl-4
           v-icon mdi-comment
           span.pl-1 {{imagePost.commentCount}}
         v-btn(icon :disabled="isImageLoading" @click="share")
