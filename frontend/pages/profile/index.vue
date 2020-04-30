@@ -30,12 +30,12 @@
             EditProfile(@detailsChanged="refresh('network-only')")
           v-tab-item(key="friends")
             Friends
+          v-tab-item(key="settings")
+            Settings
           v-tab-item(key="texts")
             Texts
           v-tab-item(key="photos")
             Photos
-          v-tab-item(key="settings")
-            Settings
 
     v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition" style="bottom: 52px;")
       template(v-slot:activator)
