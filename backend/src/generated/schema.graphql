@@ -135,6 +135,24 @@ interface Node {
   id: ID!
 }
 
+type Notification implements Node & Timestamp {
+  content: String!
+
+  """Date will be in ISO Format"""
+  createdAt: String!
+
+  """Unique identifier for the resource"""
+  id: ID!
+
+  """Date will be in ISO Format"""
+  updatedAt: String!
+  uri: String!
+}
+
+type Notifications {
+  notifications: [Notification!]!
+}
+
 """ImagePost / VideoPost / TextPost"""
 union PostType = ImagePost | TextPost | VideoPost
 
@@ -195,6 +213,7 @@ type Query {
     identifier: String!
   ): Int!
   getMachas: Machas!
+  getNotifications: Notifications!
   getTextPost(
     """Can be postId or uri"""
     identifier: String!

@@ -81,6 +81,16 @@ export interface NexusGenRootTypes {
     machas: NexusGenRootTypes['User'][]; // [User!]!
   }
   Mutation: {};
+  Notification: { // root type
+    content: string; // String!
+    createdAt: string; // String!
+    id: string; // ID!
+    updatedAt: string; // String!
+    uri: string; // String!
+  }
+  Notifications: { // root type
+    notifications: NexusGenRootTypes['Notification'][]; // [Notification!]!
+  }
   Query: {};
   TextPost: { // root type
     author: string; // ID!
@@ -113,8 +123,8 @@ export interface NexusGenRootTypes {
     uri: string; // String!
     video: string; // String!
   }
-  Node: NexusGenRootTypes['Comment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['Feedback'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
-  Timestamp: NexusGenRootTypes['Comment'] | NexusGenRootTypes['Feedback'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
+  Node: NexusGenRootTypes['Comment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['Feedback'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Like'] | NexusGenRootTypes['Notification'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
+  Timestamp: NexusGenRootTypes['Comment'] | NexusGenRootTypes['Feedback'] | NexusGenRootTypes['ImagePost'] | NexusGenRootTypes['Notification'] | NexusGenRootTypes['TextPost'] | NexusGenRootTypes['VideoPost'];
   String: string;
   Int: number;
   Float: number;
@@ -219,6 +229,16 @@ export interface NexusGenFieldTypes {
     updateUser: NexusGenRootTypes['User']; // User!
     updateVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
   }
+  Notification: { // field return type
+    content: string; // String!
+    createdAt: string; // String!
+    id: string; // ID!
+    updatedAt: string; // String!
+    uri: string; // String!
+  }
+  Notifications: { // field return type
+    notifications: NexusGenRootTypes['Notification'][]; // [Notification!]!
+  }
   Query: { // field return type
     getComment: NexusGenRootTypes['Comment']; // Comment!
     getCommentCount: number; // Int!
@@ -232,6 +252,7 @@ export interface NexusGenFieldTypes {
     getLikers: NexusGenRootTypes['Likers']; // Likers!
     getLikersCount: number; // Int!
     getMachas: NexusGenRootTypes['Machas']; // Machas!
+    getNotifications: NexusGenRootTypes['Notifications']; // Notifications!
     getTextPost: NexusGenRootTypes['TextPost']; // TextPost!
     getTextPostsOfUser: NexusGenRootTypes['TextPostList']; // TextPostList!
     getVideoPost: NexusGenRootTypes['VideoPost']; // VideoPost!
@@ -445,13 +466,13 @@ export interface NexusGenArgTypes {
 export interface NexusGenAbstractResolveReturnTypes {
   LikableType: "Comment" | "ImagePost" | "TextPost" | "VideoPost"
   PostType: "ImagePost" | "TextPost" | "VideoPost"
-  Node: "Comment" | "User" | "Feedback" | "ImagePost" | "Like" | "TextPost" | "VideoPost"
-  Timestamp: "Comment" | "Feedback" | "ImagePost" | "TextPost" | "VideoPost"
+  Node: "Comment" | "User" | "Feedback" | "ImagePost" | "Like" | "Notification" | "TextPost" | "VideoPost"
+  Timestamp: "Comment" | "Feedback" | "ImagePost" | "Notification" | "TextPost" | "VideoPost"
 }
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Comments" | "Feed" | "Feedback" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Query" | "TextPost" | "TextPostList" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Comments" | "Feed" | "Feedback" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Notification" | "Notifications" | "Query" | "TextPost" | "TextPostList" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 
