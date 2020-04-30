@@ -2,7 +2,7 @@
   .bottomPoster
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
       v-card(max-height="500%")
-        v-toolbar(top)
+        v-toolbar(color="primary" top)
           v-btn(icon @click="newImageDialogVisible=false")
             v-icon mdi-close
           v-toolbar-title Posting Image
@@ -30,14 +30,6 @@
                   v-icon mdi-rotate-right
           v-container(fluid).py-2
             v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
-        v-toolbar(color="primary" bottom)
-          v-btn(icon @click="newImageDialogVisible=false")
-            v-icon mdi-close
-          v-toolbar-title Posting Image
-          v-spacer
-          v-btn(outlined @click="createImagePost" :loading="newImageDialogLoading")
-            | Post
-            v-icon(small).pl-2 mdi-send
 
     #newPostText.mb-3
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
