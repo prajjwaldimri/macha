@@ -205,6 +205,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addMacha: boolean; // Boolean!
     changeProfilePicture: boolean; // Boolean!
+    clearNotifications: boolean; // Boolean!
     createComment: NexusGenRootTypes['Comment']; // Comment!
     createImagePost: NexusGenRootTypes['ImagePost']; // ImagePost!
     createImagePostBase64: NexusGenRootTypes['ImagePost']; // ImagePost!
