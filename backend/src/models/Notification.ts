@@ -1,7 +1,6 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { prop, Ref, getModelForClass } from "@typegoose/typegoose";
 import { User } from "./User";
-import nanoid from "nanoid";
 
 export class Notification extends TimeStamps {
   @prop({
