@@ -44,7 +44,7 @@ export default {
               limit: this.limit,
               username: this.$route.params.username
             },
-            fetchPolicy
+            fetchPolicy: 'network-only'
           })
           .then(({ data }) => {
             this.posts = data.getFeedOfOneUser.posts;
