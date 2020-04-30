@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid)
+  v-container.px-0
     v-card(:loading="isTextPostLoading" flat).mx-3
       v-list-item(v-if="textPost.authorDetails" :to="'/user/' + textPost.authorDetails.username" nuxt)
         v-list-item-avatar

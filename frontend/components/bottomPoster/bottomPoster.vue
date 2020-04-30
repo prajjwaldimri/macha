@@ -86,7 +86,6 @@ export default {
           query: profileQuery
         })
         .then(({ data }) => data.me);
-
     } catch (e) {
       this.$store.dispatch('error/addError', e);
       await this.$apolloHelpers.onLogout();
@@ -155,25 +154,25 @@ export default {
         this.newPostButtonStatus = false;
       }
     },
-    setImage(file){
-      if(!file){
+    setImage(file) {
+      if (!file) {
         return;
       }
-      if(file.type.indexOf('image/') === -1){
+      if (file.type.indexOf('image/') === -1) {
         this.$notifier.showErrorMessage({
-          content: "Please select a correct image file"
+          content: 'Please select a correct image file'
         });
       }
 
-      if(typeof FileReader === 'function'){
+      if (typeof FileReader === 'function') {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = event => {
           this.imgData = event.target.result;
           this.$refs.cropper.replace(event.target.result);
-        }
+        };
 
         reader.readAsDataURL(file);
-      } else{
+      } else {
         this.$notifier.showErrorMessage({
           content: "Sorry. Your browser doesn't support file uploading"
         });
@@ -184,7 +183,7 @@ export default {
     },
     zoom(percent) {
       this.$refs.cropper.relativeZoom(percent);
-    },
+    }
   }
 };
 </script>
@@ -196,8 +195,8 @@ export default {
   position: fixed;
   bottom: 42px;
   margin: auto;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #newPostText .v-input__control .v-input__slot .v-text-field__slot {
