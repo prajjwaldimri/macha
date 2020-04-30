@@ -43,6 +43,7 @@ const server = new ApolloServer({
       return {};
     }
   },
+  debug: true,
 });
 
 mongoose

@@ -6,30 +6,30 @@
         | {{message}}
         v-btn(text @click="show = false") Close
       nuxt
-      BottomNav
-      v-bottom-sheet(v-model="sheet")
-        v-list
-          v-subheader Share with
-          v-list-item(@click="share('facebook')")
-            v-list-item-avatar
-              v-avatar(size="32px" tile)
-                v-icon mdi-facebook
-            v-list-item-title Facebook
-          v-list-item(@click="share('twitter')")
-            v-list-item-avatar
-              v-avatar(size="32px" tile)
-                v-icon mdi-twitter
-            v-list-item-title Twitter
-          v-list-item(@click="share('whatsapp')")
-            v-list-item-avatar
-              v-avatar(size="32px" tile)
-                v-icon mdi-whatsapp
-            v-list-item-title Whatsapp
-          v-list-item(@click="share('telegram')")
-            v-list-item-avatar
-              v-avatar(size="32px" tile)
-                v-icon mdi-telegram
-            v-list-item-title Telegram
+    BottomNav
+    v-bottom-sheet(v-model="sheet")
+      v-list
+        v-subheader Share with
+        v-list-item(@click="share('facebook')")
+          v-list-item-avatar
+            v-avatar(size="32px" tile)
+              v-icon mdi-facebook
+          v-list-item-title Facebook
+        v-list-item(@click="share('twitter')")
+          v-list-item-avatar
+            v-avatar(size="32px" tile)
+              v-icon mdi-twitter
+          v-list-item-title Twitter
+        v-list-item(@click="share('whatsapp')")
+          v-list-item-avatar
+            v-avatar(size="32px" tile)
+              v-icon mdi-whatsapp
+          v-list-item-title Whatsapp
+        v-list-item(@click="share('telegram')")
+          v-list-item-avatar
+            v-avatar(size="32px" tile)
+              v-icon mdi-telegram
+          v-list-item-title Telegram
 
 </template>
 

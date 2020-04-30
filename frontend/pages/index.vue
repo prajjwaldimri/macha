@@ -1,7 +1,7 @@
 <template lang="pug">
   .feed
-    .feed-container(style="padding-bottom:50px").pt-0.px-0.mx-0
-      v-row(v-for="(post, index) in posts" :key="post")
+    .feed-container(style="margin-bottom:50px").pt-0.px-0.mx-0
+      .px-0(v-for="(post, index) in posts" :key="post")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
@@ -36,6 +36,12 @@ export default {
   },
   async mounted() {
     await this.refresh();
+    const ptr = PullToRefresh.init({
+      mainElement: '.feed-container',
+      onRefresh() {
+        window.location.reload();
+      }
+    });
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {
@@ -120,3 +126,32 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+// Overrides for pulltorefresh.js
+.ptr--ptr {
+  box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  font-size: 0.85em;
+  font-weight: bold;
+  top: 48px;
+  height: 0;
+  transition: height 0.3s, min-height 0.3s;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  align-content: stretch;
+}
+
+.ptr--text {
+  margin-top: 0.33em;
+  color: white !important;
+}
+
+.ptr--icon {
+  color: white !important;
+  transition: transform 0.3s;
+}
+</style>

@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid)
+  v-container.px-0
     v-card(:loading="isImageLoading" flat).mx-3
       v-list-item(v-if="imagePost.authorDetails" :to="'/user/' + imagePost.authorDetails.username" nuxt)
         v-list-item-avatar()
@@ -40,9 +40,6 @@
         v-btn(icon color="primary" x-small :loading="isImageLoading"  slot="append" @click="updateImagePost" )
           v-icon(size="24") mdi-send
 </template>
-
-<style lang="scss">
-</style>
 
 <script>
 import getImagePost from '../../gql/getImagePost';

@@ -7,7 +7,7 @@ export default {
    */
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: 'macha.in',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -23,6 +23,14 @@ export default {
         rel: 'stylesheet',
         href:
           'https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css',
+      },
+    ],
+    script: [
+      {
+        src:
+          'https://cdnjs.cloudflare.com/ajax/libs/pulltorefreshjs/0.1.20/index.umd.min.js',
+        integrity: 'sha256-plfyATLvpJutooJZODIP/uMaXvn8TK229Xa2FVMP/Ks=',
+        crossorigin: 'anonymous',
       },
     ],
   },
@@ -43,7 +51,6 @@ export default {
     { src: '~/plugins/sharer.js' },
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
-    // { src: '~/plugins/vue-cropper', ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
