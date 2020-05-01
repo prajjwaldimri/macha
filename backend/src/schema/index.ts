@@ -39,3 +39,4 @@ export * from "./macha/machaQuery";
 export * from "./notification/notification";
 export * from "./notification/notificationQuery";
 export * from "./notification/notificationMutation";
+export { notificationSubscription } from "./notification/notificationSubscription";

@@ -144,6 +144,7 @@ type Notification implements Node & Timestamp {
 
   """Unique identifier for the resource"""
   id: ID!
+  image: String
 
   """Date will be in ISO Format"""
   updatedAt: String!
@@ -230,6 +231,10 @@ type Query {
   ): Boolean!
   isUsernameAvailable(username: String!): Boolean!
   me: User!
+}
+
+type Subscription {
+  notificationSub: Notification!
 }
 
 type TextPost implements Node & Timestamp {

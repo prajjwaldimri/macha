@@ -9,7 +9,7 @@ if (!process.env.MONGODB) {
 
 const debug = require("debug")("dev");
 
-import { ApolloServer, ApolloError } from "apollo-server";
+import { ApolloServer, ApolloError, PubSub } from "apollo-server";
 import { makeSchema } from "@nexus/schema";
 import mongoose from "mongoose";
 import path from "path";
@@ -26,24 +26,33 @@ const schema = makeSchema({
   },
 });
 
+const pubsub = new PubSub();
+
 const server = new ApolloServer({
   schema,
-  context: async ({ req }) => {
+  context: async ({ req, connection }) => {
     try {
-      if (req.headers.authorization) {
-        const token = req.headers.authorization.replace("Bearer ", "");
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-        const user = await UserModel.findById(decoded.id).select("-password");
-        if (!user) {
-          throw new ApolloError("JWT token invalid");
-        }
-        return { user: user };
+      let token = "";
+      if (connection) {
+        token = connection.context.authorization.replace("Bearer ", "");
+      } else if (req && req.headers.authorization) {
+        token = req.headers.authorization.replace("Bearer ", "");
       }
+      const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+      const user = await UserModel.findById(decoded.id).select("-password");
+      if (!user) {
+        throw new ApolloError("JWT token invalid");
+      }
+      return { user: user, pubsub };
     } catch (err) {
-      return {};
+      return { pubsub };
     }
   },
-  debug: true,
+  subscriptions: {
+    onConnect(connectionParams) {
+      return connectionParams;
+    },
+  },
 });
 
 mongoose

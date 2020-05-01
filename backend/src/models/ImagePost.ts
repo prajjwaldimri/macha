@@ -47,7 +47,8 @@ ImagePostModel.watch().on("change", async (data: any) => {
       let notification = {
         content: `${user!.name} created a new post.`,
         user: macha,
-        uri: `https://macha.in/image/${data.fullDocument.uri}`,
+        uri: data.fullDocument.uri,
+        image: user?.profileImage,
       };
 
       await NotificationModel.create(notification);
@@ -67,7 +68,8 @@ ImagePostModel.watch().on("change", async (data: any) => {
       let notification = {
         content: `${user!.name} updated their post.`,
         user: macha,
-        uri: `https://macha.in/image/${post!.uri}`,
+        uri: post!.uri,
+        image: user?.profileImage,
       };
 
       await NotificationModel.create(notification);

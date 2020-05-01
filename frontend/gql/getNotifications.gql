@@ -4,6 +4,7 @@ query {
       id
       content
       uri
+      image
     }
   }
 }

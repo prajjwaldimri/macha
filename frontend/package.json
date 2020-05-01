@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.0-rc19",
+    "@nuxtjs/onesignal": "^3.0.0-beta.16",
     "@nuxtjs/pwa": "^3.0.0-0",
     "dayjs": "^1.8.26",
     "graphql-tag": "^2.10.3",

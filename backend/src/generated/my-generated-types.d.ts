@@ -85,6 +85,7 @@ export interface NexusGenRootTypes {
     content: string; // String!
     createdAt: string; // String!
     id: string; // ID!
+    image?: string | null; // String
     updatedAt: string; // String!
     uri: string; // String!
   }
@@ -92,6 +93,7 @@ export interface NexusGenRootTypes {
     notifications: NexusGenRootTypes['Notification'][]; // [Notification!]!
   }
   Query: {};
+  Subscription: {};
   TextPost: { // root type
     author: string; // ID!
     content: string; // String!
@@ -234,6 +236,7 @@ export interface NexusGenFieldTypes {
     content: string; // String!
     createdAt: string; // String!
     id: string; // ID!
+    image: string | null; // String
     updatedAt: string; // String!
     uri: string; // String!
   }
@@ -260,6 +263,9 @@ export interface NexusGenFieldTypes {
     isCurrentUserLiker: boolean; // Boolean!
     isUsernameAvailable: boolean; // Boolean!
     me: NexusGenRootTypes['User']; // User!
+  }
+  Subscription: { // field return type
+    notificationSub: NexusGenRootTypes['Notification']; // Notification!
   }
   TextPost: { // field return type
     author: string; // ID!
@@ -473,7 +479,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Comment" | "Comments" | "Feed" | "Feedback" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Notification" | "Notifications" | "Query" | "TextPost" | "TextPostList" | "User" | "VideoPost";
+export type NexusGenObjectNames = "Comment" | "Comments" | "Feed" | "Feedback" | "ImagePost" | "ImagePostList" | "Like" | "Likers" | "Machas" | "Mutation" | "Notification" | "Notifications" | "Query" | "Subscription" | "TextPost" | "TextPostList" | "User" | "VideoPost";
 
 export type NexusGenInputNames = never;
 
