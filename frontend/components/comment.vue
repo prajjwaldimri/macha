@@ -8,7 +8,7 @@
         v-list-item-content
           v-list-item-title() {{comment.authorDetails.name}}
       v-card-subtitle(v-if="!editMode").py-0 {{comment.text}}
-      v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
+      v-text-field( v-else dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
         v-btn(icon color="primary" x-small :loading="isCommentsLoading"  slot="append" @click="updateComment(comment.id)" )
           v-icon(size="24") mdi-send
       v-card-actions.py-0.pl-3.mr-3

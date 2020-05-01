@@ -205,6 +205,7 @@ export default {
             caption: this.newContent
           }
         });
+        this.refresh('network-only');
         this.$emit('postUpdated');
       } catch (e) {
         this.$store.dispatch('error/addError', e);
