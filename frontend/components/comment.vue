@@ -7,9 +7,16 @@
           v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{comment.authorDetails.name}}
-      v-card-subtitle.py-0 {{comment.text}}
+      v-card-subtitle(v-if="!editMode").py-0 {{comment.text}}
+      v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
+        v-btn(icon color="primary" x-small :loading="isCommentsLoading"  slot="append" @click="updateComment(comment.id)" )
+          v-icon(size="24") mdi-send
       v-card-actions.py-0.pl-3.mr-3
         v-spacer
+        v-btn(icon v-if="editMode" :disabled="isCommentsLoading" @click="cancelEdit(comment.text)")
+          v-icon(small) mdi-close-circle
+        v-btn(icon v-if="comment.isCurrentUserAuthor && !editMode" :disabled="isCommentsLoading" @click="editMode= true")
+          v-icon(small) mdi-pencil
         v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment(comment.id)" color="error" :disabled="isCommentsLoading")
           v-icon(small) mdi-delete
         v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment(comment)" color="pink" left :disabled="isCommentsLoading" :loading="isLikeLoading")
@@ -35,6 +42,7 @@ import getCommentsForThePost from '../gql/getCommentsForThePost';
 import deleteComment from '../gql/deleteComment';
 import isCurrentUserLiker from '../gql/isCurrentUserLiker';
 import likeComment from '../gql/likeComment';
+import updateComment from '../gql/updateComment';
 import unlikeComment from '../gql/unlikeComment';
 import createComment from '../gql/createComment';
 import profileQuery from '../gql/profile';
@@ -48,7 +56,8 @@ export default {
   },
   mixins: [validationMixin],
   validations: {
-    caption: { required: true }
+    caption: { required: true },
+    newContent: { required: true }
   },
   async mounted() {
     try {
@@ -84,7 +93,10 @@ export default {
       isLikeLoading: false,
       isLoading: false,
       caption: '',
-      captionErrors: ''
+      captionErrors: '',
+      editMode: false,
+      newContentErrors: '',
+      newContent: ''
     };
   },
   methods: {
@@ -198,6 +210,33 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    async updateComment(commentId) {
+      try {
+        this.isCommentsLoading = true;
+        await this.$apollo.mutate({
+          mutation: updateComment,
+          variables: {
+            commentId: commentId,
+            text: this.newContent
+          }
+        });
+        this.refresh('network-only');
+      } catch (e) {
+        this.$store.dispatch('error/addError', e);
+        this.$notifier.showErrorMessage({
+          content: 'Error updating your comment'
+        });
+      } finally {
+        this.isCommentsLoading = false;
+        this.editMode = false;
+      }
+    },
+    async cancelEdit(commentText) {
+      try {
+        this.editMode = false;
+        this.newContent = commentText;
+      } catch (e) {}
     }
   }
 };
