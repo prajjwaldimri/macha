@@ -7,15 +7,15 @@
           v-icon(v-else large color="orange" left) mdi-halloween
         v-list-item-content
           v-list-item-title() {{comment.authorDetails.name}}
-      v-card-subtitle(v-if="!editMode").py-0 {{comment.text}}
-      v-text-field( v-else dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
-        v-btn(icon color="primary" x-small :loading="isCommentsLoading"  slot="append" @click="updateComment(comment.id)" )
+      v-text-field(v-if="editMode && comment.id === beingEditedComment" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent" ).px-2
+        v-btn(icon color="primary" x-small :loading="isCommentsLoading"  slot="append" @click="updateComment(comment)" )
           v-icon(size="24") mdi-send
+      v-card-subtitle(v-else).py-0 {{comment.text}}
       v-card-actions.py-0.pl-3.mr-3
         v-spacer
-        v-btn(icon v-if="editMode" :disabled="isCommentsLoading" @click="cancelEdit(comment.text)")
+        v-btn(icon v-if="editMode && beingEditedComment === comment.id" :disabled="isCommentsLoading" @click="cancelEdit(comment.text)")
           v-icon(small) mdi-close-circle
-        v-btn(icon v-if="comment.isCurrentUserAuthor && !editMode" :disabled="isCommentsLoading" @click="editMode= true")
+        v-btn(icon v-if="comment.isCurrentUserAuthor && !editMode" :disabled="isCommentsLoading" @click="editMode= true; beingEditedComment= comment.id")
           v-icon(small) mdi-pencil
         v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment(comment.id)" color="error" :disabled="isCommentsLoading")
           v-icon(small) mdi-delete
@@ -96,7 +96,8 @@ export default {
       captionErrors: '',
       editMode: false,
       newContentErrors: '',
-      newContent: ''
+      newContent: '',
+      beingEditedComment: ''
     };
   },
   methods: {
@@ -211,13 +212,15 @@ export default {
         this.isLoading = false;
       }
     },
-    async updateComment(commentId) {
+    // Don't send complete comment object. Just send id.
+    // This approach has so many problems because we are trying to update one element in array and then detecting which element is being edited, then detecting which text was in which element. What if one user has multiple comments? How to track which new text is which comment's. Best approach is to separate comment into individual components.
+    async updateComment(comment) {
       try {
         this.isCommentsLoading = true;
         await this.$apollo.mutate({
           mutation: updateComment,
           variables: {
-            commentId: commentId,
+            commentId: comment.id,
             text: this.newContent
           }
         });
@@ -235,6 +238,7 @@ export default {
     async cancelEdit(commentText) {
       try {
         this.editMode = false;
+        this.beingEditedComment= '';
         this.newContent = commentText;
       } catch (e) {}
     }
