@@ -2,5 +2,7 @@
 import { pushNotification } from "./notificationSubscription";
 
 export const newNotificationCallback = (data: any) => {
-  pushNotification(data.fullDocument);
+  if (data.operationType === "insert") {
+    pushNotification(data.fullDocument);
+  }
 };

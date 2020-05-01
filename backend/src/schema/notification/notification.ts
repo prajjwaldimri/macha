@@ -6,6 +6,7 @@ export const Notification = objectType({
     t.implements("Node");
     t.implements("Timestamp");
     t.string("uri", { nullable: false });
+    t.string("image", { nullable: true });
     t.string("content", { nullable: false });
   },
 });

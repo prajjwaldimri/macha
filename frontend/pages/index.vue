@@ -42,6 +42,10 @@ export default {
         window.location.reload();
       }
     });
+    // Check if notifications are enabled
+    this.$OneSignal.push(() => {
+      this.$OneSignal.showSlidedownPrompt();
+    });
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {

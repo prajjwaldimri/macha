@@ -1,0 +1,8 @@
+subscription {
+  notificationSub {
+    createdAt
+    uri
+    content
+    image
+  }
+}

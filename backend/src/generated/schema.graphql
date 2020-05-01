@@ -144,6 +144,7 @@ type Notification implements Node & Timestamp {
 
   """Unique identifier for the resource"""
   id: ID!
+  image: String
 
   """Date will be in ISO Format"""
   updatedAt: String!

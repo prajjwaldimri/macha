@@ -85,6 +85,7 @@ export interface NexusGenRootTypes {
     content: string; // String!
     createdAt: string; // String!
     id: string; // ID!
+    image?: string | null; // String
     updatedAt: string; // String!
     uri: string; // String!
   }
@@ -235,6 +236,7 @@ export interface NexusGenFieldTypes {
     content: string; // String!
     createdAt: string; // String!
     id: string; // ID!
+    image: string | null; // String
     updatedAt: string; // String!
     uri: string; // String!
   }

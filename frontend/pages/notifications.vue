@@ -4,6 +4,9 @@
       v-subheader Notifications
       template(v-if="notifications" v-for="(notification, index) in notifications" )
         v-list-item(:key="notification.id" :to="notification.uri")
+          v-list-item-avatar
+            v-img(v-if="notification.image" :src="notification.image")
+            v-icon(v-else) mdi-halloween
           v-list-item-content {{notification.content}}
         v-divider(v-if="index < notifications.length - 1")
 
@@ -25,6 +28,10 @@ export default {
   },
   mounted() {
     this.refresh();
+    // Check if notifications are enabled
+    this.$OneSignal.push(() => {
+      this.$OneSignal.showSlidedownPrompt();
+    });
   },
   methods: {
     async refresh() {
@@ -39,6 +46,7 @@ export default {
             this.notifications = data.getNotifications.notifications;
           });
       } catch (e) {
+        console.log(e);
         this.$notifier.showErrorMessage({
           content: 'Unable to get notifications'
         });

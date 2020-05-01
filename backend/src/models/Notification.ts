@@ -15,6 +15,9 @@ export class Notification extends TimeStamps {
   })
   uri!: string;
 
+  @prop({})
+  image!: string;
+
   @prop({
     required: true,
   })

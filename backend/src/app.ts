@@ -34,7 +34,7 @@ const server = new ApolloServer({
     try {
       let token = "";
       if (connection) {
-        token = connection.context.Authorization.replace("Bearer ", "");
+        token = connection.context.authorization.replace("Bearer ", "");
       } else if (req && req.headers.authorization) {
         token = req.headers.authorization.replace("Bearer ", "");
       }
