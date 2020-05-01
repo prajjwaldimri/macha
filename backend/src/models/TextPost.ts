@@ -42,7 +42,7 @@ TextPostModel.watch().on("change", async (data: any) => {
     }
     for (let macha of machas) {
       let notification = {
-        content: `${user!.name} created a new post titled \"${
+        content: `${user!.name} added a new post titled \"${
           data.fullDocument.content
         }\"`,
         user: macha,

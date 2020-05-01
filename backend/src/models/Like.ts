@@ -1,10 +1,11 @@
 import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
-import { User } from "./User";
-import { ImagePost } from "./ImagePost";
-import { VideoPost } from "./VideoPost";
-import { TextPost } from "./TextPost";
+import { User, UserModel } from "./User";
+import { ImagePost, ImagePostModel } from "./ImagePost";
+import { VideoPost, VideoPostModel } from "./VideoPost";
+import { TextPost, TextPostModel } from "./TextPost";
 import { Comment } from "./Comment";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import { NotificationModel } from "./Notification";
 
 export enum LikableType {
   ImagePost = "ImagePost",
@@ -34,3 +35,47 @@ export class Like extends TimeStamps {
 }
 
 export const LikeModel = getModelForClass(Like);
+
+LikeModel.watch().on("change", async (data: any) => {
+  if (data.fullDocument) {
+    //Insert operation
+    const user = await UserModel.findById(data.fullDocument.author.toString());
+    const like = await LikeModel.findById(data.documentKey._id);
+
+    const textPost = await TextPostModel.findById(like!.likable);
+    const imagePost = await ImagePostModel.findById(like!.likable);
+    const videoPost = await VideoPostModel.findById(like!.likable);
+
+    if (user!.id != textPost?.author && like?.likableType == "TextPost") {
+      let notification = {
+        content: `${user!.name} liked your post.`,
+        user: textPost!.author,
+        uri: textPost!.uri,
+        image: user?.profileImage,
+      };
+      await NotificationModel.create(notification);
+    } else if (
+      user!.id != imagePost?.author &&
+      like?.likableType == "ImagePost"
+    ) {
+      let notification = {
+        content: `${user!.name} liked your post.`,
+        user: imagePost!.author,
+        uri: imagePost!.uri,
+        image: user?.profileImage,
+      };
+      await NotificationModel.create(notification);
+    } else if (
+      user!.id != videoPost?.author &&
+      like?.likableType == "VideoPost"
+    ) {
+      let notification = {
+        content: `${user!.name} liked your post.`,
+        user: videoPost!.author,
+        uri: videoPost!.uri,
+        image: user?.profileImage,
+      };
+      await NotificationModel.create(notification);
+    }
+  }
+});
