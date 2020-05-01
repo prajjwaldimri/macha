@@ -59,7 +59,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa', '@nuxtjs/apollo'],
+  modules: ['@nuxtjs/onesignal', '@nuxtjs/pwa', '@nuxtjs/apollo'],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -85,6 +85,16 @@ export default {
           warning: '#FFF316',
           error: '#FF4F4C',
         },
+      },
+    },
+  },
+
+  oneSignal: {
+    init: {
+      appId: 'b66b614a-8475-4184-86f3-773c4122aaa5',
+      allowLocalhostAsSecureOrigin: true,
+      welcomeNotification: {
+        disable: true,
       },
     },
   },

@@ -96,6 +96,11 @@ export default {
       this.$vuetify.theme.dark =
         localStorage.getItem('isDarkThemeEnabled') === 'true';
     }
+
+    // Check if notifications are enabled
+    this.$OneSignal.push(() => {
+      this.$OneSignal.showSlidedownPrompt();
+    });
   },
   methods: {
     async share(type) {
