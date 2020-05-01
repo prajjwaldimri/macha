@@ -43,9 +43,7 @@ export default {
       }
     });
     // Check if notifications are enabled
-    this.$OneSignal.push(() => {
-      this.$OneSignal.showSlidedownPrompt();
-    });
+    Notification.requestPermission();
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {

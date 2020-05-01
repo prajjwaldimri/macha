@@ -29,14 +29,16 @@ export default {
 
     observer.subscribe({
       next: data => {
-        console.log(data);
+        let notification = data.data.notificationSub;
         this.unreadNotifications = true;
-        this.$OneSignal.sendSelfNotification(
-          'Notification from macha',
-          data.content,
-          data.uri,
-          `${window.location.origin}/${data.image}`
-        );
+        if (Notification.permission === 'granted') {
+          navigator.serviceWorker.getRegistration().then(reg => {
+            reg.showNotification(notification.content, {
+              icon: notification.image,
+              vibrate: [100, 50, 100]
+            });
+          });
+        }
       },
       error: error => {
         this.$notifier.showErrorMessage({
