@@ -1,6 +1,7 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { prop, Ref, getModelForClass } from "@typegoose/typegoose";
 import { User } from "./User";
+import { newNotificationCallback } from "../schema/notification/notificationSchemaModelBridge";
 
 export class Notification extends TimeStamps {
   @prop({
@@ -21,3 +22,7 @@ export class Notification extends TimeStamps {
 }
 
 export const NotificationModel = getModelForClass(Notification);
+
+NotificationModel.watch().on("change", (data) => {
+  newNotificationCallback(data);
+});

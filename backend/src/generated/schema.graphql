@@ -232,6 +232,10 @@ type Query {
   me: User!
 }
 
+type Subscription {
+  notificationSub: Notification!
+}
+
 type TextPost implements Node & Timestamp {
   author: ID!
   authorDetails: User!
