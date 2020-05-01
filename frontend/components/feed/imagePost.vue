@@ -28,7 +28,7 @@
         v-btn(icon :disabled="isImageLoading" @click="share")
           v-icon mdi-share
         v-spacer
-        v-btn(icon v-if="editMode" :disabled="isImagePostLoading" @click="cancelEdit")
+        v-btn(icon v-if="editMode" :disabled="isImageLoading" @click="cancelEdit")
           v-icon mdi-close-circle
         v-btn(icon v-if="imagePost.isCurrentUserAuthor && !editMode" :disabled="isImageLoading" @click="editMode= true")
           v-icon mdi-pencil
@@ -197,7 +197,7 @@ export default {
     },
     async updateImagePost() {
       try {
-        this.isImagePostLoading = true;
+        this.isImageLoading = true;
         await this.$apollo.mutate({
           mutation: updateImagePost,
           variables: {
@@ -212,7 +212,7 @@ export default {
           content: 'Error updating your image'
         });
       } finally {
-        this.isImagePostLoading = false;
+        this.isImageLoading = false;
         this.editMode = false;
       }
     },
