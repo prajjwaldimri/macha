@@ -1,0 +1,15 @@
+query getComment($commentId: String!) {
+  getComment(commentId: $commentId) {
+    id
+    text
+    authorDetails {
+      name
+      username
+      profileImage
+      id
+    }
+    isCurrentUserAuthor
+    hasCurrentUserLikedComment
+    
+  }
+}

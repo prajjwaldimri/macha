@@ -36,7 +36,7 @@
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
         v-btn(icon color="primary" x-small :loading="isImageLoading"  slot="append" @click="updateImagePost" )
           v-icon(size="24") mdi-send
-      comment(v-if="imagePost.id" :postId = "imagePost.id" @commentCreated="imagePost.commentCount += 1" @commentDeleted="imagePost.commentCount -= 1")
+      postComments(v-if="imagePost.id" :postId = "imagePost.id" @commentCreated="imagePost.commentCount += 1" @commentDeleted="imagePost.commentCount -= 1")
 </template>
 
 <style lang="scss">
@@ -48,7 +48,7 @@ import likePost from '../../gql/likePost';
 import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteImagePost from '../../gql/deleteImagePost';
-import comment from '../../components/comment';
+import postComments from '../../components/comment/postComments';
 import updateImagePost from '../../gql/updateImagePost';
 
 import { validationMixin } from 'vuelidate';
@@ -56,7 +56,7 @@ import { required } from 'vuelidate/lib/validators';
 
 export default {
   components: {
-    comment
+    postComments
   },
   mixins: [validationMixin],
   validations: {
