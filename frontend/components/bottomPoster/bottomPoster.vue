@@ -81,11 +81,18 @@ export default {
       if (!token) {
         throw new Error('No token found');
       }
-      this.user = await this.$apollo
+      await this.$apollo
         .query({
           query: profileQuery
         })
-        .then(({ data }) => data.me);
+        .then(async ({ data }) => {
+          this.user = data.me;
+          // Check if notifications are enabled
+          this.$OneSignal.push(async () => {
+            await this.$OneSignal.setExternalUserId(this.user.id);
+            this.$OneSignal.showSlidedownPrompt();
+          });
+        });
     } catch (e) {
       this.$store.dispatch('error/addError', e);
       await this.$apolloHelpers.onLogout();

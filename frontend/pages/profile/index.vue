@@ -147,12 +147,19 @@ export default {
         if (!token) {
           throw new Error('No token found');
         }
-        this.user = await this.$apollo
+        await this.$apollo
           .query({
             query: profile,
             fetchPolicy
           })
-          .then(({ data }) => data.me);
+          .then(({ data }) => {
+            this.user = data.me;
+            // Check if notifications are enabled
+            this.$OneSignal.push(() => {
+              this.$OneSignal.setExternalUserId(this.user.id);
+              this.$OneSignal.showSlidedownPrompt();
+            });
+          });
         this.qrUrl = await qrcode.toDataURL(`${this.user.uniqueMachaId}`);
       } catch (e) {
         this.$store.dispatch('error/addError', e);

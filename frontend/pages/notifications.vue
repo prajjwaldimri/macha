@@ -28,10 +28,6 @@ export default {
   },
   mounted() {
     this.refresh();
-    // Check if notifications are enabled
-    this.$OneSignal.push(() => {
-      this.$OneSignal.showSlidedownPrompt();
-    });
   },
   methods: {
     async refresh() {
@@ -46,7 +42,6 @@ export default {
             this.notifications = data.getNotifications.notifications;
           });
       } catch (e) {
-        console.log(e);
         this.$notifier.showErrorMessage({
           content: 'Unable to get notifications'
         });

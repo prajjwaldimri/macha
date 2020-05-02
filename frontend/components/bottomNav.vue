@@ -14,39 +14,40 @@
 </template>
 
 <script>
-import notificationSub from '../gql/notificationSub';
+import getNotifications from '../gql/getNotifications';
 
 export default {
   data() {
     return {
-      unreadNotifications: false
+      unreadNotifications: false,
+      polling: null
     };
   },
-  mounted() {
-    const observer = this.$apollo.subscribe({
-      query: notificationSub
-    });
-
-    observer.subscribe({
-      next: data => {
-        let notification = data.data.notificationSub;
-        this.unreadNotifications = true;
-        if (Notification.permission === 'granted') {
-          navigator.serviceWorker.getRegistration().then(reg => {
-            reg.showNotification(notification.content, {
-              icon: notification.image,
-              vibrate: [100, 50, 100]
-            });
+  async mounted() {
+    this.polling = setInterval(async () => {
+      try {
+        this.isLoading = true;
+        await this.$apollo
+          .query({
+            query: getNotifications,
+            fetchPolicy: 'network-only'
+          })
+          .then(({ data }) => {
+            if (data.getNotifications.notifications.length > 0) {
+              this.unreadNotifications = true;
+            } else {
+              this.unreadNotifications = false;
+            }
           });
-        }
-      },
-      error: error => {
+      } catch (e) {
         this.$notifier.showErrorMessage({
-          content:
-            'Unable to subscribe to notifications. Please reload to get realtime notifications.'
+          content: 'Unable to get notifications'
         });
       }
-    });
+    }, 30000);
+  },
+  beforeDestroy() {
+    clearInterval(this.polling);
   }
 };
 </script>

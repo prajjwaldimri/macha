@@ -42,8 +42,6 @@ export default {
         window.location.reload();
       }
     });
-    // Check if notifications are enabled
-    Notification.requestPermission();
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {
