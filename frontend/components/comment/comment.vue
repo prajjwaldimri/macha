@@ -1,6 +1,6 @@
 <template lang="pug">
   .comment
-    v-card( :loading="isCommentsLoading")
+    v-card( :loading="isCommentLoading")
       v-list-item(dense v-if="comment.authorDetails")
         v-list-item-avatar(size="24").mr-2
           v-img(v-if="comment.authorDetails.profileImage" :src="comment.authorDetails.profileImage" aspect-ratio="1")
@@ -8,21 +8,21 @@
         v-list-item-content
           v-list-item-title() {{comment.authorDetails.name}}
       v-text-field(v-if="editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent" ).px-2
-        v-btn(icon color="primary" x-small :loading="isCommentsLoading"  slot="append" @click="updateComment" )
+        v-btn(icon color="primary" x-small :loading="isCommentLoading"  slot="append" @click="updateComment" )
           v-icon(size="24") mdi-send
       v-card-subtitle(v-else).py-0 {{comment.text}}
       v-card-actions.py-0.pl-3.mr-3
         v-spacer
-        v-btn(icon v-if="editMode" :disabled="isCommentsLoading" @click="cancelEdit")
+        v-btn(icon v-if="editMode" :disabled="isCommentLoading" @click="cancelEdit")
           v-icon(small) mdi-close-circle
-        v-btn(icon v-if="comment.isCurrentUserAuthor && !editMode" :disabled="isCommentsLoading" @click="editMode= true")
+        v-btn(icon v-if="comment.isCurrentUserAuthor && !editMode" :disabled="isCommentLoading" @click="editMode= true")
           v-icon(small) mdi-pencil
-        v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment" color="error" :disabled="isCommentsLoading")
+        v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment" color="error" :disabled="isCommentLoading")
           v-icon(small) mdi-delete
-        v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment" color="pink" left :disabled="isCommentsLoading" :loading="isLikeLoading")
+        v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment" color="pink" left :disabled="isCommentLoading" :loading="isLikeLoading")
           v-icon(small) mdi-heart
           span.pl-0  {{comment.likeCount}}
-        v-btn(icon @click="toggleLikeComment" color="pink" :disabled="isCommentsLoading" :loading="isLikeLoading" v-else)
+        v-btn(icon @click="toggleLikeComment" color="pink" :disabled="isCommentLoading" :loading="isLikeLoading" v-else)
           v-icon(small) mdi-heart-outline
           span.pl-0  {{comment.likeCount}}
       v-divider.mx-4
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       comment: {},
-      isCommentsLoading: false,
+      isCommentLoading: false,
       isLikeLoading: false,
       editMode: false,
       newContentErrors: '',
@@ -66,7 +66,7 @@ export default {
   methods: {
     async refresh(fetchPolicy = 'cache-first') {
       try {
-        this.isCommentsLoading = true;
+        this.isCommentLoading = true;
         await this.$apollo
           .query({
             query: getComment,
@@ -85,12 +85,12 @@ export default {
           content: 'Error loading your comments'
         });
       } finally {
-        this.isCommentsLoading = false;
+        this.isCommentLoading = false;
       }
     },
     async deleteComment() {
       try {
-        this.isCommentsLoading = true;
+        this.isCommentLoading = true;
         await this.$apollo.mutate({
           mutation: deleteComment,
           variables: {
@@ -104,20 +104,20 @@ export default {
           content: 'Error deleting your comment'
         });
       } finally {
-        this.isCommentsLoading = false;
+        this.isCommentLoading = false;
       }
     },
     async toggleLikeComment() {
       try {
         this.isLikeLoading = true;
-        if (comment.hasCurrentUserLikedComment) {
+        if (this.comment.hasCurrentUserLikedComment) {
           await this.$apollo.mutate({
             mutation: unlikeComment,
             variables: {
               commentId: this.comment.id
             }
           });
-          comment.likeCount -= 1;
+          this.comment.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likeComment,
@@ -125,9 +125,9 @@ export default {
               commentId: this.comment.id
             }
           });
-          comment.likeCount += 1;
+          this.comment.likeCount += 1;
         }
-        comment.hasCurrentUserLikedComment = await this.$apollo
+        this.comment.hasCurrentUserLikedComment = await this.$apollo
           .query({
             query: isCurrentUserLiker,
             variables: {
@@ -137,6 +137,7 @@ export default {
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {
+        console.log(e)
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Error chaging the status of like on the comment.'
@@ -147,7 +148,7 @@ export default {
     },
     async updateComment() {
       try {
-        this.isCommentsLoading = true;
+        this.isCommentLoading = true;
         await this.$apollo.mutate({
           mutation: updateComment,
           variables: {
@@ -162,7 +163,7 @@ export default {
           content: 'Error updating your comment'
         });
       } finally {
-        this.isCommentsLoading = false;
+        this.isCommentLoading = false;
         this.editMode = false;
       }
     },
