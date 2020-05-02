@@ -13,7 +13,9 @@ export const getNotifications = queryField("getNotifications", {
         );
       }
 
-      const notifications = NotificationModel.find({ user: ctx.user._id });
+      const notifications = NotificationModel.find({ user: ctx.user._id }).sort(
+        "-updatedAt"
+      );
       return { notifications };
     } catch (err) {
       return err;
