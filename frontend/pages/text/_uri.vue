@@ -31,7 +31,7 @@
           v-icon mdi-pencil
         v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-      comment(v-if="textPost.id" :postId = "textPost.id" @commentCreated="textPost.commentCount += 1" @commentDeleted="textPost.commentCount -= 1")
+      postComments(v-if="textPost.id" :postId = "textPost.id" @commentCreated="textPost.commentCount += 1" @commentDeleted="textPost.commentCount -= 1")
 </template>
 
 <style lang="scss">
@@ -44,14 +44,14 @@ import unlikePost from '../../gql/unlikePost';
 import isCurrentUserLiker from '../../gql/isCurrentUserLiker';
 import deleteTextPost from '../../gql/deleteTextPost';
 import updateTextPost from '../../gql/updateTextPost';
-import comment from '../../components/comment';
+import postComments from '../../components/comment/postComments';
 
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 
 export default {
   components: {
-    comment
+    postComments
   },
   mixins: [validationMixin],
   validations: {
