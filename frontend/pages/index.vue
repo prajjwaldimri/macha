@@ -5,7 +5,9 @@
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
-    bottomPoster(@refreshFeed="refresh('network-only')")
+    bottomPoster( @refreshFeed="refresh('network-only')")
+    v-tour(name="newPostTour" :steps="steps" :options="tourOptions" :callbacks="tourCallbacks")
+
 </template>
 
 <script>
@@ -31,7 +33,44 @@ export default {
       finalVideoPostId: '',
       limit: 10,
       isPostsEndingReached: false,
-      isFirstRender: true
+      isFirstRender: true,
+      steps: [
+        {
+          target: '[data-v-step="1"]',
+          header: {
+            title: "Let's get you familiar with macha"
+          },
+          content: 'You can post your status update by typing in this box.',
+          params: {
+            placement: 'top'
+          }
+        },
+        {
+          target: '[data-v-step="2"]',
+          content: 'Press this button to add images to your posts',
+          params: {
+            placement: 'top'
+          }
+        },
+        {
+          target: '[data-v-step="3"]',
+          content:
+            'On the bottom navigation the second button loads the profile page',
+          highlight: false
+        },
+        {
+          target: '[data-v-step="4"]',
+          content: 'To add friends click on this button'
+        }
+      ],
+      tourOptions: {
+        enabledButtons: {
+          buttonSkip: false
+        }
+      },
+      tourCallbacks: {
+        onNextStep: this.onTourNextStep
+      }
     };
   },
   async mounted() {
@@ -42,6 +81,9 @@ export default {
         window.location.reload();
       }
     });
+    if (!this.$cookies.get('homePageTourCompleted')) {
+      this.$tours['newPostTour'].start();
+    }
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {
@@ -75,6 +117,12 @@ export default {
     },
     async updatePost() {
       this.refresh('network-only');
+    },
+    onTourNextStep(currentStep) {
+      if (currentStep === 2) {
+        this.$router.push('/profile');
+        this.$cookies.set('homePageTourCompleted', true, { maxAge: 99999999 });
+      }
     }
   },
   watch: {

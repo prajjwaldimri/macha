@@ -51,6 +51,7 @@ export default {
     { src: '~/plugins/sharer.js' },
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
+    { src: '~/plugins/vuetour' },
   ],
   /*
    ** Nuxt.js dev-modules

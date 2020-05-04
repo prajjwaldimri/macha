@@ -6,7 +6,7 @@
         | {{message}}
         v-btn(text @click="show = false") Close
       nuxt
-    BottomNav(v-if="!isFullScreenComponent")
+    BottomNav(v-if="!isFullScreenComponent" data-v-step="3")
     v-bottom-sheet(v-model="sheet" v-if="!isFullScreenComponent")
       v-list
         v-subheader Share with

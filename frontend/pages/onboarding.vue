@@ -8,10 +8,10 @@
           .subtitle.py-3 {{slide.subtitle}}
 
     v-card-actions.py-0
-      v-btn(v-if="currentSlide < slides.length - 1" text to="/login" nuxt @click="$cookies.set('onboardingDone', true, {maxAge: 99999999})") SKIP
+      v-btn(v-if="currentSlide < slides.length - 1" text to="/login" nuxt @click="$cookies.set('onboardingDone', true, {maxAge: 99999999})" replace) SKIP
       v-spacer
       v-btn(v-if="currentSlide < slides.length - 1" text color="primary" @click="currentSlide += 1") NEXT
-      v-btn(v-else to="/login" nuxt color="primary" @click="$cookies.set('onboardingDone', true, {maxAge: 99999999})").px-4
+      v-btn(v-else to="/login" nuxt color="primary" @click="$cookies.set('onboardingDone', true, {maxAge: 99999999})" replace).px-4
         | START
         v-icon(small).pl-1 mdi-flag-checkered
 </template>
