@@ -51,6 +51,7 @@ export default {
     { src: '~/plugins/sharer.js' },
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
+    { src: '~/plugins/vuetour' },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -59,7 +60,12 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/onesignal', '@nuxtjs/pwa', '@nuxtjs/apollo'],
+  modules: [
+    '@nuxtjs/onesignal',
+    '@nuxtjs/pwa',
+    '@nuxtjs/apollo',
+    'cookie-universal-nuxt',
+  ],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

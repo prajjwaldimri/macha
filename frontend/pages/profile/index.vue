@@ -37,15 +37,15 @@
           v-tab-item(key="photos")
             Photos
 
-    v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition" style="bottom: 52px;")
+    v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition" style="bottom: 52px;" data-v-step="4")
       template(v-slot:activator)
-        v-btn(v-model="fab" fab color="primary")
+        v-btn(v-model="fab" fab color="primary" @click="$refs.newFriendTour.currentStep = 1" )
           v-icon(v-if="fab") mdi-close
           v-icon(v-else) mdi-plus
 
-      v-btn(color="primary" fab @click.stop="addDialog=true")
+      v-btn(color="primary" fab @click.stop="addDialog=true; fab=false;" data-v-step="5")
         v-icon mdi-account-multiple-plus
-      v-btn(color="primary" fab @click.stop="scanDialog=true")
+      v-btn(color="primary" fab @click.stop="scanDialog=true; fab=false;")
         v-icon mdi-qrcode-scan
 
     v-dialog(v-model="scanDialog" :visibility="scanVisibility" width="85%" height="85%")
@@ -55,6 +55,8 @@
         v-btn(@click="camera='auto'" block) Scan QR Code
         qrcode-stream(:camera="camera" @decode="onQRDecode")
 
+
+    v-tour(name="newFriendTour" :steps="steps" :options="tourOptions" :callbacks="tourCallbacks" ref="newFriendTour")
 
     v-dialog(v-model="addDialog" width="85%" height="85%")
       v-card
@@ -123,11 +125,40 @@ export default {
       camera: 'off',
       profileImage: '',
       isProfileImageLoading: false,
-      changeProfilePictureDialog: false
+      changeProfilePictureDialog: false,
+      steps: [
+        {
+          target: '[data-v-step="4"]',
+          content: 'To add friends click on this button',
+          params: {
+            placement: 'left-start'
+          }
+        },
+        {
+          target: '[data-v-step="5"]',
+          content: 'Click this button to see the options to add a friend',
+          params: {
+            placement: 'top'
+          }
+        }
+      ],
+      tourOptions: {
+        enabledButtons: {
+          buttonSkip: false
+        },
+        highlight: true
+      },
+      tourCallbacks: {
+        onNextStep: this.onTourNextStep,
+        onFinish: this.onTourFinish
+      }
     };
   },
   async mounted() {
     await this.refresh();
+    if (!this.$cookies.get('profilePageTourCompleted')) {
+      this.$tours['newFriendTour'].start();
+    }
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {
@@ -245,6 +276,14 @@ export default {
           this.changeProfilePictureDialog = false;
         }
       });
+    },
+    onTourNextStep(currentStep) {
+      if (currentStep === 0) {
+        this.fab = true;
+      }
+    },
+    onTourFinish() {
+      this.$cookies.set('profilePageTourCompleted', true, { maxAge: 99999999 });
     }
   }
 };

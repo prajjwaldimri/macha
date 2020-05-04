@@ -2,7 +2,7 @@
   v-bottom-navigation(app grow color="primary" height="48")
     v-btn(to="/" nuxt)
       v-icon mdi-home
-    v-btn(to="/profile" nuxt)
+    v-btn(to="/profile" nuxt )
       v-icon mdi-account-cog
     v-btn(v-if="!unreadNotifications" to="/notifications" nuxt @click="unreadNotifications = false")
       v-icon mdi-bell

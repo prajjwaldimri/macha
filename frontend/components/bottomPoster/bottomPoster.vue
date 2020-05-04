@@ -31,13 +31,13 @@
           v-container(fluid).py-2
             v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
 
-    #newPostText.mb-3
+    #newPostText.mb-3(data-v-step="1")
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
         v-btn(icon x-small slot="prepend-inner" nuxt to="/profile" :loading="isLoading")
           v-list-item-avatar(v-if="user" size="32")
             v-img(v-if="user.profileImage" :src="user.profileImage" aspect-ratio="1")
             v-icon(v-else large color="orange" right) mdi-halloween
-        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()" :newPostStatus.sync="newPostButtonStatus")
+        newPostSpeedDial(slot="append" @newImageDialogOpened="newImageDialogVisible=true" @newTextPostCreation="createTextPost()" :newPostStatus.sync="newPostButtonStatus" data-v-step="2")
 </template>
 
 <script>
