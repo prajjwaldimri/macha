@@ -59,7 +59,12 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/onesignal', '@nuxtjs/pwa', '@nuxtjs/apollo'],
+  modules: [
+    '@nuxtjs/onesignal',
+    '@nuxtjs/pwa',
+    '@nuxtjs/apollo',
+    'cookie-universal-nuxt',
+  ],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

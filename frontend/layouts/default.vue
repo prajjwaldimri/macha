@@ -1,13 +1,13 @@
 <template lang="pug">
   v-app
-    AppBar
+    AppBar(v-if="!isFullScreenComponent")
     v-content
       v-snackbar(v-model="show" top absolute :color="color")
         | {{message}}
         v-btn(text @click="show = false") Close
       nuxt
-    BottomNav
-    v-bottom-sheet(v-model="sheet")
+    BottomNav(v-if="!isFullScreenComponent")
+    v-bottom-sheet(v-model="sheet" v-if="!isFullScreenComponent")
       v-list
         v-subheader Share with
         v-list-item(@click="share('facebook')")
@@ -44,7 +44,10 @@ export default {
     BottomNav
   },
   computed: mapState({
-    theme: state => state.theme.isDarkThemeEnabled
+    theme: state => state.theme.isDarkThemeEnabled,
+    isFullScreenComponent() {
+      return this.$route.name === 'onboarding' || this.$route.name === 'login';
+    }
   }),
   data() {
     return {
@@ -95,6 +98,9 @@ export default {
     } else {
       this.$vuetify.theme.dark =
         localStorage.getItem('isDarkThemeEnabled') === 'true';
+    }
+    if (!this.$cookies.get('onboardingDone')) {
+      this.$router.push('/onboarding');
     }
   },
   methods: {
