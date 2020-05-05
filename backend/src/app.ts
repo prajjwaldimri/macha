@@ -63,7 +63,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    server.listen().then(async ({ url }) => {
+    server.listen({ port: process.env.PORT || 4000 }).then(async ({ url }) => {
       debug(`🚀 Server ready at ${url}`);
     });
   })
