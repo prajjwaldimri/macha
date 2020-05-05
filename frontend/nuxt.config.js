@@ -6,7 +6,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ',
+    titleTemplate: '%s ',
     title: 'macha.in',
     meta: [
       { charset: 'utf-8' },

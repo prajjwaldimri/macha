@@ -39,7 +39,7 @@
 
     v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition" style="bottom: 52px;" data-v-step="4")
       template(v-slot:activator)
-        v-btn(v-model="fab" fab color="primary" @click="$refs.newFriendTour.currentStep = 1" )
+        v-btn(v-model="fab" fab color="primary" @click="tourStepIncrementer" )
           v-icon(v-if="fab") mdi-close
           v-icon(v-else) mdi-plus
 
@@ -284,6 +284,11 @@ export default {
     },
     onTourFinish() {
       this.$cookies.set('profilePageTourCompleted', true, { maxAge: 99999999 });
+    },
+    tourStepIncrementer() {
+      if (!this.$cookies.get('profilePageTourCompleted')) {
+        this.$refs.newFriendTour.currentStep = 1;
+      }
     }
   }
 };
