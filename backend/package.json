@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn ./src/app.ts",
+    "start": "ts-node ./src/app.ts",
     "test": "ava --timeout=5m --tap | tnyan",
     "test-watch": "ava --watch --timeout=5m"
   },
