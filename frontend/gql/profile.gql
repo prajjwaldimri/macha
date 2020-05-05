@@ -1,0 +1,10 @@
+query {
+  me {
+    username
+    name
+    uniqueMachaId
+    profileImage
+    age
+    id
+  }
+}

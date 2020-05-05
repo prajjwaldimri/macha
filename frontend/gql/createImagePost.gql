@@ -1,0 +1,5 @@
+mutation createImagePostBase64($file: String!, $caption: String) {
+  createImagePostBase64(file: $file, caption: $caption) {
+    image
+  }
+}

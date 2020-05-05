@@ -1,0 +1,16 @@
+query getFeedOfOneUser(
+  $username: String!
+  $finalTextPostId: String
+  $finalImagePostId: String
+  $finalVideoPostId: String
+  $limit: Int) {
+  getFeedOfOneUser(
+    username: $username
+    finalTextPostId: $finalTextPostId
+    finalImagePostId: $finalImagePostId
+    finalVideoPostId: $finalVideoPostId
+    limit: $limit) {
+    posts
+    postsType
+  }
+}

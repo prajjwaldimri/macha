@@ -1,0 +1,16 @@
+query getFeed(
+  $finalTextPostId: String
+  $finalImagePostId: String
+  $finalVideoPostId: String
+  $limit: Int!
+) {
+  getFeed(
+    finalTextPostId: $finalTextPostId
+    finalImagePostId: $finalImagePostId
+    finalVideoPostId: $finalVideoPostId
+    limit: $limit
+  ) {
+    posts
+    postsType
+  }
+}

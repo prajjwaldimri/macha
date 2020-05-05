@@ -1,0 +1,5 @@
+mutation createTextPost($content: String!) {
+  createTextPost(content: $content) {
+    content
+  }
+}

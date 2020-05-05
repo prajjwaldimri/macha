@@ -1,0 +1,9 @@
+query {
+  getMachas {
+    machas {
+      name
+      username
+      profileImage
+    }
+  }
+}

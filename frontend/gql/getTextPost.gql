@@ -1,0 +1,18 @@
+query getTextPost($identifier: String!) {
+  getTextPost(identifier: $identifier) {
+    id
+    content
+    authorDetails {
+      name
+      username
+      profileImage
+      id
+    }
+    isCurrentUserAuthor
+    hasCurrentUserLikedTextPost
+    likeCount
+    commentCount
+    uri
+    updatedAt
+  }
+}

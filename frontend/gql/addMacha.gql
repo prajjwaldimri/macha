@@ -1,0 +1,3 @@
+mutation addMacha($uniqueMachaId: String!) {
+  addMacha(uniqueMachaId: $uniqueMachaId)
+}
