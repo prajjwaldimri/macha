@@ -115,7 +115,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: e.graphQLErrors[0].message
+          content: e
         });
       }
     },
@@ -149,7 +149,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: e.graphQLErrors[0].message
+          content: e
         });
       }
     }
