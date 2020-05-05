@@ -99,9 +99,6 @@ export default {
       this.$vuetify.theme.dark =
         localStorage.getItem('isDarkThemeEnabled') === 'true';
     }
-    if (!this.$cookies.get('onboardingDone')) {
-      this.$router.push('/onboarding');
-    }
   },
   methods: {
     async share(type) {

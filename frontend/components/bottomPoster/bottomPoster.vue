@@ -96,10 +96,14 @@ export default {
     } catch (e) {
       this.$store.dispatch('error/addError', e);
       await this.$apolloHelpers.onLogout();
-      this.$router.replace('/login');
-      this.$notifier.showErrorMessage({
-        content: 'Please login first'
-      });
+      if (!this.$cookies.get('onboardingDone')) {
+        this.$router.push('/onboarding');
+      } else {
+        this.$router.replace('/login');
+        this.$notifier.showErrorMessage({
+          content: 'Please login first'
+        });
+      }
     }
   },
   methods: {
