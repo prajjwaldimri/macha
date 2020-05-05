@@ -6,7 +6,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    titleTemplate: '%s - ',
     title: 'macha.in',
     meta: [
       { charset: 'utf-8' },
@@ -97,7 +97,8 @@ export default {
 
   oneSignal: {
     init: {
-      appId: 'b66b614a-8475-4184-86f3-773c4122aaa5',
+      appId:
+        process.env.ONE_SIGNAL_ID || 'b66b614a-8475-4184-86f3-773c4122aaa5',
       allowLocalhostAsSecureOrigin: true,
       welcomeNotification: {
         disable: true,
@@ -112,8 +113,7 @@ export default {
     clientConfigs: {
       default: {
         // required
-        httpEndpoint: 'http://localhost:4000',
-        wsEndpoint: 'ws://localhost:4000/graphql',
+        httpEndpoint: process.env.GRAPHQL_API || 'http://localhost:4000',
       },
     },
   },
@@ -126,7 +126,7 @@ export default {
       short_name: 'macha',
       name: 'macha.in',
       description: 'Your personal social network',
-      display: 'standalone',
+      display: 'fullscreen',
     },
   },
 
