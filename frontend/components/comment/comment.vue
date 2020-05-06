@@ -24,8 +24,8 @@
             v-card-title.subtitle-1 Are you sure you want to delete the comment?
             v-card-actions 
               v-spacer
-              v-btn(color="primary" text @click="dialog = false") No
-              v-btn(color="primary" text @click="dialog = false; deleteComment()") Yes
+              v-btn(color="primary" outlined text @click="dialog = false") No
+              v-btn(color="error" @click="dialog = false; deleteComment()") Yes
         v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment" color="pink" left :disabled="isCommentLoading" :loading="isLikeLoading")
           v-icon(small) mdi-heart
           span.pl-0  {{comment.likeCount}}
