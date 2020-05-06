@@ -17,8 +17,15 @@
           v-icon(small) mdi-close-circle
         v-btn(icon v-if="comment.isCurrentUserAuthor && !editMode" :disabled="isCommentLoading" @click="editMode= true")
           v-icon(small) mdi-pencil
-        v-btn(icon v-if="comment.isCurrentUserAuthor" @click="deleteComment" color="error" :disabled="isCommentLoading")
+        v-btn(icon v-if="comment.isCurrentUserAuthor" @click.stop="dialog = true" color="error" :disabled="isCommentLoading")
           v-icon(small) mdi-delete
+        v-dialog(v-model="dialog")
+          v-card
+            v-card-title.subtitle-1 Are you sure you want to delete the comment?
+            v-card-actions 
+              v-spacer
+              v-btn(color="primary" text @click="dialog = false") No
+              v-btn(color="primary" text @click="dialog = false; deleteComment()") Yes
         v-btn(v-if="comment.hasCurrentUserLikedComment" icon @click="toggleLikeComment" color="pink" left :disabled="isCommentLoading" :loading="isLikeLoading")
           v-icon(small) mdi-heart
           span.pl-0  {{comment.likeCount}}
@@ -60,7 +67,8 @@ export default {
       isLikeLoading: false,
       editMode: false,
       newContentErrors: '',
-      newContent: ''
+      newContent: '',
+      dialog: false
     };
   },
   methods: {
