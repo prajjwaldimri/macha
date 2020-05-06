@@ -56,7 +56,10 @@ export default {
           target: '[data-v-step="3"]',
           content:
             'On the bottom navigation the second button loads the profile page',
-          highlight: false
+          highlight: false,
+          params: {
+            placement: 'bottom'
+          }
         },
         {
           target: '[data-v-step="4"]',
@@ -81,9 +84,6 @@ export default {
         window.location.reload();
       }
     });
-    if (!this.$cookies.get('homePageTourCompleted')) {
-      this.$tours['newPostTour'].start();
-    }
   },
   methods: {
     async refresh(fetchPolicy = 'cache-first') {
@@ -99,6 +99,9 @@ export default {
           .then(({ data }) => {
             this.posts = data.getFeed.posts;
             this.postsType = data.getFeed.postsType;
+            if (!this.$cookies.get('homePageTourCompleted')) {
+              this.$tours['newPostTour'].start();
+            }
           });
       } catch (e) {
         this.$store.dispatch('error/addError', e);

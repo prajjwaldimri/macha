@@ -14,7 +14,7 @@
 
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(outlined color="primary" block @click="login" :disabled="$v.username.$anyError || $v.password.$anyError") SIGN IN
+          v-btn.mt-5(color="primary" block @click="login" :disabled="$v.username.$anyError || $v.password.$anyError") SIGN IN
 
       v-form.mt-5.mb-5(v-else key="signupForm")
         v-container
@@ -24,9 +24,9 @@
 
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show2 ? 'text' : 'password'" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show2 = !show2" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(outlined color="primary" block @click="signup") SIGN UP
+          v-btn.mt-5(color="primary" block @click="signup") SIGN UP
 
-    span.subtitle.grey--text.mt-5 Terms and Conditions
+    v-btn(text to="/terms" nuxt).subtitle.grey--text.mt-5 Terms and Conditions
 </template>
 
 <script>
@@ -160,7 +160,6 @@ export default {
 <style lang="scss">
 .login {
   display: flex;
-  width: 100vw;
   height: 100%;
   flex-direction: column;
   align-items: center;

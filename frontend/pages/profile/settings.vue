@@ -30,6 +30,8 @@ export default {
   methods: {
     async logout() {
       await this.$apolloHelpers.onLogout();
+      // Failure case cookie still exists
+      this.$cookies.remove('apollo-token');
       this.$router.push('/login');
     },
     getDarkThemeInfo() {

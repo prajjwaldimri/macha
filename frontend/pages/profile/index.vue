@@ -131,7 +131,7 @@ export default {
           target: '[data-v-step="4"]',
           content: 'To add friends click on this button',
           params: {
-            placement: 'left-start'
+            placement: 'top'
           }
         },
         {

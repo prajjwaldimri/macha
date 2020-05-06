@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container.px-0
-    v-card(:loading="isTextPostLoading" flat).mx-3
+    v-card(:loading="isTextPostLoading" flat outlined).mx-3
       v-list-item(v-if="textPost.authorDetails" :to="'/user/' + textPost.authorDetails.username" nuxt)
         v-list-item-avatar
           v-img(v-if="textPost.authorDetails.profileImage" :src="textPost.authorDetails.profileImage" aspect-ratio="1")
@@ -11,7 +11,7 @@
             span.body-2 @{{textPost.authorDetails.username}}
             v-icon(x-small color="grey").ml-2 mdi-clock
             span.caption.ml-1 {{updatedAt}}
-      v-card-subtitle(v-if="!editMode").pt-0.pb-2 {{textPost.content}}
+      v-card-subtitle(v-if="!editMode" @click="$router.push('/text/'+ textPost.uri)").pt-0.pb-2 {{textPost.content}}
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
         v-btn(icon color="primary" x-small :loading="isTextPostLoading"  slot="append" @click="updateTextPost" )
           v-icon(size="24") mdi-send
