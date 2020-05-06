@@ -52,6 +52,7 @@ export default {
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
     { src: '~/plugins/vuetour' },
+    { src: '~/plugins/swipeEventBus' },
   ],
   /*
    ** Nuxt.js dev-modules
