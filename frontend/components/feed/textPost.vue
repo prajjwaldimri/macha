@@ -32,9 +32,15 @@
           v-icon mdi-close-circle
         v-btn(icon v-if="textPost.isCurrentUserAuthor && !editMode" :disabled="isTextPostLoading" @click="editMode= true")
           v-icon mdi-pencil
-        v-btn(icon v-if="textPost.isCurrentUserAuthor" @click="deleteTextPost" color="error" :disabled="isTextPostLoading")
+        v-btn(icon v-if="textPost.isCurrentUserAuthor" @click.stop="dialog = true" color="error" :disabled="isTextPostLoading")
           v-icon mdi-delete
-
+        v-dialog(v-model="dialog")
+          v-card
+            v-card-title.subtitle-1 Are you sure you want to delete the post?
+            v-card-actions 
+              v-spacer
+              v-btn(color="primary" outlined text @click="dialog = false") No
+              v-btn(color="error" @click="dialog = false; deleteTextPost()") Yes
 </template>
 
 <script>
@@ -75,7 +81,8 @@ export default {
       isLikeLoading: false,
       editMode: false,
       newContentErrors: '',
-      newContent: ''
+      newContent: '',
+      dialog: false
     };
   },
   methods: {
