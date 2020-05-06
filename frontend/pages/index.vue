@@ -1,12 +1,14 @@
 <template lang="pug">
   .feed
-    .feed-container(style="margin-bottom:50px").pt-0.px-0.mx-0
+    .feed-container(v-if="true" style="margin-bottom:50px").pt-0.px-0.mx-0
       .px-0(v-for="(post, index) in posts" :key="post")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
+ 
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
     bottomPoster( @refreshFeed="refresh('network-only')")
     v-tour(name="newPostTour" :steps="steps" :options="tourOptions" :callbacks="tourCallbacks")
+    //- .no-post(v-else) No post yet
 
 </template>
 
@@ -204,5 +206,15 @@ export default {
 .ptr--icon {
   color: white !important;
   transition: transform 0.3s;
+}
+
+.no-post {
+  background-image: url('~assets/emptyState/noPost.svg');
+  height: 100%;
+  background-size: contain;
+  padding-top: 70%;
+  margin-top: 10%;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 </style>
