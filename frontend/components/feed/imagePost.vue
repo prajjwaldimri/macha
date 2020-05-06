@@ -32,8 +32,15 @@
           v-icon mdi-close-circle
         v-btn(icon v-if="imagePost.isCurrentUserAuthor && !editMode" :disabled="isImageLoading" @click="editMode= true")
           v-icon mdi-pencil
-        v-btn(icon v-if="imagePost.isCurrentUserAuthor" @click="deleteImagePost" color="error" :disabled="isImageLoading")
+        v-btn(icon v-if="imagePost.isCurrentUserAuthor" @click.stop="dialog = true" color="error" :disabled="isImageLoading")
           v-icon mdi-delete
+        v-dialog(v-model="dialog")
+          v-card
+            v-card-title.subtitle-1 Are you sure you want to delete the post?
+            v-card-actions 
+              v-spacer
+              v-btn(color="primary" outlined text @click="dialog = false") No
+              v-btn(color="error" @click="dialog = false; deleteImagePost()") Yes
 
       v-card-subtitle(v-if="!editMode").pt-0 {{imagePost.caption}}
       v-text-field( v-else="!editMode" dense  @input="$v.newContent.$touch()" @blur="$v.newContent.$touch()" :error-messages="newContentErrors" height="48" v-model="newContent").px-2
@@ -79,7 +86,8 @@ export default {
       isLikeLoading: false,
       editMode: false,
       newContentErrors: '',
-      newContent: ''
+      newContent: '',
+      dialog: false
     };
   },
   methods: {
