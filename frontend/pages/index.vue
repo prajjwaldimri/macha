@@ -1,14 +1,22 @@
 <template lang="pug">
   .feed
-    .feed-container(v-if="true" style="margin-bottom:50px").pt-0.px-0.mx-0
+    .no-post(v-if="noPostYet") 
+      .noPostImage
+      p There seems to be nothing here. 
+      p Try adding a macha or creating a post.
+      .addMachaButton
+        v-btn( color="primary" text @click="$cookies.remove('profilePageTourCompleted'); $router.push('/profile')") Add macha
+    .feed-container(v-else style="margin-bottom:50px").pt-0.px-0.mx-0
       .px-0(v-for="(post, index) in posts" :key="post")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
- 
-    v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
+
+    v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached" v-show="!noPostYet")
+    .caught-up(v-else v-show="!noPostYet") 
+    
     bottomPoster( @refreshFeed="refresh('network-only')")
     v-tour(name="newPostTour" :steps="steps" :options="tourOptions" :callbacks="tourCallbacks")
-    //- .no-post(v-else) No post yet
+    
 
 </template>
 
@@ -30,6 +38,7 @@ export default {
       posts: [],
       postsType: [],
       isIntersecting: false,
+      noPostYet: false,
       finalTextPostId: '',
       finalImagePostId: '',
       finalVideoPostId: '',
@@ -104,6 +113,9 @@ export default {
             if (!this.$cookies.get('homePageTourCompleted')) {
               this.$tours['newPostTour'].start();
             }
+            if(data.getFeed.posts.length <= 0){
+              this.noPostYet = true;
+            }
           });
       } catch (e) {
         this.$store.dispatch('error/addError', e);
@@ -134,6 +146,9 @@ export default {
     async isIntersecting(val) {
       if (this.isFirstRender) {
         this.isFirstRender = false;
+        return;
+      }
+      if(this.isPostsEndingReached){
         return;
       }
       if (val) {
@@ -209,7 +224,31 @@ export default {
 }
 
 .no-post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 35%;
+}
+.no-post .noPostImage {
+  display: flex;
   background-image: url('~assets/emptyState/noPost.svg');
+  height: 100%;
+  width: 80%;
+  background-size: contain;
+  padding-top: 70%;
+  margin-top: 10%;
+}
+.no-post p {
+  display: flex;
+  font-size: 10pt;
+  line-height: 0pt;
+}
+.no-post .addMachaButton {
+  display: flex;
+}
+.caught-up {
+  background-image: url('~assets/emptyState/caughtUp.svg');
   height: 100%;
   background-size: contain;
   padding-top: 70%;
