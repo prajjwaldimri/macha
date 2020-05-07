@@ -14,7 +14,7 @@
 
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show1 ? 'text' : 'password'" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show1 = !show1" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(color="primary" block @click="login" :disabled="$v.username.$anyError || $v.password.$anyError") SIGN IN
+          v-btn.mt-5(color="primary" block @click="login" :disabled="$v.username.$anyError || $v.password.$anyError" :loading="isLoading") SIGN IN
 
       v-form.mt-5.mb-5(v-else key="signupForm")
         v-container
@@ -24,7 +24,7 @@
 
           v-text-field(label="Password" type="password" hint="Should be more than 8 characters" counter :type="show2 ? 'text' : 'password'" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="show2 = !show2" required v-model="password" @input="$v.password.$touch()" @blur="$v.password.$touch()" :error-messages="passwordErrors")
 
-          v-btn.mt-5(color="primary" block @click="signup") SIGN UP
+          v-btn.mt-5(color="primary" block @click="signup" :loading="isLoading") SIGN UP
 
     v-btn(text to="/terms" nuxt).subtitle.grey--text.mt-5 Terms and Conditions
 </template>
@@ -50,7 +50,8 @@ export default {
       show2: false,
       username: '',
       name: '',
-      password: ''
+      password: '',
+      isLoading: false
     };
   },
   mounted() {
@@ -98,6 +99,7 @@ export default {
       if (this.$v.username.$anyError || this.$v.password.$anyError) return;
 
       try {
+        this.isLoading = true;
         const token = await this.$apollo
           .mutate({
             mutation: login,
@@ -117,6 +119,8 @@ export default {
         this.$notifier.showErrorMessage({
           content: e
         });
+      } finally {
+        this.isLoading = false;
       }
     },
     async signup() {
@@ -130,6 +134,7 @@ export default {
       }
 
       try {
+        this.isLoading = true;
         await this.$apollo
           .mutate({
             mutation: signup,
@@ -151,6 +156,8 @@ export default {
         this.$notifier.showErrorMessage({
           content: e
         });
+      } finally {
+        this.isLoading = false;
       }
     }
   }
