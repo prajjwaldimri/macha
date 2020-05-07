@@ -127,7 +127,9 @@ export default {
       short_name: 'macha',
       name: 'macha.in',
       description: 'Your personal social network',
-      display: 'fullscreen',
+      display: 'standalone',
+      orientation: 'portrait',
+      lang: 'English',
     },
     meta: {
       name: 'macha',
