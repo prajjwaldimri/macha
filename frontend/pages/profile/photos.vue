@@ -1,12 +1,13 @@
 <template lang="pug">
   v-container(fluid)
-    v-row
+    v-row(v-if="!imagePostExist")
       v-col(v-for="image in images" :key="image.image" class="d-flex child-flex" cols="4")
         v-card(flat tile @click="$router.push('/image/' + image.uri)").d-flex
           v-img(:src="image.image" :lazy-src="image.lazyImage" aspect-ratio="1" @click="$router.push('/image/' + image.uri)").grey.lighten-2
             template(v-slot:placeholder)
               v-row(align="center" justify="center").fill-height.ma-0
                 v-progress-circular(indeterminate color="primary")
+    .noPhotos(v-else style="display: flex; justify-content: center;").subtitle-2.pa-1 You have not posted any photos yet.
 </template>
 
 <script>
@@ -32,6 +33,9 @@ export default {
             );
           }
           this.images = images;
+          if (this.images.length <= 0) {
+            this.imagePostExist = true;
+          }
         });
     } catch (e) {
       this.$store.dispatch('error/addError', e);
@@ -42,7 +46,8 @@ export default {
   },
   data() {
     return {
-      images: []
+      images: [],
+      imagePostExist:false
     };
   }
 };
