@@ -12,7 +12,8 @@
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post" @postDeleted="removePost(post)" @postUpdated="updatePost()")
 
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached" v-show="!noPostYet")
-    .caught-up(v-else v-show="!noPostYet") 
+    .caught-up(v-else v-show="!noPostYet").pb-12
+      p You are all caught up.
     
     bottomPoster( @refreshFeed="refresh('network-only')")
     v-tour(name="newPostTour" :steps="steps" :options="tourOptions" :callbacks="tourCallbacks")
@@ -249,11 +250,13 @@ export default {
 }
 .caught-up {
   background-image: url('~assets/emptyState/caughtUp.svg');
-  height: 100%;
   background-size: contain;
-  padding-top: 70%;
-  margin-top: 10%;
+  padding-top: 50%;
   margin-left: 15%;
   margin-right: 15%;
+}
+.caught-up p {
+  display: flex;
+  justify-content: center;
 }
 </style>
