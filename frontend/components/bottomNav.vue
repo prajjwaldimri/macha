@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-bottom-navigation(app grow color="primary" height="48")
+  v-bottom-navigation(app grow color="primary" height="48" v-model="activeButton")
     v-btn(to="/" nuxt)
       v-icon mdi-home
     v-btn(to="/profile" nuxt )
@@ -20,7 +20,8 @@ export default {
   data() {
     return {
       unreadNotifications: false,
-      polling: null
+      polling: null,
+      activeButton: 0
     };
   },
   async mounted() {
