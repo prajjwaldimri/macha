@@ -1,5 +1,5 @@
 <template lang="pug">
-  .profile
+  .profile(v-touch:swipe="swipeHandler" v-touch-options="{swipeTolerance: 1}")
     v-dialog(v-model="changeProfilePictureDialog")
       v-card(max-height="500%" :loading="isProfileImageLoading")
         v-container.px-0
@@ -19,12 +19,12 @@
           span.subtitle @{{user.username}}
 
       template(v-slot:extension)
-        v-tabs(v-model="tab" grow show-arrows)
-          v-tab(key="profile") Profile
-          v-tab(key="friends") Machas
-          v-tab(key="settings") Settings
-          v-tab(key="texts") Texts
-          v-tab(key="photos") Photos
+        v-tabs(v-model="tab" grow show-arrows center-active)
+          v-tab(key="1") Profile
+          v-tab(key="2") Machas
+          v-tab(key="3") Settings
+          v-tab(key="4") Texts
+          v-tab(key="5") Photos
 
           v-tab-item(key="profile")
             EditProfile(@detailsChanged="refresh('network-only')")
@@ -114,7 +114,7 @@ export default {
   },
   data() {
     return {
-      tab: 'profile-tab',
+      tab: '1',
       user: {},
       addDialog: false,
       scanDialog: false,
@@ -131,7 +131,7 @@ export default {
           target: '[data-v-step="4"]',
           content: 'To add friends click on this button',
           params: {
-            placement: 'left-start'
+            placement: 'top'
           }
         },
         {
@@ -289,12 +289,27 @@ export default {
       if (!this.$cookies.get('profilePageTourCompleted')) {
         this.$refs.newFriendTour.currentStep = 1;
       }
+    },
+    swipeHandler(direction) {
+      if (direction === 'left') {
+        if (this.tab < 4) {
+          this.tab += 1;
+        }
+      } else if (direction === 'right') {
+        if (this.tab > 0) {
+          this.tab -= 1;
+        }
+      }
     }
   }
 };
 </script>
 
 <style lang="scss">
+.profile {
+  height: 100vh;
+}
+
 .top-profile {
   display: flex;
   width: 100%;

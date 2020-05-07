@@ -52,6 +52,7 @@ export default {
     { src: '~/plugins/vue-touch', ssr: false },
     { src: '~/plugins/vuelidate' },
     { src: '~/plugins/vuetour' },
+    { src: '~/plugins/swipeEventBus' },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -78,7 +79,7 @@ export default {
       dark: true,
       themes: {
         light: {
-          primary: '#5996ff',
+          primary: '#6970f1',
           success: '#2FC64D',
           info: '#1E7CFF',
           warning: '#FFF316',
@@ -127,6 +128,12 @@ export default {
       name: 'macha.in',
       description: 'Your personal social network',
       display: 'fullscreen',
+    },
+    meta: {
+      name: 'macha',
+      description: 'Your personal social network',
+      theme_color: '#6970f1',
+      nativeUI: true,
     },
   },
 

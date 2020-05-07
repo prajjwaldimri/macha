@@ -46,7 +46,12 @@ export default {
   computed: mapState({
     theme: state => state.theme.isDarkThemeEnabled,
     isFullScreenComponent() {
-      return this.$route.name === 'onboarding' || this.$route.name === 'login';
+      return (
+        this.$route.name === 'onboarding' ||
+        this.$route.name === 'login' ||
+        this.$route.name === 'privacy' ||
+        this.$route.name === 'terms'
+      );
     }
   }),
   data() {
