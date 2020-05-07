@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "xyz.appmaker.niedmg",
+      "sha256_cert_fingerprints": ["5D:F9:7B:97:41:C4:DC:61:B0:E7:98:52:DE:89:83:8C:B6:AA:F5:29:53:B2:C6:FF:EE:05:50:E2:80:41:0D:AE"]
+    }
+  }
+]
