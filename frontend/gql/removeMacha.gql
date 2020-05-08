@@ -1,0 +1,3 @@
+mutation removeMacha($uniqueMachaId: String!) {
+  removeMacha(uniqueMachaId: $uniqueMachaId)
+}

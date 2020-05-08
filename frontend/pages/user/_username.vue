@@ -1,10 +1,15 @@
 <template lang="pug">
   div
+    .noPostExist(v-if="noPostYet") 
+      .noPostExistImage
+      p This user has no post yet.   
     v-container(fluid style="padding-bottom:50px").pt-0
       v-row(v-for="(post, index) in posts" :key="post")
         ImagePost(v-if="postsType[index] === 'ImagePost'" :postId="post")
         TextPost(v-else-if="postsType[index] === 'TextPost'" :postId="post")
-    v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached")
+    v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached" v-show="!noPostYet")
+    .all-caught-up(v-else v-show="!noPostYet").pb-12
+      p You are all caught up.
 </template>
 
 <script>
@@ -28,7 +33,8 @@ export default {
       finalVideoPostId: '',
       limit: 10,
       isPostsEndingReached: false,
-      isFirstRender: true
+      isFirstRender: true,
+      noPostYet: false
     };
   },
   async mounted() {
@@ -49,14 +55,17 @@ export default {
           .then(({ data }) => {
             this.posts = data.getFeedOfOneUser.posts;
             this.postsType = data.getFeedOfOneUser.postsType;
+            if (data.getFeedOfOneUser.posts.length <= 0) {
+              this.noPostYet = true;
+            }
           });
       } catch (e) {
         this.$store.dispatch('error/addError', e);
-        error();
         this.$notifier.showErrorMessage({
           content:
-            'Unable to fetch the feed of the user. Please try again after some time.'
+            'Unable to fetch the feed of the user. Please check if the user you are trying to see is your macha or not'
         });
+        error();
       }
     },
     onIntersect(entries, observer) {
@@ -112,3 +121,36 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.noPostExist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 35%;
+}
+.noPostExist .noPostExistImage {
+  display: flex;
+  background-image: url('~assets/emptyState/noPost.svg');
+  height: 100%;
+  width: 80%;
+  background-size: contain;
+  padding-top: 70%;
+  margin-top: 10%;
+}
+.noPostExist p {
+  display: flex;
+  line-height: 0pt;
+}
+.all-caught-up {
+  background-image: url('~assets/emptyState/caughtUp.svg');
+  background-size: contain;
+  padding-top: 50%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+.all-caught-up p {
+  display: flex;
+  justify-content: center;
+}
+</style>

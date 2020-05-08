@@ -26,15 +26,15 @@
           v-tab(key="4") Texts
           v-tab(key="5") Photos
 
-          v-tab-item(key="profile")
+          v-tab-item(key="1")
             EditProfile(@detailsChanged="refresh('network-only')")
-          v-tab-item(key="friends")
+          v-tab-item(key="2")
             Friends
-          v-tab-item(key="settings")
+          v-tab-item(key="3")
             Settings
-          v-tab-item(key="texts")
+          v-tab-item(key="4")
             Texts
-          v-tab-item(key="photos")
+          v-tab-item(key="5")
             Photos
 
     v-speed-dial(v-model="fab" bottom right fixed transition="slide-y-reverse-transition" style="bottom: 52px;" data-v-step="4")

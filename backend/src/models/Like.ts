@@ -50,7 +50,7 @@ LikeModel.watch().on("change", async (data: any) => {
       let notification = {
         content: `${user!.name} liked your post.`,
         user: textPost!.author,
-        uri: textPost!.uri,
+        uri: `/text/${textPost!.uri}`,
         image: user?.profileImage,
       };
       await NotificationModel.create(notification);
@@ -61,7 +61,7 @@ LikeModel.watch().on("change", async (data: any) => {
       let notification = {
         content: `${user!.name} liked your post.`,
         user: imagePost!.author,
-        uri: imagePost!.uri,
+        uri: `/image/${imagePost!.uri}`,
         image: user?.profileImage,
       };
       await NotificationModel.create(notification);
@@ -72,7 +72,7 @@ LikeModel.watch().on("change", async (data: any) => {
       let notification = {
         content: `${user!.name} liked your post.`,
         user: videoPost!.author,
-        uri: videoPost!.uri,
+        uri: `/video/${videoPost!.uri}`,
         image: user?.profileImage,
       };
       await NotificationModel.create(notification);

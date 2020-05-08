@@ -4,6 +4,7 @@ query {
       name
       username
       profileImage
+      id
     }
   }
 }
