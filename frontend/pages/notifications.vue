@@ -2,14 +2,15 @@
   .notifications
     v-list(two-line dense :loading="isLoading")
       v-subheader Notifications
-      template(v-if="notifications" v-for="(notification, index) in notifications" )
+      .noNotification(v-if="notificationExist" style="display: flex; justify-content: center;").subtitle-2.pa-4 You have no notification yet.
+      template(v-else-if="notifications " v-for="(notification, index) in notifications" )
         v-list-item(:key="notification.id" :to="notification.uri")
           v-list-item-avatar
             v-img(v-if="notification.image" :src="notification.image")
             v-icon(v-else) mdi-halloween
           v-list-item-content {{notification.content}}
         v-divider(v-if="index < notifications.length - 1")
-
+      
     v-btn(fab @click="clear" bottom color="primary" right fixed style="margin-bottom: 48px" :loading="isLoading")
       v-icon mdi-notification-clear-all
 
@@ -23,7 +24,8 @@ export default {
   data() {
     return {
       notifications: [],
-      isLoading: false
+      isLoading: false,
+      notificationExist:false
     };
   },
   mounted() {
@@ -40,6 +42,9 @@ export default {
           })
           .then(({ data }) => {
             this.notifications = data.getNotifications.notifications;
+            if(this.notifications.length <= 0) {
+              this.notificationExist = true
+            }
           });
       } catch (e) {
         this.$notifier.showErrorMessage({
@@ -58,6 +63,7 @@ export default {
             this.refresh();
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Unable to clear notifications'
         });
