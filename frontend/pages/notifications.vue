@@ -31,7 +31,7 @@ export default {
     return {
       notifications: [],
       isLoading: false,
-      notificationExist:false
+      notificationExist: false
     };
   },
   mounted() {
@@ -51,8 +51,8 @@ export default {
           })
           .then(({ data }) => {
             this.notifications = data.getNotifications.notifications;
-            if(this.notifications.length <= 0) {
-              this.notificationExist = true
+            if (this.notifications.length <= 0) {
+              this.notificationExist = true;
             }
           });
       } catch (e) {

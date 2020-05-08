@@ -46,7 +46,7 @@ TextPostModel.watch().on("change", async (data: any) => {
           data.fullDocument.content
         }\"`,
         user: macha,
-        uri: data.fullDocument.uri,
+        uri: `/text/${data.fullDocument.uri}`,
         image: user?.profileImage,
       };
 
@@ -67,7 +67,7 @@ TextPostModel.watch().on("change", async (data: any) => {
       let notification = {
         content: `${user!.name} updated their post`,
         user: macha,
-        uri: post!.uri,
+        uri: `/text/${post!.uri}`,
         image: user?.profileImage,
       };
 

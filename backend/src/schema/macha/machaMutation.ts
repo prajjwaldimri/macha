@@ -88,9 +88,9 @@ export const removeMacha = mutationField("removeMacha", {
       }
 
       const loggedInUser = await UserModel.findOne({ _id: ctx.user._id });
-      const userToBeRemoved = await UserModel.findOne({ uniqueMachaId });
+      const userToBeRemoved = await UserModel.findOne({ _id: uniqueMachaId });
 
-      if (loggedInUser?.uniqueMachaId === uniqueMachaId) {
+      if (loggedInUser?._id === uniqueMachaId) {
         throw new UserInputError("Invalid action! Cannot remove yourself");
       }
 
