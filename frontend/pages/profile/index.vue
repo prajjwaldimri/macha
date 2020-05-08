@@ -205,12 +205,12 @@ export default {
       if (navigator.share) {
         await navigator.share({
           text: 'Hey, be my friend @ macha.in by clicking on this link',
-          url: `https://macha.in/addFriend/${this.user.uniqueMachaId}`
+          url: `https://macha.in/addMacha/${this.user.uniqueMachaId}`
         });
       } else {
         this.$sharer.showSheet({
           text: 'Hey, be my friend @ macha.in by clicking on this link',
-          url: `https://macha.in/addFriend/${this.user.uniqueMachaId}`
+          url: `https://macha.in/addMacha/${this.user.uniqueMachaId}`
         });
       }
     },
