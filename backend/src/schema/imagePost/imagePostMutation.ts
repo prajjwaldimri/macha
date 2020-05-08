@@ -63,7 +63,7 @@ export const createImagePostBase64 = mutationField("createImagePostBase64", {
       const result: any = await uploadSingleImageBase64Encoded(file);
       return await ImagePostModel.create({
         author: ctx.user._id,
-        image: result.url,
+        image: result.secure_url,
         caption,
       });
     } catch (err) {
