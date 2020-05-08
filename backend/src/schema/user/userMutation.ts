@@ -132,7 +132,7 @@ export const changeProfilePicture = mutationField("changeProfilePicture", {
         if (user!.profileImage) {
           await deleteSingleImage(user!.profileImage);
         }
-        user!.profileImage = result.url;
+        user!.profileImage = result.secure_url;
         await user!.save();
 
         return true;
