@@ -7,8 +7,10 @@
           v-list-item-avatar
             v-img(v-if="notification.image" :src="notification.image")
             v-icon(v-else) mdi-halloween
-          v-list-item-content {{notification.content}}
-        v-divider(v-if="index < notifications.length - 1")
+          v-list-item-content
+            v-list-item-title {{notification.content}}
+            v-list-item-subtitle {{updatedAt(notification.updatedAt)}}
+        v-divider(v-if="index < notifications.length - 1" inset)
 
     v-btn(fab @click="clear" bottom color="primary" right fixed style="margin-bottom: 48px" :loading="isLoading")
       v-icon mdi-notification-clear-all
@@ -18,6 +20,10 @@
 <script>
 import getNotifications from '../gql/getNotifications';
 import clearNotifications from '../gql/clearNotifications';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 export default {
   data() {
@@ -30,6 +36,9 @@ export default {
     this.refresh();
   },
   methods: {
+    updatedAt(time) {
+      return dayjs(parseInt(time)).fromNow();
+    },
     async refresh() {
       try {
         this.isLoading = true;

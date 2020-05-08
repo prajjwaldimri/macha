@@ -1,8 +1,8 @@
 <template lang="pug">
   .feed
-    .no-post(v-if="noPostYet") 
+    .no-post(v-if="noPostYet")
       .noPostImage
-      p There seems to be nothing here. 
+      p There seems to be nothing here.
       p Try adding a macha or creating a post.
       .addMachaButton
         v-btn( color="primary" text @click="$cookies.remove('profilePageTourCompleted'); $router.push('/profile')") Add macha
@@ -14,10 +14,10 @@
     v-progress-linear(v-intersect="onIntersect" indeterminate v-if="!isPostsEndingReached" v-show="!noPostYet")
     .caught-up(v-else v-show="!noPostYet").pb-12
       p You are all caught up.
-    
+
     bottomPoster( @refreshFeed="refresh('network-only')")
     v-tour(name="newPostTour" :steps="steps" :options="tourOptions" :callbacks="tourCallbacks")
-    
+
 
 </template>
 
@@ -114,7 +114,7 @@ export default {
             if (!this.$cookies.get('homePageTourCompleted')) {
               this.$tours['newPostTour'].start();
             }
-            if(data.getFeed.posts.length <= 0){
+            if (data.getFeed.posts.length <= 0) {
               this.noPostYet = true;
             }
           });
@@ -149,7 +149,7 @@ export default {
         this.isFirstRender = false;
         return;
       }
-      if(this.isPostsEndingReached){
+      if (this.isPostsEndingReached) {
         return;
       }
       if (val) {

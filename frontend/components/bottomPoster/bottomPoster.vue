@@ -11,10 +11,11 @@
             | Post
             v-icon(small).pl-2 mdi-send
         v-form(key="imagePostForm").pt-2
-          v-container(fluid).px-4
+          v-container(fluid).px-4.mb-0.pb-0
             v-file-input(accept="image/*" placeholder="First pick an image by clicking here" prepend-icon="mdi-camera" label="Image" outlined ref="imageInput" @change="setImage" show-size :clearable="false" :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
+          v-container(fluid).my-0.py-0
+            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
           v-container.image-input-container.pa-0
-            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100")
             v-container(fluid)
               v-row.px-3.justify-center
                 v-btn(icon tile @click.prevent="zoom(0.2)")
@@ -28,8 +29,7 @@
                 v-divider(vertical)
                 v-btn(icon tile @click.prevent="rotate(90)")
                   v-icon mdi-rotate-right
-          v-container(fluid).py-2
-            v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
+            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" dragMode="move")
 
     #newPostText.mb-3(data-v-step="1")
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
