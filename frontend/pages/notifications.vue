@@ -47,6 +47,7 @@ export default {
             }
           });
       } catch (e) {
+        this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content: 'Unable to get notifications'
         });
