@@ -34,7 +34,7 @@ export default {
       limit: 10,
       isPostsEndingReached: false,
       isFirstRender: true,
-      noPostYet: false,
+      noPostYet: false
     };
   },
   async mounted() {
@@ -55,17 +55,17 @@ export default {
           .then(({ data }) => {
             this.posts = data.getFeedOfOneUser.posts;
             this.postsType = data.getFeedOfOneUser.postsType;
-            if(data.getFeedOfOneUser.posts.length <= 0){
+            if (data.getFeedOfOneUser.posts.length <= 0) {
               this.noPostYet = true;
             }
           });
       } catch (e) {
         this.$store.dispatch('error/addError', e);
-        error();
         this.$notifier.showErrorMessage({
           content:
-            'Unable to fetch the feed of the user. Please try again after some time.'
+            'Unable to fetch the feed of the user. Please check if the user you are trying to see is your macha or not'
         });
+        error();
       }
     },
     onIntersect(entries, observer) {

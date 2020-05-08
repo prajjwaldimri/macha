@@ -214,7 +214,12 @@ export const getFeedOfOneUser = queryField("getFeedOfOneUser", {
 
       // Check if the current user is macha of the other user.
       let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
-      machas?.push(ctx.user._id);
+
+      // Check if the user asking for the feed is the macha of the other user
+      if (machas!.indexOf(ctx!.user!._id!) < 0) {
+        throw new ForbiddenError("Not allowed to view this profile");
+      }
+
       if (machas!.indexOf(ctx.user._id) < 0) {
         throw new ForbiddenError("You are not allowed to access this resource");
       }
