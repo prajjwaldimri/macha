@@ -1,11 +1,11 @@
 <template lang="pug">
   .profile(v-touch:swipe="swipeHandler" v-touch-options="{swipeTolerance: 1}")
     v-dialog(v-model="changeProfilePictureDialog")
-      v-card(max-height="500%" :loading="isProfileImageLoading")
+      v-card(max-height="100%" :loading="isProfileImageLoading")
         v-container.px-0
-          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" :aspectRatio="1")
-          v-row.justify-center.pt-2
+          v-row.justify-center
             v-btn(@click="changeProfilePicture" color="primary" :loading="isProfileImageLoading") Change Profile Picture
+          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="80" :minCropBoxHeight="100" :aspectRatio="1" dragMode="move").pt-2
 
     v-toolbar(prominent flat height="120")
       input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="setNewProfilePicture")
