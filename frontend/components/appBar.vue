@@ -2,8 +2,11 @@
   v-app-bar(app dense flat)
     //- v-btn(icon @click="goBack" tile :disabled="isBackButtonDisabled")
     //-   v-icon mdi-arrow-left
-    v-toolbar-title(@click="$router.push('/')" style="cursor: pointer").px-5
-      v-badge(content="α" color="transparent" offset-x="3" offset-y="13" tile bottom)
+    v-toolbar-side-icon.ml-4
+      v-img(:src="require('~/assets/macha-logo.svg')" height="30" width="40" )
+    v-toolbar-title(@click="$router.push('/')" style="cursor: pointer")
+      
+      v-badge(content="α" color="transparent" offset-x="7" offset-y="12" tile bottom)
         span macha.in
     //- v-spacer
     //- v-btn(icon @click="goForward" tile)
