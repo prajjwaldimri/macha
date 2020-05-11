@@ -29,7 +29,7 @@
                 v-divider(vertical)
                 v-btn(icon tile @click.prevent="rotate(90)")
                   v-icon mdi-rotate-right
-            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" dragMode="move")
+            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" dragMode="move" style="max-height: 450px")
 
     #newPostText.mb-3(data-v-step="1")
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost
