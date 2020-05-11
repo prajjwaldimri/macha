@@ -2,10 +2,9 @@
   v-app-bar(app dense flat)
     //- v-btn(icon @click="goBack" tile :disabled="isBackButtonDisabled")
     //-   v-icon mdi-arrow-left
-    v-toolbar-side-icon.ml-4
-      v-img(:src="require('~/assets/macha-logo.svg')" height="30" width="40" )
-    v-toolbar-title(@click="$router.push('/')" style="cursor: pointer")
-      
+    v-toolbar-side-icon
+      v-img(:src="require('~/assets/macha-logo.svg')" height="24" width="24")
+    v-toolbar-title(@click="$router.push('/')" style="cursor: pointer").px-2
       v-badge(content="α" color="transparent" offset-x="7" offset-y="12" tile bottom)
         span macha.in
     //- v-spacer
@@ -17,7 +16,7 @@
 export default {
   data() {
     return {
-      isBackButtonDisabled: false,
+      isBackButtonDisabled: false
     };
   },
   mounted() {
@@ -35,7 +34,7 @@ export default {
     },
     goForward() {
       this.$router.go(1);
-    },
+    }
   },
   watch: {
     $route: {
@@ -45,8 +44,8 @@ export default {
         } else {
           this.isBackButtonDisabled = false;
         }
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
