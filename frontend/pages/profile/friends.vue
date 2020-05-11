@@ -1,6 +1,7 @@
 <template lang="pug">
 .friendsPage
   v-list(v-if="friendsExist" flat two-line)
+    v-progress-linear(indeterminate v-if="isLoading")
     v-list-item(v-for="macha in machas" :key="macha.username")
       v-list-item-avatar
         v-avatar
@@ -25,7 +26,8 @@ export default {
   data() {
     return {
       machas: [],
-      friendsExist: false
+      friendsExist: true,
+      isLoading: false
     };
   },
   mounted() {
@@ -34,6 +36,7 @@ export default {
   methods: {
     async refresh() {
       try {
+        this.isLoading = true;
         await this.$apollo
           .query({
             query: getMachas,
@@ -50,6 +53,8 @@ export default {
         this.$notifier.showErrorMessage({
           content: 'Not able to get machas'
         });
+      } finally {
+        this.isLoading = false;
       }
     },
 

@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    AppBar(v-if="!isFullScreenComponent")
+    //- AppBar(v-if="!isFullScreenComponent")
     v-content
       v-snackbar(v-model="show" top absolute :color="color")
         | {{message}}
