@@ -32,7 +32,7 @@ export default {
   components: {
     bottomPoster,
     ImagePost,
-    TextPost
+    TextPost,
   },
   data() {
     return {
@@ -50,19 +50,19 @@ export default {
         {
           target: '[data-v-step="1"]',
           header: {
-            title: "Let's get you familiar with macha"
+            title: "Let's get you familiar with macha",
           },
           content: 'You can post your status update by typing in this box.',
           params: {
-            placement: 'top'
-          }
+            placement: 'top',
+          },
         },
         {
           target: '[data-v-step="2"]',
           content: 'Press this button to add images to your posts',
           params: {
-            placement: 'top'
-          }
+            placement: 'top',
+          },
         },
         {
           target: '[data-v-step="3"]',
@@ -70,22 +70,22 @@ export default {
             'On the bottom navigation the second button loads the profile page',
           highlight: false,
           params: {
-            placement: 'bottom'
-          }
+            placement: 'bottom',
+          },
         },
         {
           target: '[data-v-step="4"]',
-          content: 'To add friends click on this button'
-        }
+          content: 'To add friends click on this button',
+        },
       ],
       tourOptions: {
         enabledButtons: {
-          buttonSkip: false
-        }
+          buttonSkip: false,
+        },
       },
       tourCallbacks: {
-        onNextStep: this.onTourNextStep
-      }
+        onNextStep: this.onTourNextStep,
+      },
     };
   },
   async mounted() {
@@ -94,7 +94,7 @@ export default {
       mainElement: '.feed-container',
       onRefresh() {
         window.location.reload();
-      }
+      },
     });
   },
   methods: {
@@ -104,9 +104,9 @@ export default {
           .query({
             query: getFeed,
             variables: {
-              limit: this.limit
+              limit: this.limit,
             },
-            fetchPolicy
+            fetchPolicy,
           })
           .then(({ data }) => {
             this.posts = data.getFeed.posts;
@@ -121,7 +121,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Unable to fetch the feed. Please try again.'
+          content: 'Unable to fetch the feed. Please try again.',
         });
       }
     },
@@ -141,7 +141,7 @@ export default {
         this.$router.push('/profile');
         this.$cookies.set('homePageTourCompleted', true, { maxAge: 99999999 });
       }
-    }
+    },
   },
   watch: {
     async isIntersecting(val) {
@@ -172,9 +172,9 @@ export default {
                 finalTextPostId: this.finalTextPostId,
                 finalImagePostId: this.finalImagePostId,
                 finalVideoPostId: this.finalVideoPostId,
-                limit: this.limit
+                limit: this.limit,
               },
-              fetchPolicy: 'network-only'
+              fetchPolicy: 'network-only',
             })
             .then(({ data }) => {
               if (data.getFeed.posts.length <= 0) {
@@ -187,12 +187,12 @@ export default {
         } catch (e) {
           this.$store.dispatch('error/addError', e);
           this.$notifier.showErrorMessage({
-            content: e.graphQLErrors[0].message
+            content: e.graphQLErrors[0].message,
           });
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
