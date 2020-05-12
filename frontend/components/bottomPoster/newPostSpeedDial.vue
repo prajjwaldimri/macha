@@ -7,8 +7,8 @@
 
     v-btn(color="primary" x-small fab @click.stop="$emit('newImageDialogOpened')")
       v-icon mdi-image-plus
-    v-btn(color="primary" x-small fab @click.stop="newVideoDialog=true")
-      v-icon mdi-video-plus
+    //- v-btn(color="primary" x-small fab @click.stop="newVideoDialog=true")
+    //-   v-icon mdi-video-plus
     v-btn(color="primary" x-small fab @click.stop="$emit('newTextPostCreation')")
       v-icon mdi-message-text
 </template>
