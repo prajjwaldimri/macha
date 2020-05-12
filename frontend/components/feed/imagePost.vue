@@ -11,7 +11,7 @@
             span.body-2 @{{imagePost.authorDetails.username}}
             v-icon(x-small color="grey").ml-2 mdi-clock
             span.caption.ml-1 {{updatedAt}}
-      v-img(:src="imagePost.image" height="450px" :lazy-src="imagePost.lazyImage" @click="$router.push('/text/'+ imagePost.uri)")
+      v-img(:src="imagePost.image" max-height="450px" :lazy-src="imagePost.lazyImage" @click="$router.push('/text/'+ imagePost.uri)")
         template(v-slot:placeholder)
           v-row(align="center" justify="center").fill-height.ma-0
             v-progress-circular(indeterminate color="primary")
@@ -65,16 +65,16 @@ dayjs.extend(relativeTime);
 
 export default {
   props: {
-    postId: String
+    postId: String,
   },
   mixins: [validationMixin],
   validations: {
-    newContent: { required: true }
+    newContent: { required: true },
   },
   computed: {
     updatedAt() {
       return dayjs(parseInt(this.imagePost.updatedAt)).fromNow();
-    }
+    },
   },
   async mounted() {
     await this.refresh();
@@ -87,7 +87,7 @@ export default {
       editMode: false,
       newContentErrors: '',
       newContent: '',
-      dialog: false
+      dialog: false,
     };
   },
   methods: {
@@ -98,8 +98,8 @@ export default {
           .query({
             query: getImagePost,
             variables: {
-              identifier: this.postId
-            }
+              identifier: this.postId,
+            },
           })
           .then(({ data }) => {
             this.imagePost = data.getImagePost;
@@ -115,7 +115,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error loading your image'
+          content: 'Error loading your image',
         });
       } finally {
         this.isImageLoading = false;
@@ -128,25 +128,25 @@ export default {
           .mutate({
             mutation: deleteImagePost,
             variables: {
-              uri: this.imagePost.uri
-            }
+              uri: this.imagePost.uri,
+            },
           })
           .then(({ data }) => {
             if (data.deleteImagePost) {
               this.$emit('postDeleted');
               this.$notifier.showSuccessMessage({
-                content: 'Successfully deleted your image'
+                content: 'Successfully deleted your image',
               });
             } else {
               this.$notifier.showErrorMessage({
-                content: 'Error deleting your image'
+                content: 'Error deleting your image',
               });
             }
           });
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error deleting your image'
+          content: 'Error deleting your image',
         });
       } finally {
         this.isImageLoading = false;
@@ -159,16 +159,16 @@ export default {
           await this.$apollo.mutate({
             mutation: unlikePost,
             variables: {
-              postId: this.imagePost.id
-            }
+              postId: this.imagePost.id,
+            },
           });
           this.imagePost.likeCount -= 1;
         } else {
           await this.$apollo.mutate({
             mutation: likePost,
             variables: {
-              postId: this.imagePost.id
-            }
+              postId: this.imagePost.id,
+            },
           });
           this.imagePost.likeCount += 1;
         }
@@ -176,15 +176,15 @@ export default {
           .query({
             query: isCurrentUserLiker,
             variables: {
-              identifier: this.imagePost.id
+              identifier: this.imagePost.id,
             },
-            fetchPolicy: 'network-only'
+            fetchPolicy: 'network-only',
           })
           .then(({ data }) => data.isCurrentUserLiker);
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error chaging the status of like on the image.'
+          content: 'Error chaging the status of like on the image.',
         });
       } finally {
         this.isLikeLoading = false;
@@ -194,12 +194,12 @@ export default {
       if (navigator.share) {
         await navigator.share({
           text: 'Hey, checkout this post @ macha',
-          url: `https://macha.in/image/${this.imagePost.uri}`
+          url: `https://macha.in/image/${this.imagePost.uri}`,
         });
       } else {
         this.$sharer.showSheet({
           text: 'Hey, checkout this post @ macha',
-          url: `https://macha.in/image/${this.imagePost.uri}`
+          url: `https://macha.in/image/${this.imagePost.uri}`,
         });
       }
     },
@@ -210,15 +210,15 @@ export default {
           mutation: updateImagePost,
           variables: {
             uri: this.imagePost.uri,
-            caption: this.newContent
-          }
+            caption: this.newContent,
+          },
         });
         this.refresh('network-only');
         this.$emit('postUpdated');
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error updating your image'
+          content: 'Error updating your image',
         });
       } finally {
         this.isImageLoading = false;
@@ -230,7 +230,7 @@ export default {
         this.editMode = false;
         this.newContent = this.imagePost.caption;
       } catch (e) {}
-    }
-  }
+    },
+  },
 };
 </script>

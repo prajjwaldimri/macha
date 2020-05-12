@@ -2,7 +2,7 @@
   .bottomPoster
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
       v-card(max-height="500%")
-        v-toolbar(color="primary" top)
+        v-toolbar(color="primary" top dark)
           v-btn(icon @click="newImageDialogVisible=false")
             v-icon mdi-close
           v-toolbar-title Posting Image
@@ -16,8 +16,8 @@
           v-container(fluid).my-0.py-0
             v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
           v-container.image-input-container.pa-0
-            v-container(fluid)
-              v-row.px-3.justify-center
+            v-container(fluid).py-0.my-0
+              v-row.px-3.justify-center.py-0.my-0
                 v-btn(icon tile @click.prevent="zoom(0.2)")
                   v-icon mdi-magnify-plus-outline
                 v-divider(vertical)
@@ -29,7 +29,7 @@
                 v-divider(vertical)
                 v-btn(icon tile @click.prevent="rotate(90)")
                   v-icon mdi-rotate-right
-            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" dragMode="move")
+            VueCropper(ref="cropper" :src="imageData" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="100" :minCropBoxHeight="100" dragMode="move" style="max-height: 450px")
 
     #newPostText.mb-3(data-v-step="1")
       v-text-field(outlined rounded solo dense label="What's new with you?" hide-details height="48" v-model="caption" :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" :loading="isLoading").newPost

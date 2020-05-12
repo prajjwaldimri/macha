@@ -5,7 +5,7 @@
         v-container.px-0
           v-row.justify-center
             v-btn(@click="changeProfilePicture" color="primary" :loading="isProfileImageLoading") Change Profile Picture
-          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="80" :minCropBoxHeight="100" :aspectRatio="1" dragMode="move").pt-2
+          VueCropper(ref="profileCropper" :src="profileImage" :zoomOnWheel="false" :zoomOnTouch="false" :minCropBoxWidth="80" :minCropBoxHeight="100" :aspectRatio="1" dragMode="move" style="max-height: 400px").pt-2
 
     v-toolbar(prominent flat height="120")
       input(type="file" accept="image/*" ref="profilePicture" label="Profile picture input" style="display:none" @change="setNewProfilePicture")

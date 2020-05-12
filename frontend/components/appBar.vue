@@ -1,13 +1,15 @@
 <template lang="pug">
   v-app-bar(app dense flat)
-    v-btn(icon @click="goBack" tile :disabled="isBackButtonDisabled")
-      v-icon mdi-arrow-left
-    v-toolbar-title(@click="$router.push('/')" style="cursor: pointer").px-5
-      v-badge(content="α" color="transparent" offset-x="3" offset-y="13" tile bottom)
+    //- v-btn(icon @click="goBack" tile :disabled="isBackButtonDisabled")
+    //-   v-icon mdi-arrow-left
+    v-toolbar-side-icon(@click="$router.push('/')" style="cursor: pointer")
+      v-img(:src="require('~/assets/macha-logo.svg')" height="24" width="24")
+    v-toolbar-title(@click="$router.push('/')" style="cursor: pointer").px-2
+      v-badge(content="α" color="transparent" offset-x="7" offset-y="12" tile bottom)
         span macha.in
-    v-spacer
-    v-btn(icon @click="goForward" tile)
-      v-icon mdi-arrow-right
+    //- v-spacer
+    //- v-btn(icon @click="goForward" tile)
+    //-   v-icon mdi-arrow-right
 </template>
 
 <script>

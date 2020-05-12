@@ -134,6 +134,10 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  min-height: 100vh;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.5s;

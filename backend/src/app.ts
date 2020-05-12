@@ -53,6 +53,10 @@ const server = new ApolloServer({
       return connectionParams;
     },
   },
+  engine: {
+    apiKey: process.env.GRAPHQL_ENGINE_API_KEY || "",
+    schemaTag: "production",
+  },
 });
 
 mongoose
