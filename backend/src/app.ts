@@ -55,7 +55,7 @@ const server = new ApolloServer({
   },
   engine: {
     apiKey: process.env.GRAPHQL_ENGINE_API_KEY || "",
-    schemaTag: "production",
+    graphVariant: "production",
   },
 });
 
