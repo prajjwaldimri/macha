@@ -41,10 +41,10 @@ import { mapState } from 'vuex';
 export default {
   components: {
     AppBar,
-    BottomNav,
+    BottomNav
   },
   computed: mapState({
-    theme: (state) => state.theme.isDarkThemeEnabled,
+    theme: state => state.theme.isDarkThemeEnabled,
     isFullScreenComponent() {
       return (
         this.$route.name === 'onboarding' ||
@@ -52,7 +52,7 @@ export default {
         this.$route.name === 'privacy' ||
         this.$route.name === 'terms'
       );
-    },
+    }
   }),
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
       color: '',
       sheet: false,
       shareUrl: '',
-      shareText: '',
+      shareText: ''
     };
   },
   created() {
@@ -128,12 +128,16 @@ export default {
           break;
       }
       this.sheet = false;
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
+body {
+  min-height: 100vh;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.5s;
