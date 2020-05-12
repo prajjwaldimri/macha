@@ -2,7 +2,7 @@
   .bottomPoster
     v-dialog(v-model="newImageDialogVisible" hide-overlay fullscreen )
       v-card(max-height="500%")
-        v-toolbar(color="primary" top)
+        v-toolbar(color="primary" top dark)
           v-btn(icon @click="newImageDialogVisible=false")
             v-icon mdi-close
           v-toolbar-title Posting Image
