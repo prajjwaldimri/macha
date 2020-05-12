@@ -16,8 +16,8 @@
           v-container(fluid).my-0.py-0
             v-text-field(v-model="caption" clearable label="Caption" required outlined :error-messages="captionErrors" @input="$v.caption.$touch()" @blur="$v.caption.$touch()" small :disabled="newImageDialogLoading" :loading="newImageDialogLoading")
           v-container.image-input-container.pa-0
-            v-container(fluid)
-              v-row.px-3.justify-center
+            v-container(fluid).py-0.my-0
+              v-row.px-3.justify-center.py-0.my-0
                 v-btn(icon tile @click.prevent="zoom(0.2)")
                   v-icon mdi-magnify-plus-outline
                 v-divider(vertical)
