@@ -1,7 +1,7 @@
 <template lang="pug">
 .friendsPage
-  v-list(v-if="friendsExist" flat two-line)
-    v-progress-linear(indeterminate v-if="isLoading")
+  v-progress-linear(indeterminate v-if="isLoading")
+  v-list(v-else-if="friendsExist" flat two-line) 
     v-list-item(v-for="macha in machas" :key="macha.username")
       v-list-item-avatar
         v-avatar
@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       machas: [],
-      friendsExist: true,
+      friendsExist: false,
       isLoading: false
     };
   },
