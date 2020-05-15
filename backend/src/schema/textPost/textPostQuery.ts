@@ -51,7 +51,9 @@ export const getTextPostsOfUser = queryField("getTextPostsOfUser", {
         );
       }
 
-      const textPosts = await TextPostModel.find({ author: ctx.user._id });
+      const textPosts = await TextPostModel.find({ author: ctx.user._id }).sort(
+        "-updatedAt"
+      );
       return { textPosts };
     } catch (err) {
       return err;

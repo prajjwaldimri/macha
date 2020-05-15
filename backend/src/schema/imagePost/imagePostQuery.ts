@@ -51,7 +51,9 @@ export const getImagePostsOfUser = queryField("getImagePostsOfUser", {
         );
       }
 
-      const imagePosts = await ImagePostModel.find({ author: ctx.user._id });
+      const imagePosts = await ImagePostModel.find({
+        author: ctx.user._id,
+      }).sort("-updatedAt");
       return { imagePosts };
     } catch (err) {
       return err;
