@@ -6,7 +6,7 @@
         v-list-item(:key="text.uri" )
           v-list-item-content
             v-list-item-subtitle(flat tile @click="$router.push('/text/' + text.uri)").d-flex {{text.content}}
-        v-divider(v-if="index != texts.length - 1" :key="text.uri")
+        v-divider(v-if="index != texts.length - 1")
     .noTexts(v-else style="display: flex; justify-content: center;").subtitle-2.pa-4 You have not posted any texts yet.
 </template>
 
