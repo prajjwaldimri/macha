@@ -1,6 +1,7 @@
 <template lang="pug">
   .textsPage
-    v-list(v-if="!textPostExist" two-line)
+    v-progress-linear(indeterminate v-if="isLoading")
+    v-list(v-else-if="textPostExist" two-line)
       template(v-for="(text,index) in texts" class="d-flex child-flex")
         v-list-item(:key="text.uri" )
           v-list-item-content
@@ -15,27 +16,31 @@ import getTextPostsOfUser from '../../gql/getTextPostsOfUser';
 export default {
   async mounted() {
     try {
+      this.isLoading = true;
       await this.$apollo
         .query({
           query: getTextPostsOfUser
         })
         .then(({ data }) => {
           this.texts = data.getTextPostsOfUser.textPosts;
-          if (this.texts.length <= 0) {
+          if (this.texts.length > 0) {
             this.textPostExist = true;
           }
         });
     } catch (e) {
       this.$store.dispatch('error/addError', e);
       this.$notifier.showErrorMessage({
-        content: e
+        content: 'Not able to get the texts'
       });
+    } finally {
+      this.isLoading = false;
     }
   },
   data() {
     return {
       texts: [],
-      textPostExist: false
+      textPostExist: false,
+      isLoading: false
     };
   }
 };
