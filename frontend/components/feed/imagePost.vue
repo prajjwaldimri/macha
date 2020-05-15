@@ -11,7 +11,7 @@
             span.body-2 @{{imagePost.authorDetails.username}}
             v-icon(x-small color="grey").ml-2 mdi-clock
             span.caption.ml-1 {{updatedAt}}
-      v-img(:src="imagePost.image" max-height="450px" :lazy-src="imagePost.lazyImage" @click="$router.push('/text/'+ imagePost.uri)")
+      v-img(:src="imagePost.image" max-height="450px" :lazy-src="imagePost.lazyImage" @click="$router.push('/image/'+ imagePost.uri)")
         template(v-slot:placeholder)
           v-row(align="center" justify="center").fill-height.ma-0
             v-progress-circular(indeterminate color="primary")
