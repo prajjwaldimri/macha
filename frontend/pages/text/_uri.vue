@@ -97,7 +97,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error loading your textpost'
+          content: 'Error loading the post.'
         });
       } finally {
         this.isTextPostLoading = false;
