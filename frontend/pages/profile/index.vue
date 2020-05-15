@@ -146,7 +146,7 @@ export default {
         enabledButtons: {
           buttonSkip: false
         },
-        highlight: true
+        highlight: false
       },
       tourCallbacks: {
         onNextStep: this.onTourNextStep,
