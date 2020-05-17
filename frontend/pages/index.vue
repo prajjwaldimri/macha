@@ -1,6 +1,6 @@
 <template lang="pug">
   .feed
-    .no-post(v-if="noPostYet")
+    div.no-post(v-if="noPostYet")
       .noPostImage
       p There seems to be nothing here.
       p Try adding a macha or creating a post.
@@ -237,8 +237,7 @@ export default {
   height: 100%;
   width: 80%;
   background-size: contain;
-  padding-top: 70%;
-  margin-top: 10%;
+  padding-top: 15rem;
 }
 .no-post p {
   display: flex;
@@ -247,6 +246,7 @@ export default {
 }
 .no-post .addMachaButton {
   display: flex;
+  margin-bottom: 5rem;
 }
 .caught-up {
   background-image: url('~assets/emptyState/caughtUp.svg');
