@@ -11,7 +11,7 @@
             span.body-2 @{{imagePost.authorDetails.username}}
             v-icon(x-small color="grey").ml-2 mdi-clock
             span.caption.ml-1 {{updatedAt}}
-      v-img(:src="imagePost.image" max-height="450px" :lazy-src="imagePost.lazyImage" @click="$router.push('/text/'+ imagePost.uri)")
+      v-img(:src="imagePost.image" max-height="450px" :lazy-src="imagePost.lazyImage" @click="$router.push('/image/'+ imagePost.uri)")
         template(v-slot:placeholder)
           v-row(align="center" justify="center").fill-height.ma-0
             v-progress-circular(indeterminate color="primary")
@@ -36,7 +36,7 @@
           v-icon mdi-delete
         v-dialog(v-model="dialog")
           v-card
-            v-card-title.subtitle-1 Are you sure you want to delete the post?
+            v-card-title(style="word-break: normal").subtitle-1 Are you sure you want to delete the post?
             v-card-actions 
               v-spacer
               v-btn(color="primary" outlined text @click="dialog = false") No
@@ -115,7 +115,7 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error loading your image',
+          content: 'Error loading the post.',
         });
       } finally {
         this.isImageLoading = false;

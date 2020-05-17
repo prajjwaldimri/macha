@@ -63,9 +63,9 @@ export default {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
           content:
-            'Unable to fetch the feed of the user. Please check if the user you are trying to see is your macha or not'
+            'Unable to fetch the feed of the user. Please check if the user you are trying to see is your macha or not.'
         });
-        error();
+        this.$router.push('/profile');
       }
     },
     onIntersect(entries, observer) {

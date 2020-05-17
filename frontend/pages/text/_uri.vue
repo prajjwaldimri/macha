@@ -33,7 +33,7 @@
           v-icon mdi-delete
         v-dialog(v-model="dialog")
           v-card
-            v-card-title.subtitle-1 Are you sure you want to delete the post?
+            v-card-title(style="word-break: normal").subtitle-1 Are you sure you want to delete the post?
             v-card-actions 
               v-spacer
               v-btn(color="primary" outlined text @click="dialog = false") No
@@ -97,8 +97,9 @@ export default {
       } catch (e) {
         this.$store.dispatch('error/addError', e);
         this.$notifier.showErrorMessage({
-          content: 'Error loading your textpost'
+          content: 'Error loading the post.'
         });
+        this.$router.push('/');
       } finally {
         this.isTextPostLoading = false;
       }

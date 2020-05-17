@@ -1,8 +1,13 @@
 import { queryField, stringArg, intArg } from "@nexus/schema";
 import { UserContext } from "../types";
-import { AuthenticationError, UserInputError } from "apollo-server";
+import {
+  AuthenticationError,
+  UserInputError,
+  ForbiddenError,
+} from "apollo-server";
 import { ImagePostModel } from "../../models/ImagePost";
 import isMongoId from "validator/lib/isMongoId";
+import { UserModel } from "../../models/User";
 
 export const getImagePost = queryField("getImagePost", {
   type: "ImagePost",
@@ -29,6 +34,23 @@ export const getImagePost = queryField("getImagePost", {
       if (!imagePost) {
         throw new UserInputError("Given post id or uri doesn't exist");
       }
+      const user = await UserModel.findOne({ _id: ctx.user._id }).populate({
+        path: "machas",
+        select: "_id",
+      });
+
+      if (!user) {
+        throw new UserInputError("No user with the provided id exists");
+      }
+      // Check if the current user is macha of the other user.
+      let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
+
+      // Check if the user asking for the feed is the macha of the other user
+      if (machas!.indexOf(imagePost!.author) < 0) {
+        if (imagePost!.author.toString() !== ctx.user._id.toString()) {
+          throw new ForbiddenError("Not allowed to view this post.");
+        }
+      }
 
       return imagePost;
     } catch (err) {
@@ -51,7 +73,9 @@ export const getImagePostsOfUser = queryField("getImagePostsOfUser", {
         );
       }
 
-      const imagePosts = await ImagePostModel.find({ author: ctx.user._id });
+      const imagePosts = await ImagePostModel.find({
+        author: ctx.user._id,
+      }).sort("-updatedAt");
       return { imagePosts };
     } catch (err) {
       return err;

@@ -1,8 +1,13 @@
 import { queryField, stringArg, intArg } from "@nexus/schema";
 import { UserContext } from "../types";
-import { AuthenticationError, UserInputError } from "apollo-server";
+import {
+  AuthenticationError,
+  UserInputError,
+  ForbiddenError,
+} from "apollo-server";
 import { TextPostModel } from "../../models/TextPost";
 import isMongoId from "validator/lib/isMongoId";
+import { UserModel } from "../../models/User";
 
 export const getTextPost = queryField("getTextPost", {
   type: "TextPost",
@@ -30,6 +35,24 @@ export const getTextPost = queryField("getTextPost", {
         throw new UserInputError("Given post id or uri doesn't exist");
       }
 
+      const user = await UserModel.findOne({ _id: ctx.user._id }).populate({
+        path: "machas",
+        select: "_id",
+      });
+
+      if (!user) {
+        throw new UserInputError("No user with the provided id exists");
+      }
+      // Check if the current user is macha of the other user.
+      let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
+
+      // Check if the user asking for the feed is the macha of the other user
+      if (machas!.indexOf(textPost!.author) < 0) {
+        if (textPost!.author.toString() !== ctx.user._id.toString()) {
+          throw new ForbiddenError("Not allowed to view this post.");
+        }
+      }
+
       return textPost;
     } catch (err) {
       return err;
@@ -51,7 +74,9 @@ export const getTextPostsOfUser = queryField("getTextPostsOfUser", {
         );
       }
 
-      const textPosts = await TextPostModel.find({ author: ctx.user._id });
+      const textPosts = await TextPostModel.find({ author: ctx.user._id }).sort(
+        "-updatedAt"
+      );
       return { textPosts };
     } catch (err) {
       return err;
