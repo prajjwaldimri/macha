@@ -27,30 +27,30 @@ export const getTextPost = queryField("getTextPost", {
 
       let textPost = await TextPostModel.findOne({ uri: identifier });
 
-      // const user = await UserModel.findOne({ _id: ctx.user._id }).populate({
-      //   path: "machas",
-      //   select: "_id",
-      // });
-
-      // if (!user) {
-      //   throw new UserInputError("No user with the provided id exists");
-      // }
-      // // Check if the current user is macha of the other user.
-      // let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
-
-      // // Check if the user asking for the feed is the macha of the other user
-      // if (machas!.indexOf(textPost!.author) < 0) {
-      //   if (textPost!.author.toString() !== ctx.user._id.toString()) {
-      //     throw new ForbiddenError("Not allowed to view this post.");
-      //   }
-      // }
-
       if (!textPost && isMongoId(identifier!)) {
         textPost = await TextPostModel.findById(identifier);
       }
 
       if (!textPost) {
         throw new UserInputError("Given post id or uri doesn't exist");
+      }
+
+      const user = await UserModel.findOne({ _id: ctx.user._id }).populate({
+        path: "machas",
+        select: "_id",
+      });
+
+      if (!user) {
+        throw new UserInputError("No user with the provided id exists");
+      }
+      // Check if the current user is macha of the other user.
+      let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
+
+      // Check if the user asking for the feed is the macha of the other user
+      if (machas!.indexOf(textPost!.author) < 0) {
+        if (textPost!.author.toString() !== ctx.user._id.toString()) {
+          throw new ForbiddenError("Not allowed to view this post.");
+        }
       }
 
       return textPost;
