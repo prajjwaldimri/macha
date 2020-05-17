@@ -25,31 +25,25 @@ export const getImagePost = queryField("getImagePost", {
         );
       }
 
+      let imagePost = await ImagePostModel.findOne({ uri: identifier });
+
       // const user = await UserModel.findOne({ _id: ctx.user._id }).populate({
       //   path: "machas",
       //   select: "_id",
       // });
 
       // if (!user) {
-      //   console.log("hey");
       //   throw new UserInputError("No user with the provided id exists");
       // }
-
       // // Check if the current user is macha of the other user.
       // let machas = user!.machas?.flatMap((macha) => (macha as any)._id);
 
       // // Check if the user asking for the feed is the macha of the other user
-      // if (machas!.indexOf(ctx!.user!._id!) < 0) {
-      //   console.log("hey2");
-      //   throw new ForbiddenError("Not allowed to view this post.");
+      // if (machas!.indexOf(imagePost!.author) < 0) {
+      //   if (imagePost!.author.toString() !== ctx.user._id.toString()) {
+      //     throw new ForbiddenError("Not allowed to view this post.");
+      //   }
       // }
-
-      // if (machas!.indexOf(ctx.user._id) < 0) {
-      //   console.log("hey3");
-      //   throw new ForbiddenError("You are not allowed to access this resource");
-      // }
-
-      let imagePost = await ImagePostModel.findOne({ uri: identifier });
 
       if (!imagePost && isMongoId(identifier!)) {
         imagePost = await ImagePostModel.findById(identifier);
@@ -58,7 +52,6 @@ export const getImagePost = queryField("getImagePost", {
       if (!imagePost) {
         throw new UserInputError("Given post id or uri doesn't exist");
       }
-
       return imagePost;
     } catch (err) {
       return err;
