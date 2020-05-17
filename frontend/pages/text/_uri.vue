@@ -99,6 +99,7 @@ export default {
         this.$notifier.showErrorMessage({
           content: 'Error loading the post.'
         });
+        this.$router.push('/');
       } finally {
         this.isTextPostLoading = false;
       }
