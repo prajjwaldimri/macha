@@ -21,7 +21,7 @@
           v-icon(small) mdi-delete
         v-dialog(v-model="dialog")
           v-card
-            v-card-title.subtitle-1 Are you sure you want to delete the comment?
+            v-card-title(style="word-break: normal").subtitle-1 Are you sure you want to delete the comment?
             v-card-actions 
               v-spacer
               v-btn(color="primary" outlined text @click="dialog = false") No
